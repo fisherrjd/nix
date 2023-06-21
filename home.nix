@@ -141,6 +141,7 @@ in
 
         (with jacobi; [
           nixup
+          hax.comma
         ])
       ];
   };
