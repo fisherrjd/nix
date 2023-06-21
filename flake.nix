@@ -19,6 +19,7 @@
       forAllSystems = lib.genAttrs lib.systems.flakeExposed;
     in
     {
+      inherit (self.inputs) jacobi;
       pins = self.inputs;
       packages = forAllSystems
         (system: import self.inputs.nixpkgs {

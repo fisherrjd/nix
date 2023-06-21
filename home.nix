@@ -9,6 +9,8 @@ let
   onAws = builtins.getEnv "USER" == "ubuntu";
   promptChar = ">";
 
+  jacobi = flake.inputs.jacobi.packages.${pkgs.system};
+
   username =
     if isDarwin then
       firstName
@@ -137,7 +139,9 @@ in
         '')
         hms
 
-        flake.inputs.jacobi.nixup
+        (with jacobi; [
+          nixup
+        ])
       ];
   };
 
