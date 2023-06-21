@@ -3,6 +3,8 @@ let
   inherit (pkgs.hax) isDarwin isLinux isM1;
   inherit (pkgs.hax) attrIf optionalString words;
 
+  jacobi = flake.inputs.jacobi { inherit (pkgs) system; };
+
   firstName = "jade";
   lastName = "fisher";
 
@@ -140,7 +142,7 @@ in
         )
         hms
 
-        (with flake.inputs.jacobi; [
+        (with jacobi; [
           hax.comma
           nixup
         ])
