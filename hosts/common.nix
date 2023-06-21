@@ -104,7 +104,6 @@ in
           "hmac-sha2-256-etm@openssh.com"
           "umac-128-etm@openssh.com"
         ];
-        X11Forwarding = true;
       };
     };
   };
