@@ -2,7 +2,6 @@
   inputs = {
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     jacobi.url = "github:jpetrucciani/nix";
-    jacobi.flake = false;
     nixpkgs.url = "nixpkgs/nixos-unstable";
     nixos-wsl = {
       url = "github:nix-community/NixOS-WSL";
