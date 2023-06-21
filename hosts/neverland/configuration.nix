@@ -34,6 +34,8 @@ in
     ];
   };
 
+  services = { } // common.services;
+
   home-manager.users.jade = common.jade;
   networking.hostName = hostname;
   nixpkgs.config.allowUnfree = true;
