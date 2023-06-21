@@ -139,6 +139,11 @@ in
           ''
         )
         hms
+
+        (with flake.inputs.jacobi; [
+          hax.comma
+          nixup
+        ])
       ];
   };
 
