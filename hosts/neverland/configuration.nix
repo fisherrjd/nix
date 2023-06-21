@@ -38,6 +38,13 @@ in
 
   home-manager.users.jade = common.jade;
   networking.hostName = hostname;
+  nix = common.nix // {
+    nixPath = [
+      "nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixos"
+      "nixos-config=/home/jade/cfg/hosts/${hostname}/configuration.nix"
+      "/nix/var/nix/profiles/per-user/root/channels"
+    ];
+  };
   nixpkgs.config.allowUnfree = true;
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   programs.command-not-found.enable = false;
