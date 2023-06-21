@@ -16,7 +16,7 @@ in
   };
   wsl = {
     enable = true;
-    defaultUser = "nixos";
+    defaultUser = "jade";
     startMenuLaunchers = true;
     wslConf.automount.root = "/mnt";
     # Enable native Docker support
