@@ -3,8 +3,6 @@ let
   inherit (pkgs.hax) isDarwin isLinux isM1;
   inherit (pkgs.hax) attrIf optionalString words;
 
-  jacobi = flake.inputs.jacobi { inherit (pkgs) system; };
-
   firstName = "jade";
   lastName = "fisher";
 
@@ -134,18 +132,12 @@ in
         yq-go
         zip
 
-        # load in my custom checked pog scripts
-        (
-          writeShellScriptBin "machine-name" ''
-            echo "${machine-name}"
-          ''
-        )
+        (writeShellScriptBin "machine-name" ''
+          echo "${machine-name}"
+        '')
         hms
 
-        (with jacobi; [
-          hax.comma
-          nixup
-        ])
+        flake.inputs.jacobi.nixup
       ];
   };
 
