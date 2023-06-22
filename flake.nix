@@ -1,6 +1,10 @@
 {
+
+  #Inputs for building the flake things
   inputs = {
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
+    # Mr Cobis git nix repo
+    # TODO maybe add Keiths / DigDugs things see if they have anything cobi didn't already steal
     jacobi.url = "github:jpetrucciani/nix";
     nixpkgs.url = "nixpkgs/nixos-unstable";
     nixos-wsl = {

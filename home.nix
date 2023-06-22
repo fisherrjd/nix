@@ -149,6 +149,8 @@ in
   programs.less.enable = true;
   programs.lesspipe.enable = true;
 
+
+# Youtube command line things
   programs.yt-dlp = {
     enable = true;
     extraConfig = ''
@@ -251,6 +253,7 @@ in
     '' else "");
   };
 
+# https://github.com/ajeetdsouza/zoxide
   programs.zoxide = {
     enable = true;
   };
@@ -259,6 +262,7 @@ in
     enable = true;
     nix-direnv.enable = true;
   };
+
 
   programs.nushell = {
     enable = true;
@@ -283,6 +287,7 @@ in
     };
   };
 
+# https://github.com/cantino/mcfly
   programs.mcfly = {
     enable = true;
     enableBashIntegration = true;
@@ -327,6 +332,7 @@ in
     curlrc = {
       target = ".curlrc";
       text = ''
+        --netrc-optional
         --netrc-optional
       '';
     };

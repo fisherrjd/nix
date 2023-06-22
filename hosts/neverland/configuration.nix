@@ -29,6 +29,7 @@ in
     isNormalUser = true;
     description = "jade";
     extraGroups = [ "networkmanager" "wheel" "docker" ];
+    # KeyList for access this is stored in /hosts/common.nix under pubkeys
     openssh.authorizedKeys.keys = with common.pubkeys; [
       atlantis
     ];
