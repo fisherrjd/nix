@@ -76,20 +76,8 @@ in
             +app_update 376030 \
             +quit
         '';
-        ExecStart = ''
-          ${pkgs.steam-run}/bin/steam-run ./ShooterGame/Binaries/Win64/ShooterGameServer.exe \
-            -load "${cfg.worldName}" moon \
-            -settings \
-            ServerName "${cfg.serverName}" \
-            StartLocalHost true \
-            ServerVisible true \
-            GamePort "${toString cfg.port}" \
-            AutoSave true \
-            SaveInterval "${toString cfg.saveInterval}" \
-            ServerPassword "$STATIONEERS_PASSWORD" \
-            ServerMaxPlayers ${toString cfg.maxPlayers} \
-            UPNPEnabled false
-        '';
+        #TODO Figure out what the fuck these options are!
+        ExecStart = '''';
         Nice = "-5";
         Restart = "always";
         StateDirectory = "ark";

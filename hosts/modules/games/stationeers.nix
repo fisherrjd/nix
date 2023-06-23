@@ -77,18 +77,7 @@ in
             +quit
         '';
         ExecStart = ''
-          ${pkgs.steam-run}/bin/steam-run ./rocketstation_DedicatedServer.x86_64 \
-            -load "${cfg.worldName}" moon \
-            -settings \
-            ServerName "${cfg.serverName}" \
-            StartLocalHost true \
-            ServerVisible true \
-            GamePort "${toString cfg.port}" \
-            AutoSave true \
-            SaveInterval "${toString cfg.saveInterval}" \
-            ServerPassword "$STATIONEERS_PASSWORD" \
-            ServerMaxPlayers ${toString cfg.maxPlayers} \
-            UPNPEnabled false
+
         '';
         Nice = "-5";
         Restart = "always";
