@@ -140,11 +140,7 @@ in
         hms
 
         #Java
-        (openjdk17.withPackages
-            (pkgs: with pkgs;[
-              build-mvn
-            ])
-        )
+        (openjdk17)
 
         #Python
         (python311.withPackages
