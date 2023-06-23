@@ -139,6 +139,9 @@ in
         '')
         hms
 
+        #Java
+        (openjdk17)
+        
         #Python
         (python311.withPackages
             (pkgs: with pkgs; [
@@ -156,7 +159,7 @@ in
               # api
               fastapi
               uvicorn
-              
+
               # data
               numpy
               pandas
