@@ -139,6 +139,30 @@ in
         '')
         hms
 
+        #Python
+        (python311.withPackages
+            (pkgs: with pkgs; [
+              # linting
+              black
+              mypy
+
+               # common use case
+              python-lsp-server
+              gamble
+              httpx
+              requests
+              cryptography
+
+              # api
+              fastapi
+              uvicorn
+              
+              # data
+              numpy
+              pandas
+              scipy
+            ]))
+
         (with jacobi; [
           nixup
           hax.comma
