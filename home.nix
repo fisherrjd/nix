@@ -138,10 +138,7 @@ in
           echo "${machine-name}"
         '')
         hms
-
-        #Java
-        (openjdk17)
-
+        
         #Python
         (python311.withPackages
             (pkgs: with pkgs; [
