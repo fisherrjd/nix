@@ -108,6 +108,7 @@ in
         nix-update
         nixpkgs-fmt
         nixpkgs-review
+        nodePackages.prettier
         openssh
         p7zip
         patch
@@ -138,30 +139,30 @@ in
           echo "${machine-name}"
         '')
         hms
-        
+
         #Python
         (python311.withPackages
-            (pkgs: with pkgs; [
-              # linting
-              black
-              mypy
+          (pkgs: with pkgs; [
+            # linting
+            black
+            mypy
 
-               # common use case
-              python-lsp-server
-              gamble
-              httpx
-              requests
-              cryptography
+            # common use case
+            python-lsp-server
+            gamble
+            httpx
+            requests
+            cryptography
 
-              # api
-              fastapi
-              uvicorn
+            # api
+            fastapi
+            uvicorn
 
-              # data
-              numpy
-              pandas
-              scipy
-            ]))
+            # data
+            numpy
+            pandas
+            scipy
+          ]))
 
         (with jacobi; [
           nixup
@@ -174,7 +175,7 @@ in
   programs.lesspipe.enable = true;
 
 
-# Youtube command line things
+  # Youtube command line things
   programs.yt-dlp = {
     enable = true;
     extraConfig = ''
@@ -277,7 +278,7 @@ in
     '' else "");
   };
 
-# https://github.com/ajeetdsouza/zoxide
+  # https://github.com/ajeetdsouza/zoxide
   programs.zoxide = {
     enable = true;
   };
@@ -311,7 +312,7 @@ in
     };
   };
 
-# https://github.com/cantino/mcfly
+  # https://github.com/cantino/mcfly
   programs.mcfly = {
     enable = true;
     enableBashIntegration = true;
@@ -371,6 +372,10 @@ in
         .nullvalue NULL
         .output stdout
       '';
+    };
+    prettierrc = {
+      target = ".prettierrc.js";
+      text = builtins.readFile ./.prettierrc.js;
     };
   };
 
