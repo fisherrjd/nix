@@ -68,7 +68,6 @@ in
         dyff
         ed
         erdtree
-        exa
         fd
         figlet
         file
@@ -172,6 +171,7 @@ in
 
   programs.less.enable = true;
   programs.lesspipe.enable = true;
+  programs.lsd.enable = true;
 
 
   # Youtube command line things
