@@ -7,9 +7,11 @@ in
 {
   imports = [
     "${common.home-manager}/nixos"
-    "${modulesPath}/profiles/minimal.nix"
+    # "${modulesPath}/profiles/minimal.nix"
     flake.inputs.nixos-wsl.nixosModules.wsl
   ];
+
+  boot.tmp.useTmpfs = true;
 
   environment.variables = {
     NIX_HOST = hostname;
@@ -36,7 +38,21 @@ in
     ];
   };
 
-  services = { } // common.services;
+  services = {
+    xserver.videoDrivers = [ "nvidia" ];
+  } // common.services;
+
+  virtualisation.docker = {
+    enable = true;
+  };
+
+  hardware = {
+    opengl = {
+      enable = true;
+      driSupport32Bit = true;
+    };
+    nvidia.package = config.boot.kernelPackages.nvidiaPackages.stable;
+  };
 
   home-manager.users.jade = common.jade;
   networking.hostName = hostname;
