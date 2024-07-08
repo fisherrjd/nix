@@ -17,8 +17,7 @@ final: prev:
           PreferredAuthentications publickey
       '';
       mac_meme = ''
-        IPQoS 0x00
-          XAuthLocation /opt/X11/bin/xauth
+        XAuthLocation /opt/X11/bin/xauth
       '';
       config = ''
         Include config.d/*
