@@ -51,7 +51,10 @@ in
       enable = true;
       driSupport32Bit = true;
     };
-    nvidia.package = config.boot.kernelPackages.nvidiaPackages.stable;
+    nvidia = {
+      open = false;
+      package = config.boot.kernelPackages.nvidiaPackages.stable;
+    };
   };
 
   home-manager.users.jade = common.jade;
