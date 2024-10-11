@@ -17,3 +17,9 @@ nix-shell -p git
 git clone https://github.com/fisherrjd/nix.git cfg
 cd cfg
 $(nix-build --no-link --expr "with import $(pwd) {}; _nixos-switch" --argstr host "neverland")/bin/switch
+
+Update via cobis repo
+```
+nix flake update
+hms
+```
