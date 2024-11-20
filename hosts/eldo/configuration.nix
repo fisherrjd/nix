@@ -86,6 +86,10 @@ in
     isNormalUser = true;
     description = "Jade Fishedr";
     extraGroups = [ "networkmanager" "wheel" ];
+    openssh.authorizedKeys.keys = with common.pubkeys; [
+      atlantis 
+      neverland
+    ];
     packages = with pkgs; [
     #  thunderbird
     ];
