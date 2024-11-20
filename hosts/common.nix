@@ -1,8 +1,4 @@
-{ pkgs
-, flake
-, machine-name
-, ...
-}:
+{ pkgs, flake, machine-name, ...}:
 let
   inherit (flake.inputs) home-manager nix-darwin;
   jade = import ../home.nix {
