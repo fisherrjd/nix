@@ -23,3 +23,14 @@ Update via cobis repo
 nix flake update
 hms
 ```
+
+Docs for installing nix baremetal box!
+
+1. Enable open ssh in /etc/nixos/configuration.nix
+2. 
+
+
+#Random Tidbits
+
+SSH KEYGEN
+ssh-keygen -o -a 100 -t ed25519 -C "jade@<identifier>"

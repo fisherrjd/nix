@@ -47,4 +47,17 @@
             "neverland"
           ]);
     };
+    nixosConfigurations = builtins.listToAttrs
+        (map
+          (name: {
+            inherit name; value = self.inputs.nixpkgs.lib.nixosSystem {
+            pkgs = self.packages.x86_64-linux;
+            specialArgs = { flake = self; machine-name = name; };
+            modules = [ ./hosts/${name}/configuration.nix ];
+          };
+          })
+          [
+            "eldo"
+          ]);
+    };
 }
