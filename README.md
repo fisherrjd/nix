@@ -18,9 +18,15 @@ git clone https://github.com/fisherrjd/nix.git cfg
 cd cfg
 $(nix-build --no-link --expr "with import $(pwd) {}; _nixos-switch" --argstr host "neverland")/bin/switch
 
-Update via cobis repo
+Update Everything
 ```
 nix flake update
+hms
+```
+
+Update Ping to Jacobi
+```
+nix flake lock --update-input jacobi
 hms
 ```
 
