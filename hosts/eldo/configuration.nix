@@ -84,7 +84,7 @@ in
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.fisherrjd = {
     isNormalUser = true;
-    description = "Jade Fishedr";
+    description = "Jade Fisher";
     extraGroups = [ "networkmanager" "wheel" ];
     openssh.authorizedKeys.keys = with common.pubkeys; [
       atlantis 
@@ -99,6 +99,10 @@ in
     isNormalUser = true;
     description = "Jade Fisher";
     extraGroups = [ "networkmanager" "wheel" ];
+    openssh.authorizedKeys.keys = with common.pubkeys; [
+      atlantis 
+      neverland
+    ];
     packages = with pkgs; [
     #  thunderbird
     ];
