@@ -147,15 +147,22 @@ in
   system.stateVersion = "24.05"; # Did you read the comment?
 
   #begin jade fuckin around
+  
+  #enable security sudo users from common
   security.sudo = common.security.sudo;
 
+  #define hostname env variable
   environment.variables = {
     NIX_HOST = hostname;
   };
+  networking.hostName = "eldo"; # Define your hostname.
 
+
+  #TODO: Learn what this is doing??? 
+  #TODO: I think its enabling home manager stuff from jade user in common 
   home-manager.users.jade = common.jade;
 
-  networking.hostName = "eldo"; # Define your hostname.
+  #defining nix tings
   nix = common.nix // {
     nixPath = [
       "nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixos"
@@ -164,6 +171,7 @@ in
     ];
   };
 
+# system sleep settings
   systemd.targets.sleep.enable = false;
   systemd.targets.suspend.enable = false;
   systemd.targets.hibernate.enable = false;
