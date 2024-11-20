@@ -58,6 +58,7 @@ in
         bat
         bzip2
         cacert
+        caddy
         cachix
         clolcat
         coreutils-full
