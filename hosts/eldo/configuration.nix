@@ -2,19 +2,24 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, ... }:
+{ config, pkgs, machine-name, ... }:
 
+let
+  hostname = "eldo";
+  common = import ../common.nix { inherit config flake machine-name pkgs; };
+in
 {
   imports =
     [ # Include the results of the hardware scan.
+      "${common.home-manager}/nixos"
       ./hardware-configuration.nix
     ];
+
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  networking.hostName = "nixos"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Configure network proxy if necessary
@@ -87,6 +92,15 @@
     ];
   };
 
+    users.users.jade = {
+    isNormalUser = true;
+    description = "Jade Fisher";
+    extraGroups = [ "networkmanager" "wheel" ];
+    packages = with pkgs; [
+    #  thunderbird
+    ];
+  };
+
   # Install firefox.
   programs.firefox.enable = true;
 
@@ -96,8 +110,8 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-  #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-  #  wget
+    vim
+    vscode
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -127,4 +141,21 @@
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "24.05"; # Did you read the comment?
 
+
+
+  #begin jade fuckin around
+  environment.variables = {
+    NIX_HOST = hostname;
+  };
+
+  home-manager.users.jade = common.jade;
+
+  networking.hostName = "eldo"; # Define your hostname.
+  nix = common.nix // {
+    nixPath = [
+      "nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixos"
+      "nixos-config=/home/fisherrjd/cfg/hosts/${hostname}/configuration.nix"
+      "/nix/var/nix/profiles/per-user/root/channels"
+    ];
+  };
 }
