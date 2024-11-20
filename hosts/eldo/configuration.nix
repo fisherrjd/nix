@@ -147,6 +147,8 @@ in
   system.stateVersion = "24.05"; # Did you read the comment?
 
   #begin jade fuckin around
+  security.sudo = common.security.sudo;
+
   environment.variables = {
     NIX_HOST = hostname;
   };
