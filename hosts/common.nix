@@ -54,7 +54,7 @@ in
   pubkeys = {
     atlantis = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIE4ng5nDLLCyQJ0QOHglRBZkBUI/3FV1c2FIAjwQgIK0 jade@Atlantis";
     neverland = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPLw7NAEfBzS9PzgS2CtFmtQ6dk5wq4BC3YXhkS4iT/j jade@neverland";
-    eldo = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPNmHJWOnFRL2e5CGOEE7hMzXQlvUa6XBYQLem6EGXf0 jade@eldo"
+    eldo = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPNmHJWOnFRL2e5CGOEE7hMzXQlvUa6XBYQLem6EGXf0 jade@eldo";
   };
   timeZone = "America/Denver";
 
