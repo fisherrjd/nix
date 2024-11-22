@@ -55,6 +55,7 @@ in
     atlantis = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIE4ng5nDLLCyQJ0QOHglRBZkBUI/3FV1c2FIAjwQgIK0 jade@Atlantis";  #home desktop
     neverland = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPLw7NAEfBzS9PzgS2CtFmtQ6dk5wq4BC3YXhkS4iT/j jade@neverland"; #home wsl on home desktop
     eldo = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJbNhnkhqLCDhVYXTQXxuVYkPHnWSBFFmunVSk5ETnZj jade@eldo"; # old pc gone nix server
+    airbook = "ssh-ed25519 ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEE5agAWTMKWCbyKNtscB37gPuMrMBgO5PIr/W6J2zPP jadefisher@airbook";
   };
   timeZone = "America/Denver";
 
