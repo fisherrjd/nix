@@ -17,7 +17,7 @@ in
       extra-trusted-public-keys = jacobi.cachix.org-1:JJghCz+ZD2hc9BHO94myjCzf4wS3DeBLKHOz3jCukMU=
     '';
     settings = {
-      trusted-users = [ "root" "jade" ];
+      trusted-users = [ "root" "jade" "jadefisher" "P3175941"];
     };
   };
 
@@ -62,7 +62,7 @@ in
   security.sudo = {
     extraRules = [
       {
-        users = [ "jade" "fisherrjd" ];
+        users = [ "jade" "fisherrjd" "jadefisher"];
         commands = [
           {
             command = "ALL";

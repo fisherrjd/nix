@@ -102,6 +102,7 @@ in
     openssh.authorizedKeys.keys = with common.pubkeys; [
       atlantis 
       neverland
+      airbook
     ];
     packages = with pkgs; [
     #  thunderbird

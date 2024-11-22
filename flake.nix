@@ -48,4 +48,20 @@
             "eldo"
           ]);
     };
+    darwinConfigurations = builtins.listToAttrs
+        (map
+          (name: {
+            inherit name;
+            value = self.inputs.nix-darwin.lib.darwinSystem {
+              pkgs = self.packages.aarch64-darwin;
+              specialArgs = { flake = self; machine-name = name; };
+              modules = [
+                ./hosts/common_darwin.nix
+                ./hosts/${name}/configuration.nix
+              ];
+            };
+          })
+          [
+            "airbook"
+          ]);
 }
