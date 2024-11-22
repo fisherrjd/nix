@@ -37,7 +37,8 @@
       nixosConfigurations = builtins.listToAttrs
         (map
           (name: {
-            inherit name; value = self.inputs.nixpkgs.lib.nixosSystem {
+            inherit name; 
+            value = self.inputs.nixpkgs.lib.nixosSystem {
             pkgs = self.packages.x86_64-linux;
             specialArgs = { flake = self; machine-name = name; };
             modules = [ ./hosts/${name}/configuration.nix ];
@@ -47,21 +48,23 @@
             "neverland"
             "eldo"
           ]);
+
+      # darwinConfigurations = builtins.listToAttrs
+      #   (map
+      #     (name: {
+      #       inherit name; 
+      #       value = self.inputs.nix-darwin.lib.darwinSystem {
+      #       pkgs = self.packages.aarch64-darwin;
+      #       specialArgs = { flake = self; machine-name = name; };
+      #       modules = [
+      #       ./hosts/common_darwin.nix
+      #       ./hosts/${name}/configuration.nix
+      #       ];
+      #     };
+      #  })
+      #   [
+      #     "airbook"
+      #   ]);
     };
-    darwinConfigurations = builtins.listToAttrs
-        (map
-          (name: {
-            inherit name;
-            value = self.inputs.nix-darwin.lib.darwinSystem {
-              pkgs = self.packages.aarch64-darwin;
-              specialArgs = { flake = self; machine-name = name; };
-              modules = [
-                ./hosts/common_darwin.nix
-                ./hosts/${name}/configuration.nix
-              ];
-            };
-          })
-          [
-            "airbook"
-          ]);
+
 }
