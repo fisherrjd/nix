@@ -41,7 +41,6 @@ in
     ];
   };
   
-
   system.stateVersion = 4;
   nix = common.nix // {
     useDaemon = true;

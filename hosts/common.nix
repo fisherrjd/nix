@@ -4,12 +4,9 @@ let
   jade = import ../home.nix {
     inherit home-manager flake machine-name pkgs;
   };
-  jadefisher = import ../home.nix {
-    inherit home-manager flake machine-name pkgs;
-  };
 in
 {
-  inherit home-manager jade jadefisher nix-darwin pkgs;
+  inherit home-manager jade nix-darwin pkgs;
 
   nix = {
     extraOptions = ''
