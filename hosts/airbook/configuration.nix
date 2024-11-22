@@ -5,7 +5,7 @@ let
   hostname = "airbook";
   common = import ../common.nix { inherit config flake machine-name pkgs; };
   configPath = "/Users/jadefisher/cfg/hosts/${hostname}/configuration.nix";
-  username = "jadefisher"
+  username = "jadefisher";
 
 
   # runner-defaults = {
