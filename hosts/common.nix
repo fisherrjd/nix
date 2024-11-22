@@ -9,7 +9,7 @@ let
   };
 in
 {
-  inherit home-manager jade nix-darwin pkgs;
+  inherit home-manager jade jadefisher nix-darwin pkgs;
 
   nix = {
     extraOptions = ''
