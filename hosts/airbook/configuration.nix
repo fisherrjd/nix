@@ -40,15 +40,6 @@ in
       eldo
     ];
   };
-  users.users.jade = {
-    name = username;
-    home = "/Users/${username}";
-    openssh.authorizedKeys.keys = with common.pubkeys; [
-      atlantis 
-      neverland
-      eldo
-    ];
-  };
   
 
   system.stateVersion = 4;
