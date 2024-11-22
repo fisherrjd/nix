@@ -20,7 +20,7 @@ in
     "${common.home-manager}/nix-darwin"
   ];
 
-  home-manager.users.jadefisher = common.jade;
+  home-manager.users.jadefisher = common.jadefisher;
 
   documentation.enable = false;
 
