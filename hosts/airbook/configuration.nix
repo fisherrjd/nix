@@ -20,7 +20,9 @@ in
     "${common.home-manager}/nix-darwin"
   ];
 
-  home-manager.users.jadefisher = common.jadefisher;
+  home-manager.users.jadefisher = common.jade;
+  home-manager.users.jade = common.jade;
+
   documentation.enable = false;
 
   time.timeZone = common.timeZone;
@@ -39,6 +41,16 @@ in
       eldo
     ];
   };
+  users.users.jade = {
+    name = username;
+    home = "/Users/${username}";
+    openssh.authorizedKeys.keys = with common.pubkeys; [
+      atlantis 
+      neverland
+      eldo
+    ];
+  };
+  
 
   system.stateVersion = 4;
   nix = common.nix // {
