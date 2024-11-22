@@ -20,7 +20,7 @@ in
     "${common.home-manager}/nix-darwin"
   ];
 
-  home-manager.users.jadefisher = common.jadefisher;
+  home-manager.users.jade = common.jade;
 
   documentation.enable = false;
 
@@ -31,7 +31,7 @@ in
   };
   environment.darwinConfig = configPath;
 
-  users.users.jadefisher = {
+  users.users.jade = {
     name = username;
     home = "/Users/${username}";
     openssh.authorizedKeys.keys = with common.pubkeys; [
