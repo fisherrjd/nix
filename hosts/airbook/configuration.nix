@@ -21,7 +21,6 @@ in
   ];
 
   home-manager.users.jadefisher = common.jade;
-  home-manager.users.jade = common.jade;
 
   documentation.enable = false;
 
