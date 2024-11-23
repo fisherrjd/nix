@@ -1,12 +1,15 @@
-{ pkgs, flake, machine-name, ...}:
+{ pkgs, flake, machine-name, ... }:
 let
   inherit (flake.inputs) home-manager nix-darwin;
   jade = import ../home.nix {
     inherit home-manager flake machine-name pkgs;
   };
+  jadefisher = import ../home.nix {
+    inherit home-manager flake machine-name pkgs;
+  };
 in
 {
-  inherit home-manager jade nix-darwin pkgs;
+  inherit home-manager jade jadefisher nix-darwin pkgs;
 
   nix = {
     extraOptions = ''
@@ -17,7 +20,7 @@ in
       extra-trusted-public-keys = jacobi.cachix.org-1:JJghCz+ZD2hc9BHO94myjCzf4wS3DeBLKHOz3jCukMU=
     '';
     settings = {
-      trusted-users = [ "root" "jade" "jadefisher" "P3175941"];
+      trusted-users = [ "root" "jade" "jadefisher" "P3175941" ];
     };
   };
 
@@ -52,7 +55,7 @@ in
     full = "${first} ${last}";
   };
   pubkeys = {
-    atlantis = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIE4ng5nDLLCyQJ0QOHglRBZkBUI/3FV1c2FIAjwQgIK0 jade@Atlantis";  #home desktop
+    atlantis = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIE4ng5nDLLCyQJ0QOHglRBZkBUI/3FV1c2FIAjwQgIK0 jade@Atlantis"; #home desktop
     neverland = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPLw7NAEfBzS9PzgS2CtFmtQ6dk5wq4BC3YXhkS4iT/j jade@neverland"; #home wsl on home desktop
     eldo = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJbNhnkhqLCDhVYXTQXxuVYkPHnWSBFFmunVSk5ETnZj jade@eldo"; # old pc gone nix server
     airbook = "ssh-ed25519 ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEE5agAWTMKWCbyKNtscB37gPuMrMBgO5PIr/W6J2zPP jadefisher@airbook";
@@ -62,7 +65,7 @@ in
   security.sudo = {
     extraRules = [
       {
-        users = [ "jade" "fisherrjd" "jadefisher"];
+        users = [ "jade" "fisherrjd" "jadefisher" ];
         commands = [
           {
             command = "ALL";
