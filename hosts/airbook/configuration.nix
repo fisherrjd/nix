@@ -20,7 +20,7 @@ in
     "${common.home-manager}/nix-darwin"
   ];
 
-  home-manager.users.jadefisher = common.jade;
+  home-manager.users.jadefisher = common.jadefisher;
 
   documentation.enable = false;
 
@@ -35,12 +35,12 @@ in
     name = username;
     home = "/Users/${username}";
     openssh.authorizedKeys.keys = with common.pubkeys; [
-      atlantis 
+      atlantis
       neverland
       eldo
     ];
   };
-  
+
   system.stateVersion = 4;
   nix = common.nix // {
     useDaemon = true;
