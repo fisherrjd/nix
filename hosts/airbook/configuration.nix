@@ -52,6 +52,8 @@ in
     ];
   };
 
+  services.openssh.enable = true;
+
   ### can't get this working?
   # services.github-runners = mapAttrs' nameValuePair {
   #   jpetrucciani-nix = runner-defaults // {
