@@ -65,7 +65,7 @@ in
 
         trackpad = {
           Clicking = true;
-          TrackpadThreeFingerDrag = false;
+          TrackpadThreeFingerDrag = true;
         };
       };
       keyboard = {
