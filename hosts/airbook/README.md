@@ -24,7 +24,7 @@ $(nix-build --no-link --expr "with import $(pwd) {}; _nix-darwin-switch" --argst
 
 ### [configuration.nix](./configuration.nix)
 
-This file defines the OS configuration for the `eldo` machine.
+This file defines the OS configuration for the `airbook` machine.
 
 ### [hardware-configuration.nix](./hardware-configuration.nix)
 
