@@ -14,7 +14,7 @@ in
 
   ];
 
-  home-manager.users.P3175941 = common.P3175941;
+  home-manager.users.P3175941 = common.jade;
 
   documentation.enable = false;
 
