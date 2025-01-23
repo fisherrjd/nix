@@ -20,11 +20,12 @@ cd ~/cfg
 # initial switch. after this, you can use just `hms` to update!
 $(nix-build --no-link --expr "with import $(pwd) {}; _nix-darwin-switch" --argstr host "airbook")/bin/switch
 
+
 # Tailscale Info
 # advertise exit node 
 # TODO learn more about these things
 
-sudo tailscale up --advertise-exit-node --exit-node-allow-lan-access
+sudo tailscale up --advertise-exit-node
 
 ```
 
