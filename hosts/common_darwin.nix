@@ -81,12 +81,12 @@ in
       let
         casks = rec {
           fonts = [
-            "font-caskaydia-cove-nerd-font"
-            "font-fantasque-sans-mono-nerd-font"
-            "font-fira-code-nerd-font"
-            "font-hasklug-nerd-font"
-            "font-victor-mono-nerd-font"
-            "font-monaspace"
+            # "font-caskaydia-cove-nerd-font"
+            # "font-fantasque-sans-mono-nerd-font"
+            # "font-fira-code-nerd-font"
+            # "font-hasklug-nerd-font"
+            # "font-victor-mono-nerd-font"
+            # "font-monaspace"
           ];
           fun = [
             # "mgba"
@@ -94,11 +94,11 @@ in
             # "steam"
           ];
           work = [
-            "1password"
-            "dropbox"
-            "robo-3t"
-            "slack"
-            "xca"
+            # "1password"
+            # "dropbox"
+            # "robo-3t"
+            # "slack"
+            # "xca"
           ];
           comms = [
             # "discord"
