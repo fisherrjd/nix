@@ -39,6 +39,7 @@ in
       atlantis
       neverland
       eldo
+      workbook
     ];
   };
 

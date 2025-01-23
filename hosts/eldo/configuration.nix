@@ -83,19 +83,6 @@ in
   # services.xserver.libinput.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.fisherrjd = {
-    isNormalUser = true;
-    description = "Jade Fisher";
-    extraGroups = [ "networkmanager" "wheel" ];
-    openssh.authorizedKeys.keys = with common.pubkeys; [
-      atlantis 
-      neverland
-    ];
-    packages = with pkgs; [
-    #  thunderbird
-    ];
-  };
-
     users.users.jade = {
     isNormalUser = true;
     description = "Jade Fisher";
@@ -104,6 +91,7 @@ in
       atlantis 
       neverland
       airbook
+      workbook
     ];
     packages = with pkgs; [
     #  thunderbird
