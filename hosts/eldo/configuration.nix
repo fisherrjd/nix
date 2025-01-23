@@ -13,6 +13,7 @@ in
     [ # Include the results of the hardware scan.
       "${common.home-manager}/nixos"
       ./hardware-configuration.nix
+      {services=common.services;}
     ];
 
   # Bootloader.
@@ -171,7 +172,7 @@ in
       "/nix/var/nix/profiles/per-user/root/channels"
     ];
   };
-
+  
 # system sleep settings
   systemd.targets.sleep.enable = false;
   systemd.targets.suspend.enable = false;

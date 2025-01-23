@@ -18,6 +18,8 @@ in
 {
   imports = [
     "${common.home-manager}/nix-darwin"
+      {services=common.services;}
+
   ];
 
   home-manager.users.jadefisher = common.jadefisher;
