@@ -311,7 +311,7 @@ in
         '';
       in
       ''
-        User jadefisher
+        User jade
         PasswordAuthentication no
         IdentitiesOnly yes
         # secure stuff

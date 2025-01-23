@@ -4,8 +4,8 @@ let
 
   hostname = "airbook";
   common = import ../common.nix { inherit config flake machine-name pkgs; };
-  configPath = "/Users/jadefisher/cfg/hosts/${hostname}/configuration.nix";
-  username = "jadefisher";
+  configPath = "/Users/jade/cfg/hosts/${hostname}/configuration.nix";
+  username = "jade";
 
 
   # runner-defaults = {
@@ -21,7 +21,7 @@ in
 
   ];
 
-  home-manager.users.jadefisher = common.jadefisher;
+  home-manager.users.jade = common.jade;
 
   documentation.enable = false;
 
@@ -32,7 +32,7 @@ in
   };
   environment.darwinConfig = configPath;
 
-  users.users.jadefisher = {
+  users.users.jade = {
     name = username;
     home = "/Users/${username}";
     openssh.authorizedKeys.keys = with common.pubkeys; [

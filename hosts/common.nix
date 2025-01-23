@@ -4,12 +4,10 @@ let
   jade = import ../home.nix {
     inherit home-manager flake machine-name pkgs;
   };
-  jadefisher = import ../home.nix {
-    inherit home-manager flake machine-name pkgs;
-  };
+
 in
 {
-  inherit home-manager jade jadefisher nix-darwin pkgs;
+  inherit home-manager jade nix-darwin pkgs;
 
   nix = {
     extraOptions = ''
@@ -20,7 +18,7 @@ in
       extra-trusted-public-keys = jacobi.cachix.org-1:JJghCz+ZD2hc9BHO94myjCzf4wS3DeBLKHOz3jCukMU=
     '';
     settings = {
-      trusted-users = [ "root" "jade" "jadefisher" "P3175941" ];
+      trusted-users = [ "root" "jade" "P3175941" ];
     };
   };
 
@@ -65,7 +63,7 @@ in
   security.sudo = {
     extraRules = [
       {
-        users = [ "jade" "fisherrjd" "jadefisher" ];
+        users = [ "jade" "fisherrjd" ];
         commands = [
           {
             command = "ALL";

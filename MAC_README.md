@@ -31,8 +31,8 @@ set +h
 [[ -e ~/.aliases ]] && source ~/.aliases
 
 # starship
-eval "$(/Users/jadefisher/.nix-profile/bin/starship init bash --print-full-init)"
+eval "$(/Users/jade/.nix-profile/bin/starship init bash --print-full-init)"
 
 # direnv
-eval "$(/Users/jadefisher/.nix-profile/bin/direnv hook bash)"
+eval "$(/Users/jade/.nix-profile/bin/direnv hook bash)"
 ```
