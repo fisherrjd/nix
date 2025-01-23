@@ -5,6 +5,8 @@ Personal M1 Mackbook Air
 ## bootstrap
 
 ```bash
+# install nix
+$ sh <(curl -L https://nixos.org/nix/install)
 
 # generate ssh key, add to github
 ssh-keygen -o -a 100 -t ed25519 -C "fisherrjd@airbook"
