@@ -18,6 +18,12 @@ cd ~/cfg
 
 # initial switch. after this, you can use just `hms` to update!
 $(nix-build --no-link --expr "with import $(pwd) {}; _nixos-switch" --argstr host "eldo")/bin/switch
+
+# Tailscale Info
+# advertise exit node 
+# TODO learn more about these things
+
+sudo tailscale up --advertise-exit-node
 ```
 
 ---
