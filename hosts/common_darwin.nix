@@ -64,10 +64,9 @@ in
 
         trackpad = {
           Clicking = true;
-          TrackpadThreeFingerDrag = true;
+          TrackpadThreeFingerDrag = false;
         };
       };
-
       keyboard = {
         enableKeyMapping = true;
         remapCapsLockToControl = true;
@@ -77,72 +76,5 @@ in
       enable = true;
       completion.enable = true;
     };
-    homebrew =
-      let
-        casks = rec {
-          fonts = [
-            # "font-caskaydia-cove-nerd-font"
-            # "font-fantasque-sans-mono-nerd-font"
-            # "font-fira-code-nerd-font"
-            # "font-hasklug-nerd-font"
-            # "font-victor-mono-nerd-font"
-            # "font-monaspace"
-          ];
-          fun = [
-            # "mgba"
-            # "spotify"
-            # "steam"
-          ];
-          work = [
-            # "1password"
-            # "dropbox"
-            # "robo-3t"
-            # "slack"
-            # "xca"
-          ];
-          comms = [
-            # "discord"
-          ];
-          util = [
-            # "dbeaver-community"
-            # "docker"
-            # "insomnia"
-            # "karabiner-elements"
-            # "keybase"
-            # "macfuse"
-            # "obsidian"
-            # "parsec"
-            # "qlvideo"
-            # "raycast"
-            # "rectangle"
-            # "utm"
-            # "vlc"
-          ];
-          all = fonts ++ fun ++ work ++ comms ++ util;
-          all_personal = subtractLists work all;
-          all_work = subtractLists fun all;
-        };
-      in
-      {
-        enable = true;
-        taps = [
-          # "homebrew/cask-fonts"
-          # "homebrew/cask-versions"
-          # "homebrew/services"
-        ];
-        brews = [
-          # "openconnect"
-          # "readline"
-          # "qemu"
-          # "unixodbc"
-        ];
-        onActivation = {
-          autoUpdate = true;
-          cleanup = "zap";
-          upgrade = true;
-        };
-        casks = if work.enable then casks.all_work else casks.all_personal;
-        extraConfig = "";
-      };
   };
 }
