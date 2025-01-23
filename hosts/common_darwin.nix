@@ -56,12 +56,6 @@ in
           orientation = "bottom";
           showhidden = true;
           show-recents = false;
-          persistent-apps = [
-              "/Applications/Firefox.app"
-              "/Applications/Visual Studio Code.app"
-              "/Applications/Intellij IDEA.app"
-              "/System/Applications/Utilities/Terminal.app"
-          ];
         };
         finder = {
           AppleShowAllExtensions = true;
