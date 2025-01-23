@@ -52,11 +52,11 @@ in
   };
 
   services.openssh.enable = true;
-  ### can't get this working?
-  # services.github-runners = mapAttrs' nameValuePair {
-  #   jpetrucciani-nix = runner-defaults // {
-  #     extraPackages = with pkgs; [ gh cachix ];
-  #     tokenFile = "/etc/default/gh.token";
-  #   };
-  # };
+
+  system.defaults.dock.authide = false;
+  system.defaults.dock.orientation = “bottom”;
+  system.defaults.dock.persistent-apps = [
+    "/Applications/Firefox.app"
+    "/System/Applications/Utilities/Terminal.app"
+  ]
 }
