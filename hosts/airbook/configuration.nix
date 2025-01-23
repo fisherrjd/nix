@@ -58,5 +58,5 @@ in
   system.defaults.dock.persistent-apps = [
     "/Applications/Firefox.app"
     "/System/Applications/Utilities/Terminal.app"
-  ]
+  ];
 }
