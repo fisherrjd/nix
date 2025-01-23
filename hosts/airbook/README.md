@@ -28,6 +28,9 @@ $(nix-build --no-link --expr "with import $(pwd) {}; _nix-darwin-switch" --argst
 sudo tailscale up --advertise-exit-node
 
 ```
+## Extra Readings:
+### [Nix Darwin manual](https://daiderd.com/nix-darwin/manual/index.html)
+
 
 ---
 
