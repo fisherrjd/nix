@@ -82,10 +82,7 @@ in
     wheelNeedsPassword = false;
   };
   services = {
-    tailscale = {
-      enable = true;
-      useRoutingFeatures = "both";
-    };
+    tailscale.enable = true;
     # netdata.enable = true;
     openssh = {
       enable = true;
