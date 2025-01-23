@@ -55,6 +55,7 @@ in
           mru-spaces = false;
           orientation = "bottom";
           showhidden = true;
+          show-recents = false;
           persistent-apps = [
               "/Applications/Firefox.app"
               "/Applications/Visual Studio Code.app"
