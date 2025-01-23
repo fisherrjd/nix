@@ -51,9 +51,9 @@ in
         };
         screencapture = { location = "/Desktop"; type = "png"; };
         dock = {
-          autohide = true;
+          autohide = false;
           mru-spaces = false;
-          orientation = "left";
+          orientation = "bottom";
           showhidden = true;
         };
         finder = {

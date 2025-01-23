@@ -52,11 +52,4 @@ in
   };
 
   services.openssh.enable = true;
-
-  system.defaults.dock.autohide = false;
-  system.defaults.dock.orientation = "bottom";
-  # system.defaults.dock.persistent-apps = [
-  #   "/Applications/Firefox.app"
-  #   "/System/Applications/Utilities/Terminal.app"
-  # ];
 }
