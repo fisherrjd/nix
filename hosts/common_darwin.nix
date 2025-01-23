@@ -55,6 +55,10 @@ in
           mru-spaces = false;
           orientation = "bottom";
           showhidden = true;
+          persistent-apps = [
+              "/Applications/Firefox.app"
+              "/System/Applications/Utilities/Terminal.app"
+          ]
         };
         finder = {
           AppleShowAllExtensions = true;
