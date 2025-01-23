@@ -24,7 +24,7 @@ nix flake update
 hms
 ```
 
-Update Ping to Jacobi
+Update only Jacobi
 ```
 nix flake lock --update-input jacobi
 hms
