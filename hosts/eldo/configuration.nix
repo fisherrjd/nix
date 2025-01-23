@@ -64,7 +64,7 @@ in
   services.printing.enable = true;
 
   # Enable sound with pipewire.
-  hardware.pulseaudio.enable = false;
+  services.pulseaudio.enable = false;
   security.rtkit.enable = true;
   services.pipewire = {
     enable = true;
@@ -172,7 +172,7 @@ in
       "/nix/var/nix/profiles/per-user/root/channels"
     ];
   };
-  
+
 # system sleep settings
   systemd.targets.sleep.enable = false;
   systemd.targets.suspend.enable = false;
