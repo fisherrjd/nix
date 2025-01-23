@@ -14,7 +14,7 @@ in
 
   ];
 
-  home-manager.users.jade = common.jade;
+  home-manager.users.P3175941 = common.P3175941;
 
   documentation.enable = false;
 
@@ -25,7 +25,7 @@ in
   };
   environment.darwinConfig = configPath;
 
-  users.users.jade = {
+  users.users.P3175941 = {
     name = username;
     home = "/Users/${username}";
     openssh.authorizedKeys.keys = with common.pubkeys; [
