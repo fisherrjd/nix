@@ -18,7 +18,6 @@ in
 {
   imports = [
     "${common.home-manager}/nix-darwin"
-      {services=common.services;}
 
   ];
 
