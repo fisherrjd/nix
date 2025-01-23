@@ -9,7 +9,7 @@ let
 
   onAws = builtins.getEnv "USER" == "ubuntu";
   # isWork checks for env var USER if it is my username
-  isWork = builtins.getenv "USER" == workUser;
+  isWork = builtins.getEnv "USER" == workUser;
   promptChar = ">";
 
   jacobi = flake.inputs.jacobi.packages.${pkgs.system};
