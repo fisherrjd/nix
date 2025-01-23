@@ -6,7 +6,8 @@ Personal M1 Mackbook Air
 
 ```bash
 # install nix
-$ sh <(curl -L https://nixos.org/nix/install)
+curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | \
+  sh -s -- install
 
 # generate ssh key, add to github
 ssh-keygen -o -a 100 -t ed25519 -C "fisherrjd@airbook"
