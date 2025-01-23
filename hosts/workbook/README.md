@@ -10,7 +10,7 @@ curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix 
   sh -s -- install
 
 # generate ssh key, add to github
-ssh-keygen -o -a 100 -t ed25519 -C "fisherrjd@airbook"
+ssh-keygen -o -a 100 -t ed25519 -C "jade@work"
 
 # clone repo
 nix-shell -p git
