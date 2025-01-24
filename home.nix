@@ -13,7 +13,7 @@ let
   
   homeDirectory = if isDarwin then
                     "/Users/${username}"
-                  else "/home/${username}"
+                  else "/home/${username}";
 
   sessionVariables = {
     BASH_SILENCE_DEPRECATION_WARNING = "1";
