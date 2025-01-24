@@ -77,6 +77,8 @@ in
         htmlq
         jq
         just
+        kubectl
+        kubectx
         libarchive
         libnotify
         loop
@@ -219,8 +221,6 @@ in
       source ~/.nix-profile/share/bash-completion/completions/git
       source ~/.nix-profile/share/bash-completion/completions/ssh
       complete -o bashdefault -o default -o nospace -F __git_wrap__git_main g
-      source ~/.nix-profile/share/bash-completion/completions/docker
-      complete -F _docker d
       # there are often duplicate path entries on non-nixos; remove them
       NEWPATH=
       OLDIFS=$IFS
@@ -244,19 +244,12 @@ in
     '' else "");
   };
 
-  # https://github.com/ajeetdsouza/zoxide
-  programs.zoxide = {
-    enable = true;
-  };
 
   programs.direnv = {
     enable = true;
     nix-direnv.enable = true;
   };
 
-  programs.nushell = {
-    enable = true;
-  };
 
   programs.readline = {
     enable = true;
@@ -278,6 +271,7 @@ in
   };
 
   # https://github.com/cantino/mcfly
+  # BIG BOOM
   programs.mcfly = {
     enable = true;
     enableBashIntegration = true;
