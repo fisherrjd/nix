@@ -15,9 +15,9 @@ in
   ];
 
   home-manager.users.${username} = common.jade;
-
   documentation.enable = false;
-
+  services.openssh.enable = true;
+  
   time.timeZone = common.timeZone;
   environment.variables = {
     NIX_HOST = hostname;
@@ -44,5 +44,5 @@ in
     ];
   };
 
-  services.openssh.enable = true;
+
 }
