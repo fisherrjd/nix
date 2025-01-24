@@ -10,7 +10,10 @@ let
 
   jacobi = flake.inputs.jacobi.packages.${pkgs.system};
   
-  homeDirectory = "/Users/${username}";
+  
+  homeDirectory = if isDarwin then
+                    "/Users/${username}"
+                  else "/home/${username}"
 
   sessionVariables = {
     BASH_SILENCE_DEPRECATION_WARNING = "1";
