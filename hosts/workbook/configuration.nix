@@ -3,7 +3,7 @@ let
   # inherit (lib.attrsets) mapAttrs' nameValuePair;
 
   hostname = "workbook";
-  common = import ../common.nix { inherit config flake machine-name pkgs; };
+  common = import ../common.nix { inherit config flake machine-name pkgs username; };
   username = "P3175941";
   configPath = "/Users/${username}/cfg/hosts/${hostname}/configuration.nix";
 
@@ -14,7 +14,7 @@ in
 
   ];
 
-  home-manager.users.P3175941 = common.jade;
+  home-manager.users.${username} = common.jade;
 
   documentation.enable = false;
 
@@ -25,7 +25,7 @@ in
   };
   environment.darwinConfig = configPath;
 
-  users.users.P3175941 = {
+  users.users.${username} = {
     name = username;
     home = "/Users/${username}";
     openssh.authorizedKeys.keys = with common.pubkeys; [

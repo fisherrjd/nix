@@ -18,14 +18,8 @@ git clone git@github.com:fisherrjd/nix.git ~/cfg
 cd ~/cfg
 
 # initial switch. after this, you can use just `hms` to update!
-$(nix-build --no-link --expr "with import $(pwd) {}; _nix-darwin-switch" --argstr host "airbook")/bin/switch
+$(nix-build --no-link --expr "with import $(pwd) {}; _nix-darwin-switch" --argstr host "workbook")/bin/switch
 
-
-# Tailscale Info
-# advertise exit node 
-# TODO learn more about these things
-
-sudo tailscale up --advertise-exit-node
 
 ```
 ## Extra Readings:
