@@ -1,9 +1,9 @@
-{ config, flake, machine-name, pkgs, username, ... }:
+{ config, flake, machine-name, pkgs, ... }:
 let
   # inherit (lib.attrsets) mapAttrs' nameValuePair;
 
   hostname = "airbook";
-  common = import ../common.nix { inherit config flake machine-name pkgs; };
+  common = import ../common.nix { inherit config flake machine-name pkgs username; };
   configPath = "/Users/jade/cfg/hosts/${hostname}/configuration.nix";
   username = "jade";
 
@@ -21,7 +21,7 @@ in
 
   ];
 
-  home-manager.users.jade = common.jade;
+  home-manager.users.${username} = common.jade;
 
   documentation.enable = false;
 
@@ -32,7 +32,7 @@ in
   };
   environment.darwinConfig = configPath;
 
-  users.users.jade = {
+  users.users.${username} = {
     name = username;
     home = "/Users/${username}";
     openssh.authorizedKeys.keys = with common.pubkeys; [
