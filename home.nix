@@ -13,7 +13,20 @@ let
   promptChar = ">";
 
   jacobi = flake.inputs.jacobi.packages.${pkgs.system};
+
+  isWork = builtins.getEnv "USER" == "P3175941";
+  username = 
+  if isWork then
+    workUser
+  else
+    firstName;
   
+  homeDirectory = 
+  if isWork then
+    "/Users/${workUser}"
+  else
+    "/Users/${firstName}";
+
   sessionVariables = {
     BASH_SILENCE_DEPRECATION_WARNING = "1";
     EDITOR = "nano";
