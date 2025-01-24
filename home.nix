@@ -79,7 +79,6 @@ in
         just
         kubectl
         kubectx
-        kuben
         libarchive
         libnotify
         loop
