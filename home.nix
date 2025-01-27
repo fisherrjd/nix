@@ -245,6 +245,8 @@ in
       ${pkgs.figlet}/bin/figlet "$(hostname)" | ${pkgs.clolcat}/bin/clolcat
       echo
     '' else "");
+    workBits = ''if [ -f ~/.bash_profile_old ]; then source ~/.bash_profile_old fi'';
+
   };
 
 
