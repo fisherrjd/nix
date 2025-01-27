@@ -1,0 +1,126 @@
+# .bash_profile
+
+# Set PATH
+export PATH=$HOME/bin:/usr/local/bin:$PATH
+
+# Set prompt
+export PS1="\u@\h \W \$ "
+
+# Set some useful aliases
+alias ll='ls -la'
+alias update='sudo softwareupdate -i -a; brew update; brew upgrade'
+alias weather='curl wttr.in'
+
+# Set some environment variables
+export LANG=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
+
+# Add color to terminal
+export CLICOLOR=1
+export LSCOLORS=GxFxCxDxBxegedabagaced
+
+# Enable bash completion
+[ -f /usr/local/etc/bash_completion ] && . /usr/local/etc/bash_completion
+
+# Add any custom functions
+function mkcd() {
+    mkdir -p "$@" && cd "$_"
+}
+
+# Source additional config files
+for file in ~/.{path,bash_prompt,exports,aliases,functions,extra}; do
+    [ -r "$file" ] && [ -f "$file" ] && source "$file"
+done
+unset file
+
+# Add any project-specific configurations here 
+
+
+# Alias Section #
+
+#Logins
+alias bastionlogin='aws ssm start-session --region us-east-1 --target i-01ee77b44f740043a --profile it-cloud-shared-services'
+alias awslogin='aws sso login --profile it-cloud-shared-services'
+
+
+#cassandra
+alias cassandra='aws ssm start-session --region us-east-1 --target i-01ee77b44f740043a --profile it-cloud-shared-services --document-name AWS-StartPortForwardingSessionToRemoteHost --parameters host="pinxt-shared-cassandra.shared.dev-spectrum.net",portNumber="9042",localPortNumber="9042"'
+alias cassandraQA='aws ssm start-session --region us-east-1 --target i-01ee77b44f740043a --profile it-cloud-shared-services --document-name AWS-StartPortForwardingSessionToRemoteHost --parameters host="pinxt-shared-cassandra.shared.qa-spectrum.net",portNumber="9042",localPortNumber="9042"'
+alias cassandraUAT='aws ssm start-session --region us-east-1 --target i-01ee77b44f740043a --profile it-cloud-shared-services --document-name AWS-StartPortForwardingSessionToRemoteHost --parameters host="pinxt-shared-cassandra.shared.uat-spectrum.net",portNumber="9042",localPortNumber="9042"'
+alias cassandraBlue='aws ssm start-session --region us-east-1 --target i-01ee77b44f740043a --profile it-cloud-shared-services --document-name AWS-StartPortForwardingSessionToRemoteHost --parameters host="pinxt-shared-cassandra-uat-blue.shared.uat-spectrum.net",portNumber="9042",localPortNumber="9042"'
+alias cassandraGreen='aws ssm start-session --region us-east-1 --target i-01ee77b44f740043a --profile it-cloud-shared-services --document-name AWS-StartPortForwardingSessionToRemoteHost --parameters host="pinxt-shared-cassandra-uat-green.shared.uat-spectrum.net",portNumber="9042",localPortNumber="9042"'
+alias cassandraPerf1='aws ssm start-session --region us-east-1 --target i-01ee77b44f740043a --profile it-cloud-shared-services --document-name AWS-StartPortForwardingSessionToRemoteHost --parameters host="pinxt-shared-cassandra-perf1.shared.perf-spectrum.net",portNumber="9042",localPortNumber="9042"'
+alias cassandraPerf2='aws ssm start-session --region us-east-1 --target i-01ee77b44f740043a --profile it-cloud-shared-services --document-name AWS-StartPortForwardingSessionToRemoteHost --parameters host="pinxt-shared-cassandra-perf2.shared.perf-spectrum.net",portNumber="9042",localPortNumber="9042"'
+alias cassandraPerf3='aws ssm start-session --region us-east-1 --target i-01ee77b44f740043a --profile it-cloud-shared-services --document-name AWS-StartPortForwardingSessionToRemoteHost --parameters host="pinxt-shared-cassandra-perf3.shared.perf-spectrum.net",portNumber="9042",localPortNumber="9042"'
+
+#aws 
+alias appservices='aws ssm start-session --region us-east-1 --target i-01ee77b44f740043a --profile it-cloud-shared-services --document-name AWS-StartPortForwardingSessionToRemoteHost --parameters host="pinxtappservices.shared.dev-spectrum.net",portNumber="80",localPortNumber="8094"'
+alias ingressBeta='aws ssm start-session --region us-east-1 --target i-01ee77b44f740043a --profile it-cloud-shared-services --document-name AWS-StartPortForwardingSessionToRemoteHost --parameters host="pinxt-ingress-beta-internal.shared.dev-spectrum.net",portNumber="80",localPortNumber="8084"'
+alias ingressStable='aws ssm start-session --region us-east-1 --target i-01ee77b44f740043a --profile it-cloud-shared-services --document-name AWS-StartPortForwardingSessionToRemoteHost --parameters host="pinxt-ingress-vpc-internal.shared.dev-spectrum.net",portNumber="80",localPortNumber="8022"'
+alias ingressUAT='aws ssm start-session --region us-east-1 --target i-01ee77b44f740043a --profile it-cloud-shared-services --document-name AWS-StartPortForwardingSessionToRemoteHost --parameters host="pinxt-ingress-vpc-internal.shared.dev-spectrum.net",portNumber="80",localPortNumber="8022"'
+alias validate='aws ssm start-session --region us-east-1 --target i-01ee77b44f740043a --profile it-cloud-shared-services --document-name AWS-StartPortForwardingSessionToRemoteHost  --parameters host="pinxtvalidationservice-beta.shared.dev-spectrum.net",portNumber="80",localPortNumber="8042"'
+
+#REDIS
+alias redis_start='aws ssm start-session --region us-east-1 --target i-01ee77b44f740043a --profile it-cloud-shared-services --document-name AWS-StartPortForwardingSessionToRemoteHost --parameters host="pinxt-shared-redis.shared.dev-spectrum.net",portNumber="6379",localPortNumber="6379"'
+alias redis_connect='redis-cli -h localhost -p 6379'
+alias redis_perf3='aws ssm start-session --region us-east-1 --target i-01ee77b44f740043a --profile it-cloud-shared-services --document-name AWS-StartPortForwardingSessionToRemoteHost --parameters host="pinxt-shared-aws-use1-perf3-pinxt.f8pttt.clustercfg.use1.cache.amazonaws.com",portNumber="6379",localPortNumber="6379"'
+
+#ADD COMMENTS TO EXPLAIN THIS
+alias tunnel_8094='aws ssm start-session --region us-east-1 --target i-01ee77b44f740043a --document-name AWS-StartPortForwardingSessionToRemoteHost --parameters host="pinxtappservices.shared.dev-spectrum.net",portNumber="80",localPortNumber="8094"'  
+alias tunnel_8092='aws ssm start-session --region us-east-1 --target i-01ee77b44f740043a --document-name AWS-StartPortForwardingSessionToRemoteHost --parameters host="pinxtappservices-beta.shared.dev-spectrum.net",portNumber="80",localPortNumber="8092"'
+alias tunnel_8084='aws ssm start-session --region us-east-1 --target i-01ee77b44f740043a --document-name AWS-StartPortForwardingSessionToRemoteHost --parameters host="pinxt-ingress-beta-internal.shared.dev-spectrum.net",portNumber="443",localPortNumber="8084"'
+
+alias tunnel_uat='aws ssm start-session --region us-east-1 --target i-01ee77b44f740043a --document-name AWS-StartPortForwardingSessionToRemoteHost --parameters host="pinxt-ingress-internal.shared.uat-spectrum.net",portNumber="443",localPortNumber="8025" --no-verify-ssl'
+alias tunnel_9042='aws ssm start-session --region us-east-1 --target i-01ee77b44f740043a --document-name AWS-StartPortForwardingSessionToRemoteHost --parameters host="pinxt-shared-cassandra.shared.uat-spectrum.net",portNumber="9042",localPortNumber="9042"'
+
+#Kubernetes
+
+alias updateVideoQA='kubectl --kubeconfig=/Users/P3175941/kubeconfigs/k8s-pinxt-shared-1244-shared-qa-spectrum-net.yaml rollout restart deployment -n pinxt-video appservices; kubectl --kubeconfig=/Users/P3175941/kubeconfigs/k8s-pinxt-shared-1244-shared-qa-spectrum-net.yaml rollout restart deployment -n pinxt-video pinxtgateway; kubectl --kubeconfig=/Users/P3175941/kubeconfigs/k8s-pinxt-shared-1244-shared-qa-spectrum-net.yaml rollout restart deployment -n pinxt-video jwtfactory'
+alias updateBeta='kubectl --kubeconfig=/Users/P3175941/kubeconfigs/k8s-pinxt-shared-1244-shared-dev-spectrum-net.yaml rollout restart deployment -n pinxt-dev pinxtappservices; kubectl --kubeconfig=/Users/P3175941/kubeconfigs/k8s-pinxt-shared-1244-shared-dev-spectrum-net.yaml rollout restart deployment -n pinxt-dev pinxtgateway; kubectl --kubeconfig=/Users/P3175941/kubeconfigs/k8s-pinxt-shared-1244-shared-dev-spectrum-net.yaml rollout restart deployment -n pinxt-dev jwtfactory'
+alias statusBeta='kubectl --kubeconfig=/Users/P3175941/kubeconfigs/k8s-pinxt-shared-1244-shared-dev-spectrum-net.yaml -n pinxt-dev get pods | grep pinxtappservices; kubectl --kubeconfig=/Users/P3175941/kubeconfigs/k8s-pinxt-shared-1244-shared-dev-spectrum-net.yaml get pods -n pinxt-dev | grep pinxtgateway; kubectl --kubeconfig=/Users/P3175941/kubeconfigs/k8s-pinxt-shared-1244-shared-dev-spectrum-net.yaml get pods -n pinxt-dev | grep jwtfactory'
+alias statusBlue='kubectl --kubeconfig=/Users/P3175941/kubeconfigs/k8s-pinxt-shared-1244-uat-blue-shared-uat-spectrum-net.yaml -n pinxt get pods'
+
+status ()
+{
+    kubectl --kubeconfig=/Users/P3175941/kubeconfigs/k8s-pinxt-shared-1244-shared-"$1"-spectrum-net.yaml -n pinxt get pods | grep "$2"; 
+}
+
+
+restart ()
+{
+    kubectl --kubeconfig=/Users/P3175941/kubeconfigs/k8s-pinxt-shared-1244-shared-"$1"-spectrum-net.yaml rollout restart deployment -n pinxt "$2"
+}
+
+log () {
+
+    kubectl --kubeconfig=/Users/P3175941/kubeconfigs/k8s-pinxt-shared-1244-shared-"$1"-spectrum-net.yaml -n pinxt logs "$2"
+}
+
+alias decode='./decode.sh $1'
+#git
+alias g=git
+alias ga="git add -A"
+alias cm="commit -,"
+
+alias decode='./decode.sh $1'
+#git
+alias g=git
+alias ga="git add -A"
+alias cm="commit -,"
+
+eval "$(/opt/homebrew/bin/brew shellenv)"
+eval "$(starship init bash)"
+export JAVA_HOME=$(/usr/libexec/java_home -v11)
+
+
+# Added by Toolbox App
+export PATH="$PATH:/Users/P3175941/Library/Application Support/JetBrains/Toolbox/scripts"
+
+
+#POD LOGIN: kubectl exec -it pinxtlocationservice-6d497fc758-dg9xd -c istio-proxy pinxtlocationservicescd
+
+alias kube="kubectl --kubeconfig=/Users/P3175941/kubeconfigs/k8s-pinxt-shared-1244-shared-dev-spectrum-net.yaml"
+alias kubeuat="kubectl --kubeconfig=/Users/P3175941/kubeconfigs/k8s-pinxt-shared-1244-shared-uat-spectrum-net.yaml"
+alias kubeqa="kubectl --kubeconfig=/Users/P3175941/kubeconfigs/k8s-pinxt-shared-1244-shared-qa-spectrum-net.yaml"
+
+# -c nginx for the container logs!!! (thanks revanth)
