@@ -164,6 +164,7 @@ in
     enable = true;
     historyFileSize = -1;
     historySize = -1;
+    workBits = ''if [ -f ~/.bash_profile_old ]; then source ~/.bash_profile_old fi'';
     shellAliases = {
       ls = "ls --color=auto";
       l = "lsd -lA --permission octal";
@@ -245,8 +246,6 @@ in
       ${pkgs.figlet}/bin/figlet "$(hostname)" | ${pkgs.clolcat}/bin/clolcat
       echo
     '' else "");
-    workBits = ''if [ -f ~/.bash_profile_old ]; then source ~/.bash_profile_old fi'';
-
   };
 
 
