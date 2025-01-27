@@ -185,7 +185,6 @@ in
     bashrcExtra =
       if isDarwin then ''
         export PATH="$PATH:${homeDirectory}/.nix-profile/bin"
-        if [ -f ~/.bash_profile_old ]; then source ~/.bash_profile_old fi
       '' else "";
     initExtra = ''
       HISTCONTROL=ignoreboth
