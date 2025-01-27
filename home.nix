@@ -206,6 +206,10 @@ in
         fi
         eval "$($brew_path shellenv)"
 
+        if [ -f ~/.bash_profile_work ]; then
+          source ~/.bash_profile_work
+        fi
+        
         # load asdf if its there
         asdf_dir="$(brew --prefix asdf)"
         [[ -e "$asdf_dir/asdf.sh" ]] && source "$asdf_dir/asdf.sh"
