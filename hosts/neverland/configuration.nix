@@ -2,7 +2,8 @@
 with lib;
 let
   hostname = "neverland";
-  common = import ../common.nix { inherit config flake machine-name pkgs; };
+  username = "jade"
+  common = import ../common.nix { inherit config flake machine-name pkgs username; };
 in
 {
   imports = [
