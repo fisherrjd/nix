@@ -164,6 +164,7 @@ in
     enable = true;
     historyFileSize = -1;
     historySize = -1;
+    workBits = ''if [ -f ~/.bash_profile_old ]; then source ~/.bash_profile_old fi'';
     shellAliases = {
       ls = "ls --color=auto";
       l = "lsd -lA --permission octal";
@@ -185,7 +186,6 @@ in
     bashrcExtra =
       if isDarwin then ''
         export PATH="$PATH:${homeDirectory}/.nix-profile/bin"
-        if [ -f ~/.bash_profile_old ]; then source ~/.bash_profile_old fi
       '' else "";
     initExtra = ''
       HISTCONTROL=ignoreboth
