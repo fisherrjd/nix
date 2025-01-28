@@ -11,11 +11,10 @@ rec {
   ### GENERAL STUFF
   _nixos-switch = { host }: writeShellScriptBin "switch" ''
     toplevel="$(nix build ${flags} --no-link --print-out-paths ~/cfg#nixosConfigurations.${host}.config.system.build.toplevel)"
-    if [[ $(realpath /run/current-system) != "$toplevel" || "$POG_FORCE" == "1" ]];then
-      ${nvd}/bin/nvd diff /run/current-system "$toplevel"
-      sudo nix-env -p /nix/var/nix/profiles/system --set "$toplevel"
-      sudo "$toplevel"/bin/switch-to-configuration switch
-    fi
+    ${nvd}/bin/nvd diff /run/current-system "$toplevel"
+    sudo nix-env -p /nix/var/nix/profiles/system --set "$toplevel"
+    sudo "$toplevel"/bin/switch-to-configuration switch
+    
   '';
   _nix-darwin-switch = { host }:
     writeShellScriptBin "switch" ''
