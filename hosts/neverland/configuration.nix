@@ -19,7 +19,7 @@ in
   };
   wsl = {
     enable = true;
-    defaultUser = username;
+    defaultUser = "jade";
     startMenuLaunchers = true;
     wslConf.automount.root = "/mnt";
     nativeSystemd = true;
@@ -63,7 +63,7 @@ in
   nix = common.nix // {
     nixPath = [
       "nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixos"
-      "nixos-config=/home/${username}/cfg/hosts/${hostname}/configuration.nix"
+      "nixos-config=/home/jade/cfg/hosts/${hostname}/configuration.nix"
       "/nix/var/nix/profiles/per-user/root/channels"
     ];
   };
