@@ -1,4 +1,4 @@
-{ pkgs ? import ./default.nix { }, flake ? null, machine-name ? "void", home-manager ? null , username}:
+{ pkgs ? import ./default.nix { }, flake ? null, machine-name ? "void", home-manager ? null }:
 let
   inherit (pkgs.hax) isDarwin isLinux isM1;
   inherit (pkgs.hax) attrIf optionalString words;
@@ -6,11 +6,26 @@ let
   firstName = "jade";
   lastName = "fisher";
 
+  workUser = "P3175941";
+
+
+
   promptChar = ">";
 
   jacobi = flake.inputs.jacobi.packages.${pkgs.system};
+
+  isWork = builtins.getEnv "USER" == "P3175941";
+  username = 
+  if isWork then
+    workUser
+  else
+    firstName;
   
-  homeDirectory = "/Users/${username}";
+  homeDirectory = 
+  if isWork then
+    "/Users/${workUser}"
+  else
+    "/Users/${firstName}";
 
   sessionVariables = {
     BASH_SILENCE_DEPRECATION_WARNING = "1";

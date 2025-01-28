@@ -1,4 +1,4 @@
-{ config, flake, machine-name, pkgs, username, ... }:
+{ config, flake, machine-name, pkgs, ... }:
 let
   # inherit (lib.attrsets) mapAttrs' nameValuePair;
 

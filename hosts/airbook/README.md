@@ -21,8 +21,12 @@ cd ~/cfg
 $(nix-build --no-link --expr "with import $(pwd) {}; _nix-darwin-switch" --argstr host "airbook")/bin/switch
 
 
-# Tailscale 
-https://tailscale.com/download
+# Tailscale Info
+# advertise exit node 
+# TODO learn more about these things
+
+sudo tailscale up --advertise-exit-node
+
 ```
 ## Extra Readings:
 ### [Nix Darwin manual](https://daiderd.com/nix-darwin/manual/index.html)
