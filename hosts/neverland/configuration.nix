@@ -29,7 +29,7 @@ in
     # docker-desktop.enable = true;
   };
 
-  users.users.jade = {
+  users.users.${username} = {
     isNormalUser = true;
     description = "jade";
     extraGroups = [ "networkmanager" "wheel" "docker" ];
@@ -58,7 +58,7 @@ in
     };
   };
 
-  home-manager.users.jade = common.jade;
+  home-manager.users.${username} = common.jade;
   networking.hostName = hostname;
   nix = common.nix // {
     nixPath = [
