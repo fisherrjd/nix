@@ -11,18 +11,22 @@ rec {
   ### GENERAL STUFF
   _nixos-switch = { host }: writeShellScriptBin "switch" ''
     toplevel="$(nix build ${flags} --no-link --print-out-paths ~/cfg#nixosConfigurations.${host}.config.system.build.toplevel)"
-    ${nvd}/bin/nvd diff /run/current-system "$toplevel"
-    sudo nix-env -p /nix/var/nix/profiles/system --set "$toplevel"
-    sudo "$toplevel"/bin/switch-to-configuration switch
+    if [[ $(realpath /run/current-system) != "$toplevel" || "$POG_FORCE" == "1" ]];then
+      ${nvd}/bin/nvd diff /run/current-system "$toplevel"
+      sudo nix-env -p /nix/var/nix/profiles/system --set "$toplevel"
+      sudo "$toplevel"/bin/switch-to-configuration switch
+    fi
   '';
   _nix-darwin-switch = { host }:
     writeShellScriptBin "switch" ''
       profile=/nix/var/nix/profiles/system
       toplevel="$(nix build ${flags} --no-link --print-out-paths ~/cfg#darwinConfigurations.${host}.system)"
-      ${nvd}/bin/nvd diff "$profile" "$toplevel"
-      sudo -H nix-env -p "$profile" --set "$toplevel"
-      "$toplevel"/activate-user
-      sudo "$toplevel"/activate
+      if [[ $(realpath "$profile") != "$toplevel" ]];then
+        ${nvd}/bin/nvd diff "$profile" "$toplevel"
+        sudo -H nix-env -p "$profile" --set "$toplevel"
+        "$toplevel"/activate-user
+        sudo "$toplevel"/activate
+      fi
     '';
   _hms = {
     default = ''
