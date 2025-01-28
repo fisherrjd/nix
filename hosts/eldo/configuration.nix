@@ -85,7 +85,7 @@ in
   # services.xserver.libinput.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
-    users.users.${username} = {
+    users.users.jade = {
     isNormalUser = true;
     description = "Jade Fisher";
     extraGroups = [ "networkmanager" "wheel" ];
@@ -152,13 +152,13 @@ in
 
   #TODO: Learn what this is doing??? 
   #TODO: I think its enabling home manager stuff from jade user in common 
-  home-manager.users.${username} = common.jade;
+  home-manager.users.jade = common.jade;
 
   #defining nix tings
   nix = common.nix // {
     nixPath = [
       "nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixos"
-      "nixos-config=/home/jade/cfg/hosts/${hostname}/configuration.nix"
+      "nixos-config=/home/fisherrjd/cfg/hosts/${hostname}/configuration.nix"
       "/nix/var/nix/profiles/per-user/root/channels"
     ];
   };
