@@ -14,7 +14,6 @@ rec {
     ${nvd}/bin/nvd diff /run/current-system "$toplevel"
     sudo nix-env -p /nix/var/nix/profiles/system --set "$toplevel"
     sudo "$toplevel"/bin/switch-to-configuration switch
-    
   '';
   _nix-darwin-switch = { host }:
     writeShellScriptBin "switch" ''
