@@ -21,10 +21,12 @@ rec {
     writeShellScriptBin "switch" ''
       profile=/nix/var/nix/profiles/system
       toplevel="$(nix build ${flags} --no-link --print-out-paths ~/cfg#darwinConfigurations.${host}.system)"
+      if [[ $(realpath "$profile") != "$toplevel" ]];then
         ${nvd}/bin/nvd diff "$profile" "$toplevel"
         sudo -H nix-env -p "$profile" --set "$toplevel"
         "$toplevel"/activate-user
         sudo "$toplevel"/activate
+      fi
     '';
   _hms = {
     default = ''
