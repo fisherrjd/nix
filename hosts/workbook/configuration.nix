@@ -3,7 +3,7 @@ let
   # inherit (lib.attrsets) mapAttrs' nameValuePair;
 
   hostname = "workbook";
-  common = import ../common.nix { inherit config flake machine-name pkgs; };
+  common = import ../common.nix { inherit config flake machine-name pkgs username; };
   username = "P3175941";
   configPath = "/Users/${username}/cfg/hosts/${hostname}/configuration.nix";
 in

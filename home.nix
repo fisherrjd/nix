@@ -1,4 +1,4 @@
-{ pkgs ? import ./default.nix { }, flake ? null, machine-name ? "void", home-manager ? null }:
+{ pkgs ? import ./default.nix { }, flake ? null, machine-name ? "void", home-manager ? null, username }:
 let
   inherit (pkgs.hax) isDarwin isLinux isM1;
   inherit (pkgs.hax) attrIf optionalString words;
@@ -10,11 +10,7 @@ let
 
   # isWork checks for env var USER if it is my username
   isWork = builtins.getEnv "USER" == "P3175941";
-  username =
-    if isWork then
-      workUser
-    else
-      firstName;
+  username = username;
 
   homeDirectory =
     if isLinux then
