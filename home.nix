@@ -8,9 +8,7 @@ let
   promptChar = ">";
   jacobi = flake.inputs.jacobi.packages.${pkgs.system};
 
-  # isWork checks for env var USER if it is my username
-  isWork = builtins.getEnv "USER" == "P3175941";
-  username = username;
+  username;
 
   homeDirectory =
     if isLinux then
