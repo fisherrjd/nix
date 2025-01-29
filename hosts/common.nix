@@ -2,7 +2,7 @@
 let
   inherit (flake.inputs) home-manager nix-darwin;
   jade = import ../home.nix {
-    inherit home-manager flake machine-name pkgs;
+    inherit home-manager flake machine-name pkgs username;
   };
 
 in
