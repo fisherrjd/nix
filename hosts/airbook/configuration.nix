@@ -6,8 +6,6 @@ let
   common = import ../common.nix { inherit config flake machine-name pkgs; };
   configPath = "/Users/jade/cfg/hosts/${hostname}/configuration.nix";
   username = "jade";
-
-
   # runner-defaults = {
   #   enable = true;
   #   replace = true;
@@ -18,7 +16,6 @@ in
 {
   imports = [
     "${common.home-manager}/nix-darwin"
-
   ];
 
   home-manager.users.jade = common.jade;

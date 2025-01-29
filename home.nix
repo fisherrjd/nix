@@ -2,31 +2,28 @@
 let
   inherit (pkgs.hax) isDarwin isLinux isM1;
   inherit (pkgs.hax) attrIf optionalString words;
-
   firstName = "jade";
   lastName = "fisher";
-
   workUser = "P3175941";
-
-
-
   promptChar = ">";
-
   jacobi = flake.inputs.jacobi.packages.${pkgs.system};
 
   # isWork checks for env var USER if it is my username
   isWork = builtins.getEnv "USER" == "P3175941";
-  username = 
-  if isWork then
-    workUser
-  else
-    firstName;
-  
-  homeDirectory = 
-  if isWork then
-    "/Users/${workUser}"
-  else
-    "/Users/${firstName}";
+  username =
+    if isWork then
+      workUser
+    else
+      firstName;
+
+  homeDirectory =
+    if isLinux then
+      "/home/${firstName}"
+    else
+      if isWork then
+        "/Users/${workUser}"
+      else
+        "/Users/${firstName}";
 
 
   sessionVariables = {
