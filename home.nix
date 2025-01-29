@@ -9,12 +9,9 @@ let
 
   homeDirectory =
     if isLinux then
-      "/home/${firstName}"
+      "/home/${userName}"
     else
-      if isWork then
-        "/Users/${workUser}"
-      else
-        "/Users/${firstName}";
+      "/Users/${username}";
 
 
   sessionVariables = {
