@@ -35,6 +35,8 @@ in
     # KeyList for access this is stored in /hosts/common.nix under pubkeys
     openssh.authorizedKeys.keys = with common.pubkeys; [
       atlantis
+      eldo
+      airbook
     ];
   };
 
