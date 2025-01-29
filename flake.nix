@@ -27,7 +27,8 @@
       packages = forAllSystems
         (system: import self.inputs.nixpkgs {
           inherit system;
-          overlays = [ ] ++ import ./overlays.nix;
+          # Define cobi repos as an overlay into me
+          overlays = [ (_: _:{ jacobi = import self.inputs.jacobi {inherit system;}; }) ] ++ import ./overlays.nix;
           config = {
             allowUnfree = true;
           };

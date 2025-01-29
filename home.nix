@@ -135,6 +135,10 @@ in
           nixup
           hax.comma
         ])
+
+        [
+          github_tags
+        ]
       ];
   };
 
