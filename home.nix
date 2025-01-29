@@ -4,11 +4,8 @@ let
   inherit (pkgs.hax) attrIf optionalString words;
   firstName = "jade";
   lastName = "fisher";
-  workUser = "P3175941";
   promptChar = ">";
   jacobi = flake.inputs.jacobi.packages.${pkgs.system};
-
-  username;
 
   homeDirectory =
     if isLinux then
