@@ -10,17 +10,16 @@ let
 in
 {
   imports =
-    [ # Include the results of the hardware scan.
+    [
+      # Include the results of the hardware scan.
       "${common.home-manager}/nixos"
       ./hardware-configuration.nix
-      {services=common.services;}
+      { services = common.services; }
     ];
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
@@ -83,24 +82,21 @@ in
   # services.xserver.libinput.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
-    users.users.jade = {
+  users.users.jade = {
     isNormalUser = true;
     description = "Jade Fisher";
     extraGroups = [ "networkmanager" "wheel" ];
     openssh.authorizedKeys.keys = with common.pubkeys; [
-      atlantis 
+      atlantis
       neverland
       airbook
       workbook
     ];
-    packages = with pkgs; [
-    #  thunderbird
-    ];
+    packages = with pkgs; [ ];
   };
 
   # Install firefox.
   programs.firefox.enable = true;
-
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
@@ -120,7 +116,7 @@ in
   # List services that you want to enable:
 
   # Enable the OpenSSH daemon.
-   services.openssh.enable = true;
+  services.openssh.enable = true;
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
@@ -137,7 +133,7 @@ in
   system.stateVersion = "24.05"; # Did you read the comment?
 
   #begin jade fuckin around
-  
+
   #enable security sudo users from common
   security.sudo = common.security.sudo;
 
@@ -161,7 +157,7 @@ in
     ];
   };
 
-# system sleep settings
+  # system sleep settings
   systemd.targets.sleep.enable = false;
   systemd.targets.suspend.enable = false;
   systemd.targets.hibernate.enable = false;

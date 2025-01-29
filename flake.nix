@@ -1,6 +1,5 @@
 {
-
-  #Inputs for building the flake things
+  # Inputs for building the flake things
   inputs = {
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     # Mr Cobis git nix repo
@@ -37,12 +36,12 @@
       nixosConfigurations = builtins.listToAttrs
         (map
           (name: {
-            inherit name; 
+            inherit name;
             value = self.inputs.nixpkgs.lib.nixosSystem {
-            pkgs = self.packages.x86_64-linux;
-            specialArgs = { flake = self; machine-name = name; };
-            modules = [ ./hosts/${name}/configuration.nix ];
-          };
+              pkgs = self.packages.x86_64-linux;
+              specialArgs = { flake = self; machine-name = name; };
+              modules = [ ./hosts/${name}/configuration.nix ];
+            };
           })
           [
             "neverland"
@@ -52,20 +51,20 @@
       darwinConfigurations = builtins.listToAttrs
         (map
           (name: {
-            inherit name; 
+            inherit name;
             value = self.inputs.nix-darwin.lib.darwinSystem {
-            pkgs = self.packages.aarch64-darwin;
-            specialArgs = { flake = self; machine-name = name; };
-            modules = [
-            ./hosts/common_darwin.nix
-            ./hosts/${name}/configuration.nix
-            ];
-          };
-       })
-        [
-          "airbook"
-          "workbook"
-        ]);
+              pkgs = self.packages.aarch64-darwin;
+              specialArgs = { flake = self; machine-name = name; };
+              modules = [
+                ./hosts/common_darwin.nix
+                ./hosts/${name}/configuration.nix
+              ];
+            };
+          })
+          [
+            "airbook"
+            "workbook"
+          ]);
     };
 
 }
