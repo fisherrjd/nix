@@ -3,7 +3,7 @@ let
   # inherit (lib.attrsets) mapAttrs' nameValuePair;
 
   hostname = "airbook";
-  common = import ../common.nix { inherit config flake machine-name pkgs; };
+  common = import ../common.nix { inherit config flake machine-name pkgs username; };
   configPath = "/Users/jade/cfg/hosts/${hostname}/configuration.nix";
   username = "jade";
   # runner-defaults = {

@@ -6,7 +6,8 @@
 
 let
   hostname = "eldo";
-  common = import ../common.nix { inherit config flake machine-name pkgs; };
+  username = "jade";
+  common = import ../common.nix { inherit config flake machine-name pkgs username; };
 in
 {
   imports =
