@@ -9,7 +9,7 @@ let
 
   homeDirectory =
     if isLinux then
-      "/home/${userName}"
+      "/home/${username}"
     else
       "/Users/${username}";
 
