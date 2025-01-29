@@ -1,8 +1,8 @@
-# eldo
+# Eldo
 
 This is a bare-metal nixos server I am messing with 
 
-## bootstrap
+## Setup
 
 ```bash
 # load nixos iso

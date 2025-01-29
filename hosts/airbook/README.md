@@ -2,14 +2,14 @@
 
 Personal M1 Mackbook Air
 
-## bootstrap
+## Setup
 
 ```bash
 # install nix
 curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | \
   sh -s -- install
 
-# generate ssh key, add to github
+# generate ssh key
 ssh-keygen -o -a 100 -t ed25519 -C "fisherrjd@airbook"
 
 # clone repo
@@ -21,16 +21,9 @@ cd ~/cfg
 $(nix-build --no-link --expr "with import $(pwd) {}; _nix-darwin-switch" --argstr host "airbook")/bin/switch
 
 
-# Tailscale Info
-# advertise exit node 
-# TODO learn more about these things
-
-sudo tailscale up --advertise-exit-node
-
+# Tailscale Enable
+sudo tailscale up 
 ```
-## Extra Readings:
-### [Nix Darwin manual](https://daiderd.com/nix-darwin/manual/index.html)
-
 
 ---
 
