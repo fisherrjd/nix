@@ -207,6 +207,11 @@ in
         fi
         eval "$($brew_path shellenv)"
 
+        #load work bashrc
+        if [ -f ~/.bash_aliases_work ]; then
+            source ~/.bash_aliases_work
+        fi
+
         # load asdf if its there
         asdf_dir="$(brew --prefix asdf)"
         [[ -e "$asdf_dir/asdf.sh" ]] && source "$asdf_dir/asdf.sh"
