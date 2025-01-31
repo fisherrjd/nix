@@ -79,6 +79,8 @@ in
         htmlq
         jq
         just
+        kubectl
+        kubectx
         libarchive
         libnotify
         loop
