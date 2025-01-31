@@ -208,8 +208,8 @@ in
         eval "$($brew_path shellenv)"
 
         #load work bashrc
-        if [ -f ~/.bash_aliases_work ]; then
-            source ~/.bash_aliases_work
+        if [ -f ~/.bash_profile_work ]; then
+            source ~/.bash_profile_work
         fi
 
         # load asdf if its there
