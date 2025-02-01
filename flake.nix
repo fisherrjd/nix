@@ -58,7 +58,7 @@
               specialArgs = { flake = self; machine-name = name; };
               modules = [
                 ./hosts/common_darwin.nix
-                ./hosts/modules/
+                ./hosts/modules/llama-server.nix
                 ./hosts/${name}/configuration.nix
               ];
             };
