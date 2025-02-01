@@ -56,7 +56,6 @@ in
       modelPath = name: "/opt/box/models/${name}";
     in
     {
-      infinity.enable = true;
       llama-server.servers = {
         r1-14b = {
           enable = true;
