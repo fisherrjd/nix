@@ -86,7 +86,7 @@ in
           command = serve;
           serviceConfig = {
             GroupName = cfg.group;
-            Label = "dev.cobi.llama-server.${llamaName name}";
+            Label = "dev.jade.llama-server.${llamaName name}";
             RunAtLoad = true;
             StandardOutPath = "${homeDir}/log/${llamaName name}.out";
             StandardErrorPath = "${homeDir}/log/${llamaName name}.err";
