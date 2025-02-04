@@ -72,7 +72,6 @@ in
         gnumake
         gnupg
         gnused
-        gnutar
         gron
         gum
         gzip
@@ -132,14 +131,29 @@ in
         '')
         hms
 
+        # Stolen from cobi
         (with jacobi; [
           nixup
           hax.comma
         ])
 
+        # Pog scripts
         [
           github_tags
         ]
+
+        # Packages for only Max
+        (
+          optList isDarwin [ ]
+        )
+
+        # Packages for only Linux
+        (
+          optList isLinux [
+            gnutar
+          ]
+        )
+
       ];
   };
 
