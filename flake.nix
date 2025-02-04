@@ -30,6 +30,7 @@
           # Define cobi repos as an overlay into me
           overlays = [
             (_: _: { jacobi = import self.inputs.jacobi { inherit system; }; })
+            (_: prev: { inherit (prev.jacobi) llama-cpp-latest })
             (_: _: { nixpkgsRev = self.inputs.nixpkgs.rev; })
           ] ++ import ./overlays.nix;
           config = {
