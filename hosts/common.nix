@@ -64,7 +64,7 @@ in
   security.sudo = {
     extraRules = [
       {
-        users = [ "jade" "fisherrjd" "P3175941"];
+        users = [ "jade" "fisherrjd" "P3175941" ];
         commands = [
           {
             command = "ALL";
