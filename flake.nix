@@ -28,7 +28,10 @@
         (system: import self.inputs.nixpkgs {
           inherit system;
           # Define cobi repos as an overlay into me
-          overlays = [ (_: _:{ jacobi = import self.inputs.jacobi {inherit system;}; }) ] ++ import ./overlays.nix;
+          overlays = [
+            (_: _: { jacobi = import self.inputs.jacobi { inherit system; }; })
+            (_: _: { nixpkgsRev = self.inputs.nixpkgs.rev; })
+          ] ++ import ./overlays.nix;
           config = {
             allowUnfree = true;
           };
