@@ -57,7 +57,7 @@ in
     in
     {
       llama-server.servers = {
-        r1-14b = {
+        r1-1_5b = {
           enable = true;
           port = 8012;
           model = modelPath "DeepSeek-R1-Distill-Qwen-1.5B-Q8_0.gguf";
