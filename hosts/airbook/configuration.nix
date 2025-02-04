@@ -60,7 +60,7 @@ in
         r1-14b = {
           enable = true;
           port = 8012;
-          model = modelPath "DeepSeek-R1-Distill-Qwen-14B-Q8_0.gguf";
+          model = modelPath "DeepSeek-R1-Distill-Qwen-1.5B-Q8_0.gguf";
           ngl = 99;
         };
       };
