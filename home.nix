@@ -83,7 +83,6 @@ in
         kubectx
         libarchive
         libnotify
-        loop
         lsof
         man-pages
         manix
