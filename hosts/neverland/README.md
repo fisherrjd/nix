@@ -15,6 +15,7 @@
 
 - ```powershell
   wsl --import NixOS $env:USERPROFILE\NixOS\ nixos-wsl.tar.gz --version 2
+  (If re-installing run this first: wsl --unregister NixOS)
   ```
 
 4. You can now run NixOS:
