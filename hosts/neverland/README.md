@@ -38,8 +38,7 @@ git clone git@github.com:fisherrjd/nix.git ~/cfg
 cd ~/cfg
 
 # initial switch. after this, you can use just `hms` to update!
-$(nix-build --no-link --expr "with import $(pwd) {}; _nix-darwin-switch" --argstr host "neverland")/bin/switch
-
+$(nix-build --no-link --expr "with import $(pwd) {}; _nixos-switch" --argstr host "neverland")/bin/switch
 
 ```
 
