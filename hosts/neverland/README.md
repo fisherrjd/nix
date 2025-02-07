@@ -14,7 +14,7 @@
 3. Import the tarball into WSL:
 
 - ```powershell
-  wsl --import NixOS $env:USERPROFILE\NixOS\ nixos-wsl.tar.gz --version 2
+  wsl --import NixOS $env:USERPROFILE\NixOS\ nixos-wsl.tar.gz --version 2 --user jade
   (If re-installing run this first: wsl --unregister NixOS)
   ```
 
