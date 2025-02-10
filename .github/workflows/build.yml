@@ -5,11 +5,14 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os:
-          - ubuntu-24.04
-          - macos-15
-    name: nix (${{ matrix.os }})
-    runs-on: ${{ matrix.os }}
+        attrs:
+          - os: ubuntu-24.04
+            cmd: .#nixosConfigurations.eldo.config.system.build.toplevel
+          - os: macos-15
+            cmd: .#darwinConfigurations.airbook.system
+          
+    name: nix (${{ matrix.attrs.os }})
+    runs-on: ${{ matrix.attrs.os }}
     steps:
       - uses: actions/checkout@v4.2.2
       - uses: cachix/install-nix-action@v30
@@ -17,4 +20,4 @@ jobs:
         with:
           name: fisherrjd
           authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
-      - run: nix --show-trace build .#nixosConfigurations.eldo.config.system.build.toplevel
+      - run: nix --show-trace build ${{ matrix.attrs.cmd }}
