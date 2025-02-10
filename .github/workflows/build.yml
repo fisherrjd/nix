@@ -15,6 +15,5 @@ jobs:
       - uses: cachix/install-nix-action@v30
       - uses: cachix/cachix-action@master
         with:
-          # skipAddingSubstituter: ${{ matrix.os == 'm1' && 'true' || 'false' }}
           name: fisherrjd
       - run: nix --show-trace build
