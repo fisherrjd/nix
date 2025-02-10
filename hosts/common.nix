@@ -14,8 +14,8 @@ in
       max-jobs = auto
       narinfo-cache-negative-ttl = 10
       extra-experimental-features = nix-command flakes
-      extra-substituters = https://jacobi.cachix.org
-      extra-trusted-public-keys = jacobi.cachix.org-1:JJghCz+ZD2hc9BHO94myjCzf4wS3DeBLKHOz3jCukMU=
+      extra-substituters = https://jacobi.cachix.org https://fisherrjd.cachix.org
+      extra-trusted-public-keys = jacobi.cachix.org-1:JJghCz+ZD2hc9BHO94myjCzf4wS3DeBLKHOz3jCukMU= fisherrjd.cachix.org-1:21bdYeKCoWN19OGUDTGU41o60gnEsLHY5+tIpEq7w+A=
     '';
     settings = {
       trusted-users = [ "root" "jade" "P3175941" ];

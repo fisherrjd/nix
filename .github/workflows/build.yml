@@ -16,4 +16,5 @@ jobs:
       - uses: cachix/cachix-action@master
         with:
           name: fisherrjd
-      - run: nix --show-trace build
+          authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
+      - run: nix --show-trace build .#nixosConfigurations.eldo.config.system.build.toplevel
