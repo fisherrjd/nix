@@ -41,6 +41,7 @@ in
   };
 
   system.stateVersion = 4;
+  ids.gids.nixbld = 350;
   nix = common.nix // {
     nixPath = [
       "darwin=${common.nix-darwin}"
