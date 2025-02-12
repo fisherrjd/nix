@@ -10,7 +10,7 @@ jobs:
       - uses: cachix/install-nix-action@v30
       - uses: cachix/cachix-action@master
         with:
-          name: fisherrjd
+          name: jade
           authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
       - run: nix flake update
       - uses: peter-evans/create-pull-request@v7.0.6
