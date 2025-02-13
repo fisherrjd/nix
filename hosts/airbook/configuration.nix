@@ -51,15 +51,15 @@ in
 
   services =
     let
-      modelPath = name: "/opt/box/models/${name}";
+      modelPath = name: "/opt/box/models/bartowski/agentica-org_DeepScaleR-1.5B-Preview-GGUF";
     in
     {
       openssh.enable = true;
       llama-server.servers = {
         r1-7b = {
           enable = true;
-          port = 8012;
-          model = modelPath "DeepSeek-R1-Distill-Qwen-7B-Q8_0.gguf";
+          port = 6969;
+          model = modelPath "agentica-org_DeepScaleR-1.5B-Preview-GGUF";
           ngl = 99;
         };
       };
