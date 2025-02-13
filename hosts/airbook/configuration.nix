@@ -59,7 +59,7 @@ in
         r1-7b = {
           enable = true;
           port = 6969;
-          model = modelPath "agentica-org_DeepScaleR-1.5B-Preview-GGUF";
+          model = modelPath;
           ngl = 99;
         };
       };
