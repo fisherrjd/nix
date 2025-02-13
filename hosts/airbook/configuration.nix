@@ -55,14 +55,14 @@ in
     in
     {
       openssh.enable = true;
-      #  llama-server.servers = {
-      #    r1-7b = {
-      #      enable = true;
-      #      port = 8012;
-      #      model = modelPath "agentica-org_DeepScaleR-1.5B-Preview-Q4_0.gguf";
-      #      ngl = 99;
-      #    };
-      #  };
+      llama-server.servers = {
+        r1-7b = {
+          enable = true;
+          port = 8012;
+          model = modelPath "agentica-org_DeepScaleR-1.5B-Preview-Q4_0.gguf";
+          ngl = 99;
+        };
+      };
     };
 
 }
