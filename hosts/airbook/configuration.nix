@@ -51,7 +51,7 @@ in
 
   services =
     let
-      modelPath = name: "/opt/box/models/${name}";
+      modelPath = name: "/opt/box/models/bartowski/agentica-org_DeepScaleR-1.5B-Preview-GGUF/${name}";
     in
     {
       openssh.enable = true;
@@ -59,9 +59,10 @@ in
         r1-7b = {
           enable = true;
           port = 8012;
-          model = modelPath "DeepSeek-R1-Distill-Qwen-7B-Q8_0.gguf";
+          model = modelPath "agentica-org_DeepScaleR-1.5B-Preview-Q4_0.gguf";
           ngl = 99;
         };
       };
     };
+
 }
