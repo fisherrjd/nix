@@ -57,6 +57,7 @@ in
         cowsay
         curl
         diffutils
+        docker
         dos2unix
         dyff
         ed
