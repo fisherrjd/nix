@@ -51,7 +51,7 @@ in
 
   services =
     let
-      modelPath = name: "/opt/box/models/bartowski/agentica-org_DeepScaleR-1.5B-Preview-GGUF";
+      modelPath = "/opt/box/models/bartowski/agentica-org_DeepScaleR-1.5B-Preview-GGUF";
     in
     {
       openssh.enable = true;
