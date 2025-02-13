@@ -49,21 +49,19 @@ in
     ];
   };
 
-  services.openssh.enable = true;
-
-  # Temp disabled
-  # services =
-  #   let
-  #     modelPath = name: "/opt/box/models/${name}";
-  #   in
-  #   {
-  #     llama-server.servers = {
-  #       r1-7b = {
-  #         enable = true;
-  #         port = 8012;
-  #         model = modelPath "DeepSeek-R1-Distill-Qwen-7B-Q8_0.gguf";
-  #         ngl = 99;
-  #       };
-  #     };
-  #   };
+  services =
+    let
+      modelPath = name: "/opt/box/models/${name}";
+    in
+    {
+      openssh.enable = true;
+      llama-server.servers = {
+        r1-7b = {
+          enable = true;
+          port = 8012;
+          model = modelPath "DeepSeek-R1-Distill-Qwen-7B-Q8_0.gguf";
+          ngl = 99;
+        };
+      };
+    };
 }
