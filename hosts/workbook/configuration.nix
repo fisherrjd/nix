@@ -41,20 +41,5 @@ in
       "darwin-config=${configPath}"
     ];
   };
-    services =
-    let
-      modelPath = name: "/opt/box/models/${name}";
-    in
-    {
-      openssh.enable = true;
-      llama-server.servers = {
-        r1-7b = {
-          enable = true;
-          port = 8012;
-          model = modelPath "Rombos-Coder-V2.5-Qwen-7b-Q5_K_M.gguf";
-          ngl = 99;
-        };
-      };
-    };
-
+    services.openssh.enable = true;
 }
