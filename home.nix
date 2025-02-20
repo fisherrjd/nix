@@ -34,10 +34,10 @@ in
     inherit flake;
     inherit machine-name;
   };
-  nixpkgs. overlays = import
+  nixpkgs.overlays = import
     ./overlays.nix;
 
-  programs. home-manager. enable = true;
+  programs.home-manager.enable = true;
   programs.home-manager.path = "${home-manager}";
 
   programs.btop.enable = true;
