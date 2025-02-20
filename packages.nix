@@ -2,9 +2,10 @@
 
 let
   jacobi = flake.inputs.jacobi.packages.${pkgs.system};
+  inherit (pkgs.hax) isDarwin isLinux;
 in
 {
-  flakeInputs = with jacobi;[
+  cobiFlakes = with jacobi; [
     nixup
     hax.comma
   ];

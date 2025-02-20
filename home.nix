@@ -127,8 +127,6 @@ in
         '')
         hms
 
-        # Stolen from cobi
-        myPackages.cobiFlakes
 
         # Pog scripts
         [
@@ -146,8 +144,9 @@ in
             gnutar
           ]
         )
-
+        myPackages.cobiFlakes
       ];
+
   };
 
   programs.less.enable = true;
