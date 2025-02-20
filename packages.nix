@@ -1,4 +1,4 @@
-{ pkgs, flake, lib, ... }:
+{ pkgs, flake, lib, machine-name, ... }:
 
 {
   home.packages = with pkgs;
