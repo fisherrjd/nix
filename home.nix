@@ -5,7 +5,8 @@ let
   firstName = "jade";
   lastName = "fisher";
   promptChar = ">";
-  jacobi = flake.inputs.jacobi.packages.${pkgs.system};
+  # jacobi = flake.inputs.jacobi.packages.${pkgs.system};
+  myPackages = import./packages.nix { inherit pkgs flake; };
 
   homeDirectory =
     if isLinux then
@@ -52,41 +53,35 @@ in
         cacert
         caddy
         cachix
-        clolcat
+        clolcat # what is this
         coreutils-full
-        cowsay
         curl
         diffutils
         docker
-        dos2unix
+        # dos2unix #test removal
         dyff
-        ed
         erdtree
         fd
         figlet
         file
         fq
         gawk
-        genpass
         gitAndTools.delta
         gnugrep
         gnumake
         gnupg
         gnused
         gron
-        gum
+        gum # learn about this
         gzip
         htmlq
         jq
-        just
         kubectl
         kubectx
-        libarchive
-        libnotify
         lsof
         man-pages
         manix
-        moreutils
+        moreutils # learn about this
         nano
         nanorc
         netcat-gnu
@@ -133,10 +128,7 @@ in
         hms
 
         # Stolen from cobi
-        (with jacobi; [
-          nixup
-          hax.comma
-        ])
+        myPackages.cobiFlakes
 
         # Pog scripts
         [
