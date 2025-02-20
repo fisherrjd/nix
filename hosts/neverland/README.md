@@ -13,21 +13,38 @@
 
 3. Import the tarball into WSL:
 
-- ```powershell
+- ```
   wsl --import NixOS $env:USERPROFILE\NixOS\ nixos-wsl.tar.gz --version 2 --user jade
   (If re-installing run this first: wsl --unregister NixOS)
   ```
 
 4. You can now run NixOS:
 
-- ```powershell
-  wsl -d NixOS
-  ```
+- ```powershell wsl -d NixOS```
+  
+## Changing the Default WSL User
+
+To change the default user for your NixOS WSL distribution, follow these steps:
+
+1. Change the ```wsl.defaultUser``` setting in your configuration to the desired username.
+  ```/etc/nixos/configuration.nix```
+2. Apply the configuration:
+   ```sudo nixos-rebuild boot```
+   Do not use ```nixos-rebuild switch```! It may lead to the new user account being misconfigured.
+3. Exit the WSL shell and stop your NixOS distro:
+   ```wsl -t NixOS```
+4. Start a shell inside NixOS and immediately exit it to apply the new generation:
+   ```wsl -d NixOS --user root exit```
+5. Stop the distro again:
+   ```wsl -t NixOS```
+6. Open a WSL shell. Your new username should be applied now!
 
 
 ## Setup
 
 ```bash
+
+
 
 # generate ssh key, add to github
 ssh-keygen -o -a 100 -t ed25519 -C "jade@neverland"
