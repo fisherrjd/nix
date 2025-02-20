@@ -22,6 +22,7 @@ let
   };
 
   optList = conditional: list: if conditional then list else [ ];
+
 in
 {
   imports = [
@@ -29,7 +30,6 @@ in
     ./cobi.nix
     # Look more into these ex: optionalAttrs
     (pkgs.lib.optionalAttrs isLinux "${flake.inputs.vscode-server}/modules/vscode-server/home.nix")
-
   ];
 
   _module.args = {
@@ -52,33 +52,6 @@ in
     inherit username homeDirectory sessionVariables;
 
     stateVersion = "22.11";
-
-    packages = with pkgs;
-      lib.flatten [
-        (writeShellScriptBin "machine-name" ''
-          echo "${machine-name}"
-        '')
-        hms
-
-
-        # Pog scripts
-        [
-          github_tags
-        ]
-
-        # Packages for only Max
-        (
-          optList isDarwin [ ]
-        )
-
-        # Packages for only Linux
-        (
-          optList isLinux [
-            gnutar
-          ]
-        )
-      ];
-
   };
 
   programs.less.enable = true;

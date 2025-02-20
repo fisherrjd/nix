@@ -4,6 +4,9 @@
   home.packages = with pkgs;
     lib.flatten
       [
+        (writeShellScriptBin "machine-name" ''
+          echo "${machine-name}"
+        '')
         bash-completion
         bashInteractive
         bat
@@ -31,6 +34,7 @@
         gum # learn about this
         gzip
         htmlq
+        hms
         jq
         kubectl
         kubectx
@@ -77,5 +81,19 @@
         yank
         yq-go
         zip
+        # Packages for only Macs
+        (
+          optList isDarwin [ ]
+        )
+
+        # Packages for only Linux
+        (
+          optList isLinux [
+            gnutar
+          ]
+        )
+
+        # TODO: Pog scripts
+        [ ]
       ];
 }
