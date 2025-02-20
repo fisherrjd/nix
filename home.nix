@@ -21,8 +21,6 @@ let
     PAGER = "less";
   };
 
-  optList = conditional: list: if conditional then list else [ ];
-
 in
 {
   imports = [
