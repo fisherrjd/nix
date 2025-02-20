@@ -5,15 +5,12 @@ let
   firstName = "jade";
   lastName = "fisher";
   promptChar = ">";
-  # jacobi = flake.inputs.jacobi.packages.${pkgs.system};
-  myPackages = import ./packages.nix { inherit pkgs flake; };
 
   homeDirectory =
     if isLinux then
       "/home/${username}"
     else
       "/Users/${username}";
-
 
   sessionVariables = {
     BASH_SILENCE_DEPRECATION_WARNING = "1";
@@ -27,6 +24,10 @@ let
   optList = conditional: list: if conditional then list else [ ];
 in
 {
+  imports = [ ./packages.nix ./cobi.nix ];
+  _module.args = {
+    inherit flake;
+  };
   nixpkgs.overlays = import ./overlays.nix;
 
   programs.home-manager.enable = true;
@@ -144,7 +145,6 @@ in
             gnutar
           ]
         )
-        myPackages.cobiFlakes
       ];
 
   };
