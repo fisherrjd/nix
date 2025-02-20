@@ -22,7 +22,6 @@ in
     defaultUser = "jade";
     startMenuLaunchers = true;
     wslConf.automount.root = "/mnt";
-    nativeSystemd = true;
     # Enable native Docker support
     # docker-native.enable = true;
     # Enable integration with Docker Desktop (needs to be installed)
