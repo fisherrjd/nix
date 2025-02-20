@@ -83,12 +83,12 @@
         zip
         # Packages for only Macs
         (
-          optList isDarwin [ ]
+          lib.optionals isDarwin [ ]
         )
 
         # Packages for only Linux
         (
-          optList isLinux [
+          lib.optionals isLinux [
             gnutar
           ]
         )
