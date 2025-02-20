@@ -24,11 +24,19 @@ let
   optList = conditional: list: if conditional then list else [ ];
 in
 {
-  imports = [ ./packages.nix ./cobi.nix ];
+  imports = [
+    ./packages.nix
+    ./cobi.nix
+    # Look more into these ex: optionalAttrs
+    (pkgs.lib.optionalAttrs isLinux "${flake.inputs.vscode-server}/modules/vscode-server/home.nix")
+
+  ];
+
   _module.args = {
     inherit flake;
   };
-  nixpkgs.overlays = import ./overlays.nix;
+  nixpkgs.overlays = import
+    ./overlays.nix;
 
   programs.home-manager.enable = true;
   programs.home-manager.path = "${home-manager}";
@@ -47,82 +55,6 @@ in
 
     packages = with pkgs;
       lib.flatten [
-        bash-completion
-        bashInteractive
-        bat
-        bzip2
-        cacert
-        caddy
-        cachix
-        clolcat # what is this
-        coreutils-full
-        curl
-        diffutils
-        docker
-        # dos2unix #test removal
-        dyff
-        erdtree
-        fd
-        figlet
-        file
-        fq
-        gawk
-        gitAndTools.delta
-        gnugrep
-        gnumake
-        gnupg
-        gnused
-        gron
-        gum # learn about this
-        gzip
-        htmlq
-        jq
-        kubectl
-        kubectx
-        lsof
-        man-pages
-        manix
-        moreutils # learn about this
-        nano
-        nanorc
-        netcat-gnu
-        nil
-        nix
-        nix-info
-        nix-output-monitor
-        nix-prefetch-github
-        nix-prefetch-scripts
-        nix-tree
-        nix-update
-        nixpkgs-fmt
-        nixpkgs-review
-        nodePackages.prettier
-        openssh
-        p7zip
-        patch
-        pigz
-        procps
-        pssh
-        q
-        ranger
-        re2c
-        rlwrap
-        ruff
-        scc
-        scrypt
-        shfmt
-        statix
-        time
-        unzip
-        vale
-        watch
-        wget
-        which
-        xh
-        yank
-        yq-go
-        zip
-
         (writeShellScriptBin "machine-name" ''
           echo "${machine-name}"
         '')
@@ -517,11 +449,7 @@ in
 
     };
 
-  # fix vscode
-  imports =
-    if isLinux then [
-      "${flake.inputs.vscode-server}/modules/vscode-server/home.nix"
-    ] else [ ];
+
 
   ${attrIf isLinux "services"}.vscode-server.enable = isLinux;
 }
