@@ -6,7 +6,7 @@ let
   lastName = "fisher";
   promptChar = ">";
   # jacobi = flake.inputs.jacobi.packages.${pkgs.system};
-  myPackages = import./packages.nix { inherit pkgs flake; };
+  myPackages = import ./packages.nix { inherit pkgs flake; };
 
   homeDirectory =
     if isLinux then
