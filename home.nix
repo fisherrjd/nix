@@ -24,8 +24,8 @@ let
 in
 {
   imports = [
-    ./packages.nix
-    ./cobi.nix
+    ./home_configurations/packages.nix
+    ./home_configurations/cobi.nix
     # Look more into these ex: optionalAttrs
     (pkgs.lib.optionalAttrs isLinux "${flake.inputs.vscode-server}/modules/vscode-server/home.nix")
   ];
