@@ -104,7 +104,5 @@ in
   services =
     {
       openssh.enable = true;
-      palworld.enable = false;
-
     };
 }
