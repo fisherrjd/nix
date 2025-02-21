@@ -38,6 +38,7 @@
         jq
         kubectl
         kubectx
+        kubernetes-helm
         lsof
         man-pages
         manix
