@@ -68,14 +68,9 @@
             };
           })
           [
-            "
-                airbook
-                "
-            "
-                workbook
-                "
+            "airbook"
+            "workbook"
           ]);
     };
 
 }
-
