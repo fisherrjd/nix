@@ -272,51 +272,51 @@ in
 
   # # starship config temp disable
 
-  # programs.starship = {
-  #   enable = true;
-  #   settings = {
-  #     add_newline = false;
-  #     character = {
-  #       success_symbol = "[${promptChar}](bright-green)";
-  #       error_symbol = "[${promptChar}](bright-red)";
-  #     };
-  #     golang = {
-  #       style = "fg:#00ADD8";
-  #       symbol = "go ";
-  #     };
-  #     directory.style = "fg:#d442f5";
-  #     localip = {
-  #       disabled = true;
-  #     };
-  #     nix_shell = {
-  #       pure_msg = "";
-  #       impure_msg = "";
-  #       format = "via [$symbol$state($name)]($style) ";
-  #     };
-  #     kubernetes = {
-  #       disabled = false;
-  #       style = "fg:#326ce5";
-  #     };
-  #     terraform = {
-  #       disabled = false;
-  #       format = "via [$symbol $version]($style) ";
-  #       symbol = "🌴";
-  #     };
-  #     nodejs = { symbol = "⬡ "; };
-  #     hostname = {
-  #       style = "bold fg:46";
-  #     };
-  #     username = {
-  #       style_user = "bold fg:93";
-  #     };
+  programs.starship = {
+    enable = true;
+    settings = {
+      add_newline = false;
+      character = {
+        success_symbol = "[${promptChar}](bright-green)";
+        error_symbol = "[${promptChar}](bright-red)";
+      };
+      golang = {
+        style = "fg:#00ADD8";
+        symbol = "go ";
+      };
+      directory.style = "fg:#d442f5";
+      localip = {
+        disabled = true;
+      };
+      nix_shell = {
+        pure_msg = "";
+        impure_msg = "";
+        format = "via [$symbol$state($name)]($style) ";
+      };
+      kubernetes = {
+        disabled = false;
+        style = "fg:#326ce5";
+      };
+      terraform = {
+        disabled = false;
+        format = "via [$symbol $version]($style) ";
+        symbol = "🌴";
+      };
+      nodejs = { symbol = "⬡ "; };
+      hostname = {
+        style = "bold fg:46";
+      };
+      username = {
+        style_user = "bold fg:93";
+      };
 
-  #     # disabled plugins
-  #     aws.disabled = true;
-  #     cmd_duration.disabled = true;
-  #     gcloud.disabled = true;
-  #     package.disabled = true;
-  #   };
-  # };
+      # disabled plugins
+      aws.disabled = true;
+      cmd_duration.disabled = true;
+      gcloud.disabled = true;
+      package.disabled = true;
+    };
+  };
 
   # gitconfig
   programs.git =
