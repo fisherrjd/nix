@@ -70,10 +70,7 @@ in
     vscode
   ];
 
-  services =
-    {
-      openssh.enable = true;
-    };
+
   system.stateVersion = "24.05"; # Did you read the comment?
 
   # begin jade fuckin around
@@ -104,9 +101,10 @@ in
   systemd.targets.hibernate.enable = false;
   systemd.targets.hybrid-sleep.enable = false;
 
-  # sytemd.services.startup = {
-  #   description = "Random Startup Service thing";
-  #   after = [ "network.target" ];
-  #   restart = "always";
-  # };
+  services =
+    {
+      openssh.enable = true;
+      palworld.enable = false;
+
+    };
 }

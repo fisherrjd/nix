@@ -63,14 +63,20 @@
               modules = [
                 ./hosts/common_darwin.nix
                 "${self.inputs.jacobi}/hosts/modules/darwin/llama-server.nix"
+                "${self.inputs.jacobi}/hosts/modules/games/palworld.nix"
                 ./hosts/${name}/configuration.nix
               ];
             };
           })
           [
-            "airbook"
-            "workbook"
+            "
+                airbook
+                "
+            "
+                workbook
+                "
           ]);
     };
 
 }
+
