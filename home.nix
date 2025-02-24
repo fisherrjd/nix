@@ -33,6 +33,8 @@ in
   _module.args = {
     inherit flake;
     inherit machine-name;
+    inherit homeDirectory;
+    inherit sessionVariables;
   };
   nixpkgs.overlays = import
     ./overlays.nix;
