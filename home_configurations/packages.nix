@@ -25,6 +25,7 @@
         file
         fq
         gawk
+        gh
         gitAndTools.delta
         gnugrep
         gnumake
