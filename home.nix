@@ -51,7 +51,7 @@ in
   manual.manpages.enable = false;
 
   home = {
-    inherit username homeDirectory sessionVariables;
+    inherit username homeDirectory;
 
     stateVersion = "22.11";
   };
