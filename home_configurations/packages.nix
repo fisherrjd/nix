@@ -10,11 +10,13 @@
         bash-completion
         bashInteractive
         bat
+        boxes
         bzip2
         cacert
         caddy
         cachix
         coreutils-full
+        clolcat
         curl
         diffutils
         docker

@@ -8,6 +8,8 @@ rec {
 
   flags = "--extra-experimental-features nix-command --extra-experimental-features flakes";
 
+
+  # (nix build --extra-experimental-features nix-command --extra-experimental-features flakes --no-link --print-out-paths ~/cfg#nixosConfigurations.${host}.config.system.build.toplevel
   ### GENERAL STUFF
   _nixos-switch = { host }: writeShellScriptBin "switch" ''
     toplevel="$(nix build ${flags} --no-link --print-out-paths ~/cfg#nixosConfigurations.${host}.config.system.build.toplevel)"
