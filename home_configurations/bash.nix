@@ -1,10 +1,19 @@
 { pkgs, flake, lib, ... }:
 let
-  TEMP = "placeholder";
 
+  sessionVariables = {
+    BASH_SILENCE_DEPRECATION_WARNING = "1";
+    EDITOR = "nano";
+    GIT_SSH_COMMAND = "${pkgs.openssh}/bin/ssh";
+    HISTCONTROL = "ignoreboth";
+    LESS = "-iR";
+    PAGER = "less";
+  };
 in
 {
   programs.bash = {
+    inherit sessionVariables;
+
     shellAliases = {
       ls = "ls --color=auto";
       l = "lsd -lA --permission octal";

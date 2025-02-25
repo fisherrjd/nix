@@ -12,14 +12,6 @@ let
     else
       "/Users/${username}";
 
-  sessionVariables = {
-    BASH_SILENCE_DEPRECATION_WARNING = "1";
-    EDITOR = "nano";
-    GIT_SSH_COMMAND = "${pkgs.openssh}/bin/ssh";
-    HISTCONTROL = "ignoreboth";
-    LESS = "-iR";
-    PAGER = "less";
-  };
 
 in
 {
@@ -35,7 +27,6 @@ in
     inherit flake;
     inherit machine-name;
     inherit homeDirectory;
-    inherit sessionVariables;
   };
   nixpkgs.overlays = import
     ./overlays.nix;
@@ -75,7 +66,6 @@ in
   };
 
   programs.bash = {
-    inherit sessionVariables;
     enable = true;
     historyFileSize = -1;
     historySize = -1;
