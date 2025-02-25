@@ -20,7 +20,8 @@ in
     ./home_configurations/cobi.nix
     ./home_configurations/bash.nix
     # Look more into these ex: optionalAttrs
-    (pkgs.lib.optionalAttrs isLinux "${flake.inputs.vscode-server}/modules/vscode-server/home.nix")
+    (pkgs.lib.mkIf isLinux "${flake.inputs.vscode-server}/modules/vscode-server/home.nix")
+
   ];
 
   _module.args = {
