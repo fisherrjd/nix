@@ -90,6 +90,7 @@ in
       g = "git";
       ga = "git add -A .";
       cm = "git commit -m ";
+      test2 = "echo 'test'";
 
       # misc
       space = "du -Sh | sort -rh | head -10";
