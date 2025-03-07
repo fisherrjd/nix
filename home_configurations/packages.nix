@@ -74,6 +74,7 @@
         statix
         time
         unzip
+        uv
         vale
         watch
         wget
