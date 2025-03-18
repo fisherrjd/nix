@@ -540,11 +540,11 @@
         "vscode-server": "vscode-server"
       },
       "locked": {
-        "lastModified": 1742245171,
-        "narHash": "sha256-rlF8xs6kUgVY6EeyL0J5fbsNOmruIa1ajo+JjHFZiHk=",
+        "lastModified": 1742318350,
+        "narHash": "sha256-3MreuOaKExIge5Nd/JMeEQwEC946+IvE/oPsQ0bIzhw=",
         "owner": "jpetrucciani",
         "repo": "nix",
-        "rev": "2288ce7f0ed00f3215d760ececc3fe2ee6387503",
+        "rev": "9df92b1a3a763a91c6190514127910d39be8d7bd",
         "type": "github"
       },
       "original": {
