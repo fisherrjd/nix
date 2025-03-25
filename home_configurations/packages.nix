@@ -10,7 +10,6 @@
         bash-completion
         bashInteractive
         bat
-        bruno
         bzip2
         cacert
         caddy
