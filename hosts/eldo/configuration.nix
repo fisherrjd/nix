@@ -108,19 +108,7 @@ in
     ];
   };
 
-  age = {
-    identityPaths = [ "/home/jade/.ssh/id_ed25519" ];
-    secrets = {
-      litellm = {
-        file = ../../secrets/litellm.age;
-        mode = "644";
-      };
-      openwebui = {
-        file = ../../secrets/openwebui.age;
-        mode = "644";
-      };
-    };
-  };
+
 
   virtualisation.docker.enable = true;
   users.extraGroups.docker.members = [ common.username ];
