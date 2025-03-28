@@ -95,6 +95,8 @@ in
     ];
   };
 
+  virtualisation.docker.enable = true;
+
   # system sleep settings
   systemd.targets.sleep.enable = false;
   systemd.targets.suspend.enable = false;
