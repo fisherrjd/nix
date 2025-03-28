@@ -10,6 +10,7 @@ let
   common = import ../common.nix { inherit config flake machine-name pkgs username; };
 in
 {
+
   imports =
     [
       # Include the results of the hardware scan.
@@ -95,7 +96,60 @@ in
     ];
   };
 
+  age = {
+    identityPaths = [ "/home/jade/.ssh/id_ed25519" ];
+    secrets = {
+      litellm = {
+        file = ../../secrets/litellm.age;
+        mode = "644";
+      };
+      openwebui = {
+        file = ../../secrets/openwebui.age;
+        mode = "644";
+      };
+    };
+  };
+
   virtualisation.docker.enable = true;
+  users.extraGroups.docker.members = [ common.username ];
+
+  virtualisation.oci-containers = {
+    backend = "docker";
+
+    containers.litellm = {
+      image = "ghcr.io/berriai/litellm:main-v1.63.11-nightly";
+      volumes = [ "lite-llm:/app" ];
+      environmentFiles = [ config.age.secrets.litellm.path ];
+      extraOptions = [
+        "--network=host"
+      ];
+    };
+
+    containers.openwebui = {
+      image = "ghcr.io/open-webui/open-webui:main";
+      volumes = [ "open-webui:/app/backend/data" ];
+      environmentFiles = [ config.age.secrets.openwebui.path ];
+      extraOptions = [
+        "--network=host"
+      ];
+    };
+
+  };
+
+  # currently being used for litellm backend -- no backups or anything 😅
+  services.postgresql = {
+    enable = true;
+    ensureDatabases = [ "litellm" ];
+    authentication = pkgs.lib.mkOverride 10 ''
+      #type database  DBuser  auth-method
+      local all       all     trust
+      host all all 127.0.0.1/32 trust
+      host all all 0.0.0.0/0 trust
+      host    all            postgres         127.0.0.1/32           md5
+      host    all            postgres         ::1/128                md5
+      host    litellm        postgres         0.0.0.0/0              md5
+    '';
+  };
 
   # system sleep settings
   systemd.targets.sleep.enable = false;
