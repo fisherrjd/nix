@@ -62,6 +62,7 @@
         p7zip
         patch
         pigz
+        postgresql
         procps
         pssh
         q
