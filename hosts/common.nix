@@ -59,6 +59,8 @@ in
     airbook = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILaWm9is28MRcO96v72pHvWQuZ+NiM0t3iFmC4mq3jsJ jade@airbook"; # m1 macbook air
     workbook = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDMR5a3uP1lZndQ8BZhirgYwHwbZNdzeoLeAwdOnslZf jade@work"; #m1pro work CHARTER
   };
+
+
   timeZone = "America/Denver";
 
   security.sudo = {
