@@ -1,5 +1,4 @@
 { pkgs, flake, lib, machine-name, ... }:
-
 {
   home.packages = with pkgs;
     lib.flatten
