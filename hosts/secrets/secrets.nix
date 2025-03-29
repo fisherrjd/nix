@@ -9,4 +9,5 @@ let
 in
 {
   "litellm.age".publicKeys = dev;
+  "openwebui.age".publicKeys = dev;
 }
