@@ -6,7 +6,6 @@
         (writeShellScriptBin "machine-name" ''
           echo "${machine-name}"
         '')
-        agenix
         bash-completion
         bashInteractive
         bat
