@@ -1,7 +1,4 @@
 { pkgs, flake, lib, machine-name, inputs, ... }:
-let
-  agenix = inputs.agenix.packages.${pkgs.system}.default;
-in
 {
   home.packages = with pkgs;
     lib.flatten
