@@ -1,5 +1,7 @@
-{ pkgs, flake, lib, machine-name, ... }:
-
+{ pkgs, flake, lib, machine-name, inputs, ... }:
+let
+  agenix = inputs.agenix.packages.${pkgs.system}.default;
+in
 {
   home.packages = with pkgs;
     lib.flatten
@@ -7,6 +9,7 @@
         (writeShellScriptBin "machine-name" ''
           echo "${machine-name}"
         '')
+        agenix
         bash-completion
         bashInteractive
         bat

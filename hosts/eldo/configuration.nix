@@ -15,6 +15,7 @@ in
       # Include the results of the hardware scan.
       "${common.home-manager}/nixos"
       ./hardware-configuration.nix
+      ./externals.nix
       { services = common.services; }
     ];
 
