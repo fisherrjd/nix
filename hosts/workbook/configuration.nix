@@ -33,6 +33,9 @@ in
     ];
   };
 
+  power.sleep = {
+    computer = "never";
+  }
   system.stateVersion = 4;
   ids.gids.nixbld = 350;
   nix = common.nix // {
