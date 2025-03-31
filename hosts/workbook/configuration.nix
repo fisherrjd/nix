@@ -15,7 +15,6 @@ in
   home-manager.users.P3175941 = common.jade;
 
   documentation.enable = false;
-
   time.timeZone = common.timeZone;
   environment.variables = {
     NIX_HOST = hostname;
@@ -33,9 +32,6 @@ in
     ];
   };
 
-  power.sleep = {
-    computer = "never";
-  }
   system.stateVersion = 4;
   ids.gids.nixbld = 350;
   nix = common.nix // {
