@@ -130,9 +130,8 @@ in
       volumes = [ "lite-llm:/app" ]; # Persists container data
 
       # --- Provide Database Connection URL ---
-      environment = {
-        DATABASE_URL = "postgresql://postgres@127.0.0.1:5432/litellm";
-      };
+      environmentFiles = [ config.age.secrets.litellm.path ];
+
       extraOptions = [
         "--network=host" # Connects container directly to host network
       ];
