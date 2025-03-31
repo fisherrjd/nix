@@ -108,7 +108,17 @@ in
     ];
   };
 
-
+  services.postgresql = {
+    enable = true;
+    package = pkgs.postgresql_15;
+    # Similar options as the NixOS module are often available:
+    # initialScript = ...;
+    # ensureDatabases = [ "myuserdb" ];
+    # ensureUsers = [ { name = config.home.username; } ]; # Ensure your own user exists
+    # settings = { ... };
+    dataDir = "${config.home.homeDirectory}/.local/share/postgres"; # Choose a location
+    # port = 5433; # Use a non-default port if needed
+  };
 
   virtualisation.docker.enable = true;
   users.extraGroups.docker.members = [ common.username ];
@@ -124,6 +134,8 @@ in
         "--network=host"
       ];
     };
+
+    
 
     # containers.openwebui = {
     #   image = "ghcr.io/open-webui/open-webui:main";
