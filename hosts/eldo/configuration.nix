@@ -31,7 +31,7 @@ in
 
 
   age = {
-    identityPaths = [ "/home/bduggan/.ssh/id_ed25519" ];
+    identityPaths = [ "/home/jade/.ssh/id_ed25519" ];
     secrets = {
       litellm = {
         file = ../../secrets/litellm.age;
