@@ -133,22 +133,11 @@ in
       environment = {
         DATABASE_URL = "postgresql://postgres@127.0.0.1:5432/litellm";
       };
-
-
       extraOptions = [
         "--network=host" # Connects container directly to host network
       ];
 
       autoStart = true; # Start container on boot/rebuild
-    # };
-
-    # containers.openwebui = {
-    #   image = "ghcr.io/open-webui/open-webui:main";
-    #   volumes = [ "open-webui:/app/backend/data" ];
-    #   environmentFiles = [ config.age.secrets.openwebui.path ];
-    #   extraOptions = [
-    #     "--network=host"
-    #   ];
-    # };
+    };
   };
 }
