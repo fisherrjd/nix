@@ -108,6 +108,7 @@ in
     ];
   };
 
+<<<<<<< HEAD
   services.postgresql = {
     enable = true;
     package = pkgs.postgresql_15;
@@ -120,6 +121,8 @@ in
     # port = 5433; # Use a non-default port if needed
   };
 
+=======
+>>>>>>> 685d4a0 (init litellm service)
   virtualisation.docker.enable = true;
   users.extraGroups.docker.members = [ common.username ];
 
