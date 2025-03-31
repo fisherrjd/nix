@@ -27,6 +27,19 @@ in
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
   # Enable networking
+
+
+
+  age = {
+    identityPaths = [ "/home/bduggan/.ssh/id_ed25519" ];
+    secrets = {
+      litellm = {
+        file = ../../secrets/litellm.age;
+        mode = "644";
+      };
+    };
+  };
+
   networking.networkmanager.enable = true;
 
   # Set your time zone.
