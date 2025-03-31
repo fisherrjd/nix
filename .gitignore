@@ -1,6 +1,5 @@
 .history/
 .vscode/
-secrets
 result*
 .old/
 node_modules/
