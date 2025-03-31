@@ -135,9 +135,9 @@ in
         LITELLM_MODEL_LIST = ''
           [
             {
-              "model_name": "llama-cpp-local",
+              "model_name": "airbook-local",
               "litellm_params": {
-                "model": "openai/llama-cpp-server",
+                "model": "airbook/depseek",
                 "api_base": "http://airbook:8012/v1",
                 "api_key": "no_key"
               }
