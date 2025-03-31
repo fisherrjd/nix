@@ -120,5 +120,24 @@ in
         '';
       };
     };
+  users.extraGroups.docker.members = [ username ];
 
+  virtualisation.oci-containers = {
+    backend = "docker";
+
+    containers.litellm = {
+      image = "ghcr.io/berriai/litellm:main-v1.63.11-nightly";
+      volumes = [ "lite-llm:/app" ]; # Persists container data
+
+      # --- Provide Database Connection URL ---
+      environment = {
+        DATABASE_URL = "postgresql://postgres@127.0.0.1:5432/litellm";
+      };
+      extraOptions = [
+        "--network=host" # Connects container directly to host network
+      ];
+
+      autoStart = true; # Start container on boot/rebuild
+    };
+  };
 }
