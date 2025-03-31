@@ -120,7 +120,7 @@ in
         '';
       };
     };
-  users.extraGroups.docker.members = [ common.username ];
+  users.extraGroups.docker.members = [ username ];
 
   virtualisation.oci-containers = {
     backend = "docker";
