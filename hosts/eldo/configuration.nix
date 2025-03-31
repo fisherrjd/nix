@@ -27,19 +27,6 @@ in
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
   # Enable networking
-
-
-
-  age = {
-    identityPaths = [ "/home/jade/.ssh/id_ed25519" ];
-    secrets = {
-      litellm = {
-        file = ../../secrets/litellm.age;
-        mode = "644";
-      };
-    };
-  };
-
   networking.networkmanager.enable = true;
 
   # Set your time zone.
@@ -143,8 +130,21 @@ in
       volumes = [ "lite-llm:/app" ]; # Persists container data
 
       # --- Provide Database Connection URL ---
-      environmentFiles = [ config.age.secrets.litellm.path ];
-
+      environment = {
+        DATABASE_URL = "postgresql://postgres@127.0.0.1:5432/litellm";
+        LITELLM_MODEL_LIST = ''
+          [
+            {
+              "model_name": "llama-cpp-local",
+              "litellm_params": {
+                "model": "openai/llama-cpp-server",
+                "api_base": "http://airbook:8012/v1",
+                "api_key": "no_key"
+              }
+            }
+          ]
+        '';
+      };
       extraOptions = [
         "--network=host" # Connects container directly to host network
       ];
