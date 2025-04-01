@@ -18,6 +18,11 @@ in
     "${common.home-manager}/nix-darwin"
   ];
 
+  power.sleep = {
+    computer = "never";
+    display = "never";
+  };
+
   home-manager.users.jade = common.jade;
 
   documentation.enable = false;
