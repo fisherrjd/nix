@@ -22,15 +22,15 @@ in
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  age = {
-    identityPaths = [ "/home/jade/.ssh/id_ed25519" ];
-    secrets = {
-      litellm = {
-        file = ../../secrets/litellm.age;
-        mode = "644";
-      };
-    };
-  };
+  # age = {
+  #   identityPaths = [ "/home/jade/.ssh/id_ed25519" ];
+  #   secrets = {
+  #     litellm = {
+  #       file = ../../secrets/litellm.age;
+  #       mode = "644";
+  #     };
+  #   };
+  # };
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
