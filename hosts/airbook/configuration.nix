@@ -18,17 +18,6 @@ in
     "${common.home-manager}/nix-darwin"
   ];
 
-  powerManagement.enable = true;
-  powerManagement.settings = {
-    AC = {
-      sleep = 0;
-      displaysleep = 0;
-      disksleep = 10;
-      hibernatemode = 3;
-      lidwake = 1;
-    };
-  };
-
   home-manager.users.jade = common.jade;
 
   documentation.enable = false;
