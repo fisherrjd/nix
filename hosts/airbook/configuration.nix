@@ -48,7 +48,10 @@ in
       "darwin-config=${configPath}"
     ];
   };
-  power.sleep.computer = "never";
+  power.sleep = {
+    comptuer = "never";
+    display = "never";
+  };
 
   services =
     let
