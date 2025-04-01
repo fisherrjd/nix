@@ -48,11 +48,6 @@ in
       "darwin-config=${configPath}"
     ];
   };
-  power.sleep = {
-    comptuer = "never";
-    display = "never";
-  };
-
   services =
     let
       modelPath = name: "/opt/box/models/bartowski/agentica-org_DeepScaleR-1.5B-Preview-GGUF/${name}";
