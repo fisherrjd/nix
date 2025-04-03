@@ -86,7 +86,7 @@
         system = "x86_64-linux";
         format = "do";
         modules = [
-          ./hosts/bifrost/configuration.nix
+          ./generators/do-builder/configuration.nix
         ];
       };
     };
