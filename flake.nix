@@ -62,6 +62,7 @@
           [
             "neverland"
             "eldo"
+            "bifrost"
           ]);
 
       darwinConfigurations = builtins.listToAttrs
