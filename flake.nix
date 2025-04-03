@@ -26,7 +26,7 @@
       forAllSystems = lib.genAttrs lib.systems.flakeExposed;
     in
     {
-      inherit (self.inputs) jacobi;
+      inherit (self.inputs) jacobi agenix;
       pins = self.inputs;
       packages = forAllSystems
         (system: import self.inputs.nixpkgs {
@@ -49,7 +49,10 @@
             value = self.inputs.nixpkgs.lib.nixosSystem {
               pkgs = self.packages.x86_64-linux;
               specialArgs = { flake = self; machine-name = name; };
-              modules = [ ./hosts/${name}/configuration.nix ];
+              modules = [
+                self.inputs.agenix.nixosModules.default
+                ./hosts/${name}/configuration.nix
+              ];
             };
           })
           [
