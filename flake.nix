@@ -19,6 +19,10 @@
       url = "github:ryantm/agenix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nixos-generators = {
+      url = "github:nix-community/nixos-generators";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
   outputs = { self, ... }:
     let
@@ -78,6 +82,14 @@
             "airbook"
             "workbook"
           ]);
+      do-builder = self.input.snixos-generators.nixosGenerate {
+        system = "x86_64-linux";
+        format = "do";
+        modules = [
+          ./hosts/bifrost/configuration.nix
+        ];
+      };
     };
+
 
 }
