@@ -82,7 +82,7 @@
             "airbook"
             "workbook"
           ]);
-      do-builder = self.input.snixos-generators.nixosGenerate {
+      do-builder = self.inputs.nixos-generators.nixosGenerate {
         system = "x86_64-linux";
         format = "do";
         modules = [
