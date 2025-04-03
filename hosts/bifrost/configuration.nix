@@ -1,10 +1,14 @@
-{ config, flake, pkgs, machine-name, ... }:
+{ config, flake, pkgs, machine-name, lib, modulesPath, ... }:
 let
   hostname = "bifrost";
   username = "jade";
   common = import ../common.nix { inherit config flake machine-name pkgs username; };
+
 in
 {
+  imports = lib.optional (builtins.pathExists ./do-userdata.nix) ./do-userdata.nix ++ [
+    (modulesPath + "/virtualisation/digital-ocean-config.nix")
+  ];
   nix = {
     extraOptions = ''
       max-jobs = auto
@@ -19,7 +23,6 @@ in
   networking.hostName = hostname; # Define your hostname.
 
   boot.kernel.sysctl."net.ipv4.ip_forward" = 1;
-
 
   users.users.jade = {
     isNormalUser = true;
