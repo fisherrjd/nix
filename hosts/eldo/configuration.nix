@@ -82,7 +82,7 @@ in
   ];
 
 
-  system.stateVersion = "24.05"; # Did you read the comment?
+  system.stateVersion = "24.05";
 
   # begin jade fuckin around
   security.sudo = common.security.sudo;
