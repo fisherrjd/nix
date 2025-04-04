@@ -6,17 +6,24 @@ jobs:
       fail-fast: false
       matrix:
         attrs:
+          # Original eldo entry
           - os: ubuntu-24.04
             cmd: .#nixosConfigurations.eldo.config.system.build.toplevel
+          # Added bifrost entry
+          - os: ubuntu-24.04 # Assuming bifrost also runs on Linux/Ubuntu
+            cmd: .#nixosConfigurations.bifrost.config.system.build.toplevel # <-- Added command
+          # Original macOS entry
           - os: macos-15
             cmd: .#darwinConfigurations.airbook.system
-          
+
+    # Consider making the name more specific if you have multiple jobs on the same OS
+    # e.g., name: nix (${{ matrix.attrs.os }} - ${{ matrix.attrs.cmd }})
     name: nix (${{ matrix.attrs.os }})
     runs-on: ${{ matrix.attrs.os }}
     steps:
       - uses: actions/checkout@v4.2.2
       - uses: cachix/install-nix-action@v30
-      - uses: cachix/cachix-action@master
+      - uses: cachix/cachix-action@master # Consider using a specific tag like @v12 for stability
         with:
           name: fisherrjd
           authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
