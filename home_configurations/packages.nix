@@ -9,7 +9,6 @@
         bash-completion
         bashInteractive
         bat
-        bruno-cli
         bzip2
         cacert
         caddy
