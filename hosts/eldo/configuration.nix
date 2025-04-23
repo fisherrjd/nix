@@ -140,22 +140,22 @@ in
   virtualisation.oci-containers = {
     backend = "docker";
 
-    containers.litellm = {
-      image = "ghcr.io/berriai/litellm:main-v1.63.11-nightly";
-      volumes = [ "lite-llm:/app" ];
-      environmentFiles = [ config.age.secrets.litellm.path ];
-      extraOptions = [
-        "--network=host"
-      ];
-    };
+    # containers.litellm = {
+    #   image = "ghcr.io/berriai/litellm:main-v1.63.11-nightly";
+    #   volumes = [ "lite-llm:/app" ];
+    #   environmentFiles = [ config.age.secrets.litellm.path ];
+    #   extraOptions = [
+    #     "--network=host"
+    #   ];
+    # };
 
-    containers.openwebui = {
-      image = "ghcr.io/open-webui/open-webui:main";
-      volumes = [ "open-webui:/app/backend/data" ];
-      environmentFiles = [ config.age.secrets.openwebui.path ];
-      extraOptions = [
-        "--network=host"
-      ];
-    };
+    # containers.openwebui = {
+    #   image = "ghcr.io/open-webui/open-webui:main";
+    #   volumes = [ "open-webui:/app/backend/data" ];
+    #   environmentFiles = [ config.age.secrets.openwebui.path ];
+    #   extraOptions = [
+    #     "--network=host"
+    #   ];
+    # };
   };
 }
