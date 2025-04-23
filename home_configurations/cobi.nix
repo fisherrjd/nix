@@ -8,6 +8,7 @@ in
   home.packages = with jacobi; [
     nixup
     hax.comma
+    docker_pog_scripts
   ];
 
 }
