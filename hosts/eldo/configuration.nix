@@ -149,13 +149,13 @@ in
       ];
     };
 
-    containers.openwebui = {
-      image = "ghcr.io/open-webui/open-webui:main";
-      volumes = [ "open-webui:/app/backend/data" ];
-      environmentFiles = [ config.age.secrets.openwebui.path ];
-      extraOptions = [
-        "--network=host"
-      ];
-    };
+    # containers.openwebui = {
+    #   image = "ghcr.io/open-webui/open-webui:main";
+    #   volumes = [ "open-webui:/app/backend/data" ];
+    #   environmentFiles = [ config.age.secrets.openwebui.path ];
+    #   extraOptions = [
+    #     "--network=host"
+    #   ];
+    # };
   };
 }
