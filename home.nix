@@ -14,7 +14,7 @@ let
 
   sessionVariables = {
     BASH_SILENCE_DEPRECATION_WARNING = "1";
-    EDITOR = "nano";
+    EDITOR = "code --wait";
     GIT_SSH_COMMAND = "${pkgs.openssh}/bin/ssh";
     HISTCONTROL = "ignoreboth";
     LESS = "-iR";
@@ -399,7 +399,7 @@ in
         push.default = "simple";
         rebase.instructionFormat = "<%ae >%s";
         core = {
-          editor = if isDarwin then "code --wait" else "nano";
+          editor = sessionVariables.EDITOR;
           pager = "delta --dark";
           autocrlf = "input";
           hooksPath = "/dev/null";
