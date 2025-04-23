@@ -93,6 +93,8 @@
             gnutar
           ]
         )
+        # Secrets
+        flake.inputs.agenix.packages.${pkgs.system}.default
 
         # TODO: Pog scripts
         [ ]
