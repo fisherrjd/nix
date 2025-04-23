@@ -14,7 +14,7 @@ let
 
   sessionVariables = {
     BASH_SILENCE_DEPRECATION_WARNING = "1";
-    EDITOR = "code --wait";
+    EDITOR = "nano";
     GIT_SSH_COMMAND = "${pkgs.openssh}/bin/ssh";
     HISTCONTROL = "ignoreboth";
     LESS = "-iR";
@@ -56,20 +56,6 @@ in
   programs.less.enable = true;
   programs.lesspipe.enable = true;
   programs.lsd.enable = true;
-
-
-  # Youtube command line things
-  programs.yt-dlp = {
-    enable = true;
-    extraConfig = ''
-      --embed-thumbnail
-      --embed-metadata
-      --embed-subs
-      --sub-langs all
-      --downloader aria2c
-      --downloader-args aria2c:'-c -x8 -s8 -k1M'
-    '';
-  };
 
   programs.bash = {
     inherit sessionVariables;
