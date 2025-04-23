@@ -135,13 +135,14 @@ in
         '';
       };
     };
+
   users.extraGroups.docker.members = [ username ];
 
   virtualisation.oci-containers = {
     backend = "docker";
 
     containers.litellm = {
-      image = "ghcr.io/berriai/litellm:main-v1.63.11-nightly";
+      image = "ghcr.io/berriai/litellm:main-v1.67.0-stable";
       volumes = [ "lite-llm:/app" ];
       environmentFiles = [ config.age.secrets.litellm.path ];
       extraOptions = [
