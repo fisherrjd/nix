@@ -138,29 +138,20 @@ in
 
     containers.litellm = {
       image = "ghcr.io/berriai/litellm:main-v1.63.11-nightly";
-      volumes = [ "lite-llm:/app" ]; # Persists container data
-
-      # --- Provide Database Connection URL ---
-      environment = {
-        DATABASE_URL = "postgresql://postgres@127.0.0.1:5432/litellm";
-        LITELLM_MODEL_LIST = ''
-          [
-            {
-              "model_name": "airbook-local",
-              "litellm_params": {
-                "model": "airbook/depseek",
-                "api_base": "http://airbook:8012/v1",
-                "api_key": "no_key"
-              }
-            }
-          ]
-        '';
-      };
+      volumes = [ "lite-llm:/app" ];
+      environmentFiles = [ config.age.secrets.litellm.path ];
       extraOptions = [
-        "--network=host" # Connects container directly to host network
+        "--network=host"
       ];
-
-      autoStart = true; # Start container on boot/rebuild
     };
+
+    # containers.openwebui = {
+    #   image = "ghcr.io/open-webui/open-webui:main";
+    #   volumes = [ "open-webui:/app/backend/data" ];
+    #   environmentFiles = [ config.age.secrets.openwebui.path ];
+    #   extraOptions = [
+    #     "--network=host"
+    #   ];
+    # };
   };
 }
