@@ -5,9 +5,11 @@ let
   inherit (pkgs.hax) isDarwin isLinux;
 in
 {
-  home.packages = with jacobi; [
-    nixup
-    hax.comma
-  ] ++ docker_pog_scripts;
+  home.packages = with jacobi;
+    lib.flatten [
+      nixup
+      hax.comma
+      docker_pog_scripts
+    ];
 
 }

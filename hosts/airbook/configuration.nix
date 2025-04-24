@@ -6,12 +6,7 @@ let
   common = import ../common.nix { inherit config flake machine-name pkgs username; };
   configPath = "/Users/jade/cfg/hosts/${hostname}/configuration.nix";
   username = "jade";
-  # runner-defaults = {
-  #   enable = true;
-  #   replace = true;
-  #   url = "https://github.com/fisherrjd/nix";
-  #   extraLabels = [ "nix" "m1" ];
-  # };
+
 in
 {
   imports = [
