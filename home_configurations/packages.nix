@@ -72,6 +72,7 @@
         shfmt
         statix
         time
+        tmux
         unzip
         uv
         vale
