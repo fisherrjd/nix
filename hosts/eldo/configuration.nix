@@ -134,24 +134,6 @@ in
           host    litellm        postgres         0.0.0.0/0              md5
         '';
       };
-      caddy = {
-        enable = true;
-        virtualHosts = {
-          "eldo" = {
-            extraConfig = ''
-              tls internal
-              reverse_proxy 127.0.0.1
-            '';
-          };
-
-          "chat.eldo" = {
-            extraConfig = ''
-              tls internal
-              reverse_proxy 127.0.0.1:8080
-            '';
-          };
-        };
-      };
     };
 
   users.extraGroups.docker.members = [ username ];
