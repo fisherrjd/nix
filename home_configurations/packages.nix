@@ -14,6 +14,7 @@
         caddy
         cachix
         coreutils-full
+        colmena
         curl
         diffutils
         docker
