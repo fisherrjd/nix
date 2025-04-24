@@ -134,7 +134,7 @@ in
           host    litellm        postgres         0.0.0.0/0              md5
         '';
       };
-      services.caddy = {
+      caddy = {
         enable = true;
         virtualHosts = {
           "eldo" = {
