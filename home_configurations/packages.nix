@@ -46,6 +46,7 @@
         nano
         nanorc
         netcat-gnu
+        ntfy-sh
         nil
         nix
         nix-info
