@@ -124,6 +124,7 @@ in
         enable = true;
         user = "jade";
         settings = {
+          base-url = "http://localhost:8081";
           listen-http = ":8081";
         };
       };
