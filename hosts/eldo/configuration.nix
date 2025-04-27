@@ -120,7 +120,7 @@ in
 
   services =
     {
-      services.ntfy-sh = {
+      ntfy-sh = {
         enable = true;
         user = "jade";
         settings = {
