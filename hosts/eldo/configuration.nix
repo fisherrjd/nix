@@ -120,6 +120,13 @@ in
 
   services =
     {
+      services.ntfy-sh = {
+        enable = true;
+        user = "jade";
+        settings = {
+          listen-http = ":8081";
+        };
+      };
       openssh.enable = true;
       postgresql = {
         enable = true;
