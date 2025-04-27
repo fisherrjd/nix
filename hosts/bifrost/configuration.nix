@@ -51,7 +51,6 @@ in
     openssh = {
       enable = true;
       settings = {
-        PermitRootLogin = "prohibit-password";
         PasswordAuthentication = false;
         KexAlgorithms = [
           "curve25519-sha256"
