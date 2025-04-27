@@ -70,12 +70,12 @@ in
       };
     };
     tailscale.enable = true;
-    caddy = {
-      enable = true;
-      virtualHosts."localhost".extraConfig = ''
-        respond "Hello, world!"
-      '';
-    };
+    # caddy = {
+    #   enable = true;
+    #   virtualHosts."localhost".extraConfig = ''
+    #     respond "Hello, world!"
+    #   '';
+    # };
   };
 
   system.stateVersion = "24.05";
