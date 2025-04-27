@@ -51,8 +51,8 @@ in
   services = {
     openssh = {
       enable = true;
-      PasswordAuthentication = true;
       settings = {
+        PasswordAuthentication = true;
         KexAlgorithms = [
           "curve25519-sha256"
           "curve25519-sha256@libssh.org"
