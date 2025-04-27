@@ -7,13 +7,19 @@ let
 in
 {
   imports = lib.optional (builtins.pathExists ./do-userdata.nix) ./do-userdata.nix ++ [
+    "${common.home-manager}/nixos"
     (modulesPath + "/virtualisation/digital-ocean-config.nix")
+    { services = common.services; }
+
   ];
-  nix = {
-    extraOptions = ''
-      max-jobs = auto
-      extra-experimental-features = nix-command flakes
-    '';
+
+  #defining nix tings
+  nix = common.nix // {
+    nixPath = [
+      "nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixos"
+      "nixos-config=/home/fisherrjd/cfg/hosts/${hostname}/configuration.nix"
+      "/nix/var/nix/profiles/per-user/root/channels"
+    ];
   };
 
   #define hostname env variable
@@ -33,6 +39,7 @@ in
       neverland
       airbook
       workbook
+      eldo
     ];
     packages = with pkgs; [ ];
   };
@@ -64,6 +71,12 @@ in
       };
     };
     tailscale.enable = true;
+    caddy = {
+      enable = true;
+      virtualHosts."localhost".extraConfig = ''
+        respond "Hello, world!"
+      '';
+    };
   };
 
   system.stateVersion = "24.05";
