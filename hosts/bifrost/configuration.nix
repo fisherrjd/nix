@@ -8,6 +8,7 @@ in
 {
   imports = lib.optional (builtins.pathExists ./do-userdata.nix) ./do-userdata.nix ++ [
     (modulesPath + "/virtualisation/digital-ocean-config.nix")
+    { services = common.services; }
   ];
 
   #defining nix tings
@@ -50,8 +51,8 @@ in
   services = {
     openssh = {
       enable = true;
+      PasswordAuthentication = true;
       settings = {
-        PasswordAuthentication = true;
         KexAlgorithms = [
           "curve25519-sha256"
           "curve25519-sha256@libssh.org"
@@ -72,8 +73,6 @@ in
     tailscale.enable = true;
 
   };
-
-  # home-manager.users.jade = common.jade;
 
 
   system.stateVersion = "24.05";
