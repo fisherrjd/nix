@@ -76,6 +76,9 @@ in
 
   };
 
+  home-manager.users.jade = common.jade;
+
+
   system.stateVersion = "24.05";
   programs.command-not-found.enable = false;
 }
