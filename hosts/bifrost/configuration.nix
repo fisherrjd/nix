@@ -54,7 +54,7 @@ in
     openssh = {
       enable = true;
       settings = {
-        PasswordAuthentication = false;
+        PasswordAuthentication = true;
         KexAlgorithms = [
           "curve25519-sha256"
           "curve25519-sha256@libssh.org"
