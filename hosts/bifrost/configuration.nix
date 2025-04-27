@@ -46,7 +46,10 @@ in
 
   networking.firewall.enable = false;
   security.sudo.wheelNeedsPassword = false;
-
+  environment.systemPackages = with pkgs; [
+    git
+    vim
+  ];
   services = {
     openssh = {
       enable = true;
