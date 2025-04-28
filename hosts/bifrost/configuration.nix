@@ -53,6 +53,7 @@ in
   services = {
     tailscale.enable = true;
     caddy = {
+      enable = true;
       virtualHosts = {
         # Push Notifications
         "ntfy.jade.rip".extraConfig = ''
