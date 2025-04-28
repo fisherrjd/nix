@@ -68,6 +68,11 @@ in
             to eldo:8080
           }
         '';
+        "llama.jade.rip".extraConfig = ''
+          reverse_proxy * {
+            to airbook:8012
+          }
+        '';
       };
     };
   };

@@ -100,7 +100,6 @@
             nixosConfiguration = self.nixosConfigurations."bifrost";
             tags = [
               "proxy"
-              "low-ram"
             ];
           };
 
