@@ -86,7 +86,7 @@
 
       colmena = {
         meta = {
-          nixpkgs = self.inputs.nixpkgs {
+          nixpkgs = import self.inputs.nixpkgs {
             system = "x86_64-linux"; # Or your deployment machine's system
             # Overlays are typically NOT needed here, as the actual build
             # uses the pkgs defined in nixosConfigurations, which already
