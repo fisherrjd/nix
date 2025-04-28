@@ -42,7 +42,9 @@ in
     packages = with pkgs; [ ];
   };
 
-  networking.firewall.enable = false;
+  networking.firewall.enable = true;
+  networking.firewall.allowedTCPPorts = [ 80 443 ];
+
   security.sudo.wheelNeedsPassword = false;
   environment.systemPackages = with pkgs; [
     git
@@ -50,9 +52,19 @@ in
   ];
   services = {
     tailscale.enable = true;
-  };
+    caddy = {
+      virtualHosts = {
+        # Push Notifications
+        "ntfy.jade.rip".extraConfig = ''
+          reverse_proxy * {
+            to eldo:8081
+          }
+        '';
+      };
+    };
 
 
-  system.stateVersion = "24.05";
-  programs.command-not-found.enable = false;
-}
+    system.stateVersion = "24.05";
+    programs.command-not-found.enable = false;
+  }
+
