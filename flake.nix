@@ -85,6 +85,17 @@
           ]);
 
       colmena = {
+        meta = {
+          # Instantiate nixpkgs for Colmena's internal use/metadata
+          # Use the system where Colmena runs or a common default.
+          nixpkgs = import inputs.nixpkgs {
+            system = "x86_64-linux"; # Or your deployment machine's system
+            # Overlays are typically NOT needed here, as the actual build
+            # uses the pkgs defined in nixosConfigurations, which already
+            # includes overlays via self.packages.
+            overlays = [ ];
+          };
+        };
         nodes = {
           "bifrost" = {
             deployment = {
