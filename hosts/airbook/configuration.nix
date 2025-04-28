@@ -50,10 +50,10 @@ in
     {
       openssh.enable = true;
       llama-server.servers = {
-        Qwen_Qwen3-4B-Q8_0 = {
+        Qwen3-4B-Q8_0 = {
           enable = true;
           port = 8012;
-          model = modelPath "Qwen_Qwen3-4B-Q8_0.gguf";
+          model = modelPath "Qwen3-4B-Q8_0.gguf";
           ngl = 99;
         };
       };
