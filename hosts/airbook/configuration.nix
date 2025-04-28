@@ -45,18 +45,28 @@ in
   };
   services =
     let
-      modelPath = name: "/opt/box/models/unsloth/${name}";
+      bartowski = name: "/opt/box/models/bartowski/${name}";
+      unsloth = name: "/opt/box/models/unsloth/${name}";
+
     in
     {
       openssh.enable = true;
       llama-server.servers = {
-        Qwen3-4B-Q8_0 = {
+        Unsloth_Qwen3-4B-Q8_0 = {
           enable = true;
           port = 8012;
-          model = modelPath "Qwen3-4B-Q8_0.gguf";
+          model = unsloth "Qwen3-4B-Q8_0.gguf";
           ngl = 99;
         };
       };
+      # llama-server.servers = {
+      #   Bartowski_Qwen3-4B-Q8_0 = {
+      #     enable = true;
+      #     port = 8012;
+      #     model = bartowski "Qwen_Qwen3-4B-Q8_0.gguf";
+      #     ngl = 99;
+      #   };
+      # };
     };
 
 }
