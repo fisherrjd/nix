@@ -97,7 +97,7 @@
         nodes = {
           "bifrost" = {
             deployment = {
-              targetHost = "bifrost";
+              targetHost = "104.236.220.8";
               # Optional: Specify SSH user if it's not your current username
               # targetUser = "jade";
               allowLocalDeployment = false;
