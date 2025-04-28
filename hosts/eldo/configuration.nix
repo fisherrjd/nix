@@ -120,18 +120,6 @@ in
 
   services =
     {
-      calibre-web = {
-        enable = true;
-        listen = {
-          ip = "127.0.0.1";
-          port = 8083;
-        };
-        options = {
-          calibreLibrary = "/tank/media/ebook";
-          enableBookUploading = true;
-          enableBookConversion = true;
-        };
-      };
       ntfy-sh = {
         enable = true;
         user = "jade";
