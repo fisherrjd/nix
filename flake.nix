@@ -101,7 +101,6 @@
             tags = [
               "proxy"
               "low-ram"
-              "bifrost"
             ];
           };
 
