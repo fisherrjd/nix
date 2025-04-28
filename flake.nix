@@ -87,10 +87,7 @@
       colmena = {
         meta = {
           nixpkgs = import self.inputs.nixpkgs {
-            system = "x86_64-linux"; # Or your deployment machine's system
-            # Overlays are typically NOT needed here, as the actual build
-            # uses the pkgs defined in nixosConfigurations, which already
-            # includes overlays via self.packages.
+            system = "x86_64-linux";
             overlays = [ ];
           };
         };
@@ -98,8 +95,7 @@
           "bifrost" = {
             deployment = {
               targetHost = "104.236.220.8";
-              # Optional: Specify SSH user if it's not your current username
-              # targetUser = "jade";
+              targetUser = "jade";
               allowLocalDeployment = false;
             };
             nixosConfiguration = self.nixosConfigurations."bifrost";
