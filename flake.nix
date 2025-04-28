@@ -85,11 +85,6 @@
           ]);
 
       colmena = {
-        meta = {
-          # Good practice: track nixpkgs revision used for deployments
-          nixpkgs = self.inputs.nixpkgs;
-        };
-
         nodes = {
           "bifrost" = {
             deployment = {
