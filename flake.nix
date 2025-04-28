@@ -97,7 +97,7 @@
               targetHost = "bifrost";
               allowLocalDeployment = false;
             };
-            nixosConfiguration = self.nixosConfigurations.bifrost;
+            nixosConfiguration = self.nixosConfigurations."bifrost";
             tags = [
               "proxy"
               "low-ram"
