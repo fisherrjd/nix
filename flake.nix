@@ -82,20 +82,19 @@
           [
             "airbook"
             "workbook"
-          ]);
+          ]
+        );
 
       colmena = {
         meta = {
           nixpkgs = import self.inputs.nixpkgs {
             system = "x86_64-linux";
-            overlays = [ ];
           };
         };
         nodes = {
           bifrost = {
             deployment = {
               targetHost = "bifrost";
-              targetUser = "jade";
               allowLocalDeployment = false;
             };
             nixosConfiguration = self.nixosConfigurations.bifrost;
