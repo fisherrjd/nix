@@ -83,6 +83,30 @@
             "airbook"
             "workbook"
           ]);
+
+      colmena = {
+        meta = {
+          # Good practice: track nixpkgs revision used for deployments
+          nixpkgs = self.inputs.nixpkgs;
+        };
+
+        nodes = {
+          "bifrost" = {
+            deployment = {
+              targetHost = "bifrost";
+              # Optional: Specify SSH user if it's not your current username
+              # targetUser = "jade";
+              allowLocalDeployment = false;
+            };
+            nixosConfiguration = self.nixosConfigurations."bifrost";
+            tags = [
+              "proxy"
+              "low-ram"
+            ];
+          };
+
+        };
+      };
       do-builder = self.inputs.nixos-generators.nixosGenerate {
         system = "x86_64-linux";
         format = "do";
