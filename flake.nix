@@ -92,7 +92,7 @@
           };
         };
         nodes = {
-          "bifrost" = {
+          bifrost = {
             deployment = {
               targetHost = "bifrost";
               targetUser = "jade";
