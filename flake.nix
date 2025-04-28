@@ -84,27 +84,6 @@
             "workbook"
           ]
         );
-
-      colmena = {
-        meta = {
-          nixpkgs = import self.inputs.nixpkgs {
-            system = "x86_64-linux";
-          };
-        };
-        nodes = {
-          bifrost = {
-            deployment = {
-              targetHost = "bifrost";
-              allowLocalDeployment = false;
-            };
-            nixosConfiguration = self.nixosConfigurations."bifrost";
-            tags = [
-              "proxy"
-            ];
-          };
-
-        };
-      };
       do-builder = self.inputs.nixos-generators.nixosGenerate {
         system = "x86_64-linux";
         format = "do";
