@@ -2,6 +2,7 @@
 let
   inherit (pkgs.hax) isDarwin isLinux isM1;
   inherit (pkgs.hax) attrIf optionalString words;
+  isBifrost = machine-name == "bifrost";
   firstName = "jade";
   lastName = "fisher";
   promptChar = ">";
@@ -24,7 +25,7 @@ let
 in
 {
   imports = [
-    ./home_configurations/packages.nix
+    (if isBifrost then ./home_configurations/packages_mini.nix else ./home_configurations/packages.nix)
     ./home_configurations/cobi.nix
     # Look more into these ex: optionalAttrs
     (pkgs.lib.optionalAttrs isLinux "${flake.inputs.vscode-server}/modules/vscode-server/home.nix")
