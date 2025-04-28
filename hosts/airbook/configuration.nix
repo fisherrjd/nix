@@ -45,7 +45,7 @@ in
   };
   services =
     let
-      modelPath = name: "/opt/box/models/bartowski/${name}";
+      modelPath = name: "/opt/box/models/unsloth/${name}";
     in
     {
       openssh.enable = true;
