@@ -61,6 +61,11 @@ in
             to eldo:8081
           }
         '';
+        "chat.jade.rip".extraConfig = ''
+          reverse_proxy * {
+            to eldo:8080
+          }
+        '';
       };
     };
   };
