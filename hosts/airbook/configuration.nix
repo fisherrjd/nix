@@ -45,15 +45,15 @@ in
   };
   services =
     let
-      modelPath = name: "/opt/box/models/bartowski/agentica-org_DeepScaleR-1.5B-Preview-GGUF/${name}";
+      modelPath = name: "/opt/box/models/bartowski/${name}";
     in
     {
       openssh.enable = true;
       llama-server.servers = {
-        r1-7b = {
+        Qwen_Qwen3-4B-Q8_0 = {
           enable = true;
           port = 8012;
-          model = modelPath "agentica-org_DeepScaleR-1.5B-Preview-Q4_0.gguf";
+          model = modelPath "Qwen_Qwen3-4B-Q8_0.gguf";
           ngl = 99;
         };
       };
