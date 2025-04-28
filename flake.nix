@@ -94,7 +94,7 @@
         nodes = {
           "bifrost" = {
             deployment = {
-              targetHost = "104.236.220.8";
+              targetHost = "bifrost";
               targetUser = "jade";
               allowLocalDeployment = false;
             };
