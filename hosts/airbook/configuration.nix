@@ -71,7 +71,6 @@ in
 
   # CORRECT STRUCTURE
   launchd.user.agents.keepAwake = {
-    # Properties are directly under keepAwake, no extra "config" block
     Label = "com.user.keepawake";
     Program = "/usr/bin/caffeinate";
     ProgramArguments = [
@@ -80,10 +79,8 @@ in
       "-s"
     ];
     RunAtLoad = true;
-    KeepAlive = true;
+    # KeepAlive = true;
 
-    # Optional: Add log paths if desired
-    # StandardOutPath = "/Users/your_username/Library/Logs/keepawake.log";
-    # StandardErrorPath = "/Users/your_username/Library/Logs/keepawake.error.log";
+
   };
 }
