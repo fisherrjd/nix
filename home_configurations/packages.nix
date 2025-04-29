@@ -89,7 +89,6 @@
         # Packages for only Macs
         (
           lib.optionals isDarwin [
-            caffeine
           ]
         )
 
