@@ -24,7 +24,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
-  outputs = { self, ... }:
+  outputs = { self, ... }@inputs:
     let
       inherit (self.inputs.nixpkgs) lib;
       forAllSystems = lib.genAttrs lib.systems.flakeExposed;
@@ -92,7 +92,9 @@
         ];
       };
       colmena = {
-        hive = import ./hive.nix { };
+        hive = import ./hive.nix {
+          inherit inputs;
+        };
       };
     };
 
