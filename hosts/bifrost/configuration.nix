@@ -7,9 +7,7 @@ let
 in
 {
   imports = lib.optional (builtins.pathExists ./do-userdata.nix) ./do-userdata.nix ++ [
-    "${common.home-manager}/nixos"
     (modulesPath + "/virtualisation/digital-ocean-config.nix")
-    { services = common.services; }
   ];
 
   #defining nix tings
@@ -29,7 +27,6 @@ in
 
   boot.kernel.sysctl."net.ipv4.ip_forward" = 1;
 
-  home-manager.users.jade = common.jade;
   users.users.jade = {
     isNormalUser = true;
     description = "Jade Fisher";
