@@ -1,17 +1,9 @@
 {
-  meta = {
-    nixpkgs = <nixpkgs>; # <-- Accesses the passed 'inputs'
-  };
+  meta = { nixpkgs = <nixpkgs>; }; # Adjust if not using flakes or pass differently
   nodes = {
-    bifrost = { name, nodes, ... }: {
-      imports = [
-        ../hosts/bifrost/configuration.nix
-      ];
-      deployment.targetHost = "104.236.220.8";
-      deployment.replaceUnknownProfiles = false;
-      deployment.allowLocalDeployment = false;
-      deployment.tags = [ "proxy" ];
-
+    bifrost = { ... }: {
+      imports = [ ../hosts/bifrost/configuration.nix ];
+      deployment.targetHost = "dummy"; # Doesn't matter for 'build'
     };
   };
 }
