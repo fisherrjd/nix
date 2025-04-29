@@ -1,10 +1,12 @@
 {
-  meta = { nixpkgs = <nixpkgs>; }; # Adjust if not using flakes or pass differently
+  meta = {
+    nixpkgs = <nixpkgs>;
+  };
   nodes = {
-    host-a = { ... }: {
+    bifrost = { ... }: {
       imports = [ ../hosts/bifrost/configuration.nix ];
       deployment.targetHost = "bifrost"; # Doesn't matter for 'build'
-      deployment.tags = [ "bifrost" ];
+      deployment.targetUser = "jade";
     };
   };
 }
