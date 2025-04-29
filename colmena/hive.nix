@@ -4,7 +4,7 @@
   };
   bifrost = { name, nodes, ... }: {
     imports = [
-      ../hosts/bifrost/configtest.nix
+      ../hosts/bifrost/configuration.nix
     ];
     deployment.targetHost = "104.236.220.8";
     deployment.replaceUnknownProfiles = false;
