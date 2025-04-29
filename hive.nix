@@ -6,7 +6,7 @@ in
     nixpkgs = <nixpkgs>;
   };
 
-  bifrost = { pkgs, lib, ... }: {
+  bifrost = { name, nodes, ... }: {
     imports = [
       ./hosts/bifrost/configuration.nix
     ];
