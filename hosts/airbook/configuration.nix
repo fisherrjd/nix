@@ -69,22 +69,21 @@ in
     };
 
 
+  # CORRECT STRUCTURE
   launchd.user.agents.keepAwake = {
-    config = {
-      Label = "com.user.keepawake";
+    # Properties are directly under keepAwake, no extra "config" block
+    Label = "com.user.keepawake";
+    Program = "/usr/bin/caffeinate";
+    ProgramArguments = [
+      "/usr/bin/caffeinate"
+      "-i"
+      "-s"
+    ];
+    RunAtLoad = true;
+    KeepAlive = true;
 
-      # The program to run. Use the absolute path.
-      Program = "/usr/bin/caffeinate";
-
-      # Arguments for the program. Each argument is a separate string.
-      ProgramArguments = [
-        "/usr/bin/caffeinate"
-        "-i" # Prevent idle sleep
-        "-s" # Prevent system sleep (requires AC power)
-      ];
-
-      RunAtLoad = true;
-      KeepAlive = true;
-    };
+    # Optional: Add log paths if desired
+    # StandardOutPath = "/Users/your_username/Library/Logs/keepawake.log";
+    # StandardErrorPath = "/Users/your_username/Library/Logs/keepawake.error.log";
   };
 }
