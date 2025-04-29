@@ -74,6 +74,5 @@ in
           KeepAlive = true; # Keeps caffeinate running even if it exits
         };
       };
-    }
     };
 }
