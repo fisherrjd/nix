@@ -12,7 +12,6 @@
         bzip2
         cacert
         caddy
-        caffeine
         cachix
         calibre-web
         coreutils-full
@@ -89,7 +88,9 @@
         zip
         # Packages for only Macs
         (
-          lib.optionals isDarwin [ ]
+          lib.optionals isDarwin [
+            caffeine
+          ]
         )
 
         # Packages for only Linux
