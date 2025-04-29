@@ -4,10 +4,12 @@ let
   username = "jade";
   common = import ../common.nix { inherit config flake machine-name pkgs username; };
 
+
 in
 {
   imports = lib.optional (builtins.pathExists ./do-userdata.nix) ./do-userdata.nix ++ [
     (modulesPath + "/virtualisation/digital-ocean-config.nix")
+    ./starship.nix
   ];
 
   #defining nix tings
@@ -77,4 +79,6 @@ in
 
   system.stateVersion = "24.05";
   programs.command-not-found.enable = false;
+
+
 }
