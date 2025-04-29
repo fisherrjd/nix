@@ -93,5 +93,9 @@
       };
     };
 
+  colmena = {
+    hive = import ./hive.nix { };
+  };
+
 
 }
