@@ -76,7 +76,6 @@ in
     };
   };
 
-
   system.stateVersion = "24.05";
   programs.command-not-found.enable = false;
 
