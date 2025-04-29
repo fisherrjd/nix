@@ -7,7 +7,7 @@
       imports = [
         ../hosts/bifrost/configuration.nix
       ];
-      deployment.targetHost = "bifrost";
+      deployment.targetHost = "104.236.220.8";
       deployment.replaceUnknownProfiles = false;
       deployment.allowLocalDeployment = false;
       deployment.tags = [ "proxy" ];
