@@ -136,6 +136,7 @@ in
         authentication = pkgs.lib.mkOverride 10 ''
           #type database  DBuser  IP            auth-method
           host  all       all     100.64.0.0/10 md5
+          host  all       all     127.0.0.1/32  md5
         '';
       };
     };
