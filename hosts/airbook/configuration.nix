@@ -70,7 +70,7 @@ in
     };
   launchd.user.agents.caffeinate = {
     serviceConfig = {
-      Label = "local.caffeinate";
+      Label = "jade.caffeinate";
       ProgramArguments = [ "/usr/bin/caffeinate" "-dims" ];
       RunAtLoad = true;
       KeepAlive = true; # Keeps caffeinate running even if it exits
