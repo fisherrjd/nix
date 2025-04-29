@@ -91,11 +91,12 @@
           ./generators/do-builder/configuration.nix
         ];
       };
+      colmena = {
+        hive = import ./hive.nix { };
+      };
     };
 
-  colmena = {
-    hive = import ./hive.nix { };
-  };
+
 
 
 }
