@@ -1,9 +1,10 @@
+{ inputs, ... }:
 let
   test = "test";
 in
 {
   meta = {
-    nixpkgs = <nixpkgs>;
+    nixpkgs = inputs.nixpkgs;
   };
   nodes = {
     bifrost = { name, nodes, ... }: {
