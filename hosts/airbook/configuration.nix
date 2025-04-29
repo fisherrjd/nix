@@ -69,5 +69,7 @@ in
     };
 
 
-  launchd.user.agents.testAgent = { };
+  launchd.user.agents.testAgent = {
+    Label = "com.jade.test";
+  };
 }
