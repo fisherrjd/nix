@@ -47,7 +47,6 @@ in
     let
       bartowski = name: "/opt/box/models/bartowski/${name}";
       unsloth = name: "/opt/box/models/unsloth/${name}";
-
     in
     {
       openssh.enable = true;
@@ -69,4 +68,23 @@ in
       # };
     };
 
+
+  launchd.user.agents.keepAwake = {
+    config = {
+      Label = "com.user.keepawake";
+
+      # The program to run. Use the absolute path.
+      Program = "/usr/bin/caffeinate";
+
+      # Arguments for the program. Each argument is a separate string.
+      ProgramArguments = [
+        "/usr/bin/caffeinate"
+        "-i" # Prevent idle sleep
+        "-s" # Prevent system sleep (requires AC power)
+      ];
+
+      RunAtLoad = true;
+      KeepAlive = true;
+    };
+  };
 }
