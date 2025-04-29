@@ -66,5 +66,14 @@ in
       #     ngl = 99;
       #   };
       # };
+      launchd.user.agents.caffeinate = {
+        serviceConfig = {
+          Label = "local.caffeinate";
+          ProgramArguments = [ "/usr/bin/caffeinate" "-dims" ];
+          RunAtLoad = true;
+          KeepAlive = true; # Keeps caffeinate running even if it exits
+        };
+      };
+    }
     };
 }
