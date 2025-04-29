@@ -69,15 +69,11 @@ in
     };
 
 
-  launchd.user.agents.keepAwake = {
-    Label = "com.user.keepawake";
-    Program = "/usr/bin/caffeinate";
-    ProgramArguments = [
-      "/usr/bin/caffeinate"
-      "-i"
-      "-s"
-    ];
-    RunAtLoad = true;
-    KeepAlive = true; # <-- Uncomment this
+  # Replace the keepAwake block with this temporary test:
+  launchd.user.agents.testAgent = {
+    # Label = "com.user.testagent"; # Leave out Label initially
+    Program = "/usr/bin/true"; # A command that does nothing and exits
+    # RunAtLoad = true;          # Leave out extras
+    # KeepAlive = false;         # Leave out extras
   };
 }
