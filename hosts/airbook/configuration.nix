@@ -69,7 +69,6 @@ in
     };
 
 
-  # CORRECT STRUCTURE
   launchd.user.agents.keepAwake = {
     Label = "com.user.keepawake";
     Program = "/usr/bin/caffeinate";
@@ -79,8 +78,6 @@ in
       "-s"
     ];
     RunAtLoad = true;
-    # KeepAlive = true;
-
-
+    KeepAlive = true; # <-- Uncomment this
   };
 }
