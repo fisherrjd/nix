@@ -9,7 +9,7 @@ in
     settings = {
       add_newline = false;
       character = {
-        success_symbol = "[${promptChar}](bright-green)";
+        success_symbol = "[${promptChar}](bright-blue)";
         error_symbol = "[${promptChar}](bright-red)";
       };
       directory.style = "fg:#d442f5";
