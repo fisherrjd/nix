@@ -12,6 +12,7 @@
         bzip2
         cacert
         caddy
+        caffeine
         cachix
         calibre-web
         coreutils-full

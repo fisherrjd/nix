@@ -67,10 +67,4 @@ in
       #   };
       # };
     };
-
-
-  launchd.user.agents.testAgent = {
-    Label = "com.jade.test";
-    Program = "/usr/bin/true"; # Add a minimal program to run
-  };
 }
