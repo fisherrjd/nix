@@ -85,6 +85,11 @@ in
             to airbook:8012
           }
         '';
+        "meals.jade.rip".extraConfig = ''
+          reverse_proxy * {
+            to eldo:5000
+          }
+        '';
       };
     };
   };
