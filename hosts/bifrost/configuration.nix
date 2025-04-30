@@ -21,18 +21,18 @@ in
     ];
   };
 
-  age = {
-    identityPaths = [ "/home/jade/.ssh/id_ed25519" ];
-    secrets = {
-      caddy = {
-        file = ../../secrets/caddy.age;
-        path = "/etc/default/caddy";
-        owner = "root";
-        group = "root";
-        mode = "644";
-      };
-    };
-  };
+  # age = {
+  #   identityPaths = [ "/home/jade/.ssh/id_ed25519" ];
+  #   secrets = {
+  #     caddy = {
+  #       file = ../../secrets/caddy.age;
+  #       path = "/etc/default/caddy";
+  #       owner = "root";
+  #       group = "root";
+  #       mode = "644";
+  #     };
+  #   };
+  # };
 
   #define hostname env variable
   environment.variables = {
