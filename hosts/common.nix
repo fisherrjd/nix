@@ -7,7 +7,8 @@ let
   constants = import ./constants.nix;
 in
 {
-  inherit (constants) home-manager jade nix-darwin pkgs pubkeys;
+  inherit (constants) pubkeys;
+  inherit (constants) home-manager jade nix-darwin pkgs;
 
   nix = {
     extraOptions = ''
