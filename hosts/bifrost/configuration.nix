@@ -9,7 +9,7 @@ in
 {
   imports = lib.optional (builtins.pathExists ./do-userdata.nix) ./do-userdata.nix ++ [
     (modulesPath + "/virtualisation/digital-ocean-config.nix")
-    ./starship.nix
+    ./bifrost_home.nix
   ];
 
   #defining nix tings
@@ -19,6 +19,19 @@ in
       "nixos-config=/home/fisherrjd/cfg/hosts/${hostname}/configuration.nix"
       "/nix/var/nix/profiles/per-user/root/channels"
     ];
+  };
+
+  age = {
+    identityPaths = [ "/home/jade/.ssh/id_ed25519" ];
+    secrets = {
+      caddy = {
+        file = ../../secrets/caddy.age;
+        path = "/etc/default/caddy";
+        owner = "root";
+        group = "root";
+        mode = "644";
+      };
+    };
   };
 
   #define hostname env variable
