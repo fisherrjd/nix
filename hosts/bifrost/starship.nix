@@ -1,4 +1,3 @@
-# ./starship.nix (or modules/starship.nix, etc.)
 { config, pkgs, lib, ... }:
 let promptChar = ">";
 in
