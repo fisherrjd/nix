@@ -19,8 +19,6 @@ let
     ];
 
     all = dev ++ work;
-
-
   };
 in
 {
