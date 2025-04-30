@@ -90,6 +90,11 @@ in
             to eldo:5000
           }
         '';
+        "n8n.jade.rip".extraConfig = ''
+          reverse_proxy * {
+            to eldo:5678
+          }
+        '';
       };
     };
   };

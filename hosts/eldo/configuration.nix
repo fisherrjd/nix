@@ -167,5 +167,20 @@ in
         "--network=host"
       ];
     };
+    containers.n8n = {
+      image = "docker.n8n.io/n8nio/n8n:1.89.2";
+      volumes = [ "n8n_data:/home/node/.n8n" ];
+      ports = [ "5678:5678" ];
+      environment = {
+        GENERIC_TIMEZONE = "America/Denver";
+        N8N_EDITOR_BASE_URL = "https://n8n.jade.dev";
+        N8N_TEMPLATES_ENABLED = "true";
+        N8N_HIRING_BANNER_ENABLED = "false";
+      };
+      # environmentFiles = [ config.age.secrets.n8n.path ];
+      extraOptions = [
+        "--network=host"
+      ];
+    };
   };
 }
