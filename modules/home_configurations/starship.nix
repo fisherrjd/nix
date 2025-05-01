@@ -24,7 +24,7 @@ in
 
       nodejs = { symbol = "⬡ "; };
       hostname = {
-        style = "bold bright-orange";
+        style = "bold orange";
       };
       username = {
         style_user = "bold fg:93";
