@@ -1,17 +1,23 @@
 { config, pkgs, lib, ... }:
-let promptChar = ">";
+let
+  promptChar = "> ";
 in
 {
-  # Enable the starship program system-wide
   programs.starship.enable = true;
   programs.starship = {
     settings = {
       add_newline = false;
       character = {
-        success_symbol = "[${promptChar}](bright-green)";
-        error_symbol = "[${promptChar}](bright-red)";
+        success_symbol = "[${promptChar}](bold green)";
+        error_symbol = "[${promptChar}](bold red)";
       };
-      directory.style = "fg:#d442f5";
+      directory = {
+        style = "fg:#8b9467";
+      };
+      git_branch = {
+        symbol = "\uF418 ";
+        style = "fg:blue";
+      };
       nix_shell = {
         pure_msg = "";
         impure_msg = "";
@@ -21,7 +27,6 @@ in
         disabled = false;
         style = "fg:#326ce5";
       };
-
       nodejs = { symbol = "⬡ "; };
       hostname = {
         style = "bold bright-green";
@@ -29,7 +34,18 @@ in
       username = {
         style_user = "bold fg:93";
       };
-
+      python = {
+        symbol = "\u🐍 ";
+        style = "fg:blue";
+      };
+      rust = {
+        symbol = "\u🦀 ";
+        style = "fg:orange";
+      };
+      ruby = {
+        symbol = "\u💎 ";
+        style = "fg:blue";
+      };
     };
   };
 }
