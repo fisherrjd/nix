@@ -95,6 +95,11 @@ in
             to eldo:5678
           }
         '';
+        "game.jade.rip".extraConfig = ''
+          reverse_proxy * {
+            to eldo:6900
+          }
+        '';
       };
     };
   };
