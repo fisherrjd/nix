@@ -132,7 +132,6 @@ in
         N8N_TEMPLATES_ENABLED = "true";
         N8N_HIRING_BANNER_ENABLED = "false";
       };
-      # environmentFiles = [ config.age.secrets.n8n.path ];
       extraOptions = [
         "--network=host"
       ];

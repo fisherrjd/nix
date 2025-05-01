@@ -12,7 +12,7 @@ in
     ++ [
       (modulesPath + "/virtualisation/digital-ocean-config.nix")
       (modulesDir + "/starship.nix")
-      (modulesDir + "/git.nix")
+      # (modulesDir + "/git.nix")
 
     ];
 
