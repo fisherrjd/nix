@@ -5,7 +5,6 @@ let
   common = import ../common.nix { inherit config flake machine-name pkgs username; };
   modulesDir = ../../modules/home_configurations;
 
-
 in
 {
   imports =
@@ -99,9 +98,9 @@ in
             to eldo:5678
           }
         '';
-        "game.jade.rip".extraConfig = ''
+        "litellm.jade.rip".extraConfig = ''
           reverse_proxy * {
-            to eldo:6900
+            to eldo:4000
           }
         '';
       };
