@@ -3,14 +3,18 @@ let
   hostname = "bifrost";
   username = "jade";
   common = import ../common.nix { inherit config flake machine-name pkgs username; };
+  modulesDir = ../../modules/home_configurations;
 
 
 in
 {
-  imports = lib.optional (builtins.pathExists ./do-userdata.nix) ./do-userdata.nix ++ [
-    (modulesPath + "/virtualisation/digital-ocean-config.nix")
-    ./starship.nix
-  ];
+  imports =
+    lib.optional (builtins.pathExists ./do-userdata.nix) ./do-userdata.nix
+    ++ [
+      (modulesPath + "/virtualisation/digital-ocean-config.nix")
+      (modulesDir + "/starship.nix")
+
+    ];
 
   #defining nix tings
   nix = common.nix // {
