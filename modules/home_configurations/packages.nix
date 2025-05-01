@@ -1,4 +1,8 @@
 { pkgs, flake, lib, machine-name, ... }:
+let
+  notBifrost = machine-name != "bifrost";
+
+in
 {
   home.packages = with pkgs;
     lib.flatten
@@ -35,7 +39,6 @@
         gum # learn about this
         gzip
         htmlq
-        hms
         jq
         kubectl
         kubectx
@@ -101,6 +104,10 @@
         # Secrets
         flake.inputs.agenix.packages.${pkgs.system}.default
 
+        #Packages NOT on Bifrost
+        (lib.optionals notBifrost [
+          hms
+        ])
         # TODO: Pog scripts
         [ ]
       ];
