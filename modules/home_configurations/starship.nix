@@ -8,8 +8,8 @@ in
     settings = {
       add_newline = false;
       character = {
-        success_symbol = "[${promptChar}](bright-orange)";
-        error_symbol = "[${promptChar}](bright-orange)";
+        success_symbol = "[${promptChar}](bright-green)";
+        error_symbol = "[${promptChar}](bright-green)";
       };
       directory.style = "fg:#d442f5";
       nix_shell = {
