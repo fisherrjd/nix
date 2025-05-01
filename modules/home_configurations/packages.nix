@@ -35,7 +35,7 @@
         gum # learn about this
         gzip
         htmlq
-        # hms
+        hms
         jq
         kubectl
         kubectx
