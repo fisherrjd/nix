@@ -17,7 +17,7 @@ rec {
   '';
   _nix-darwin-switch = { host }:
     writeShellScriptBin "switch" ''
-      profile=/nix/var/nix/profiles/system
+      profile=/nix/var/nix/profiles/system  
       toplevel="$(nix build ${flags} --no-link --print-out-paths ~/cfg#darwinConfigurations.${host}.system)"
         ${nvd}/bin/nvd diff "$profile" "$toplevel"
         sudo -H nix-env -p "$profile" --set "$toplevel"
