@@ -9,7 +9,7 @@ in
       add_newline = false;
       character = {
         success_symbol = "[${promptChar}](bright-green)";
-        error_symbol = "[${promptChar}](bright-green)";
+        error_symbol = "[${promptChar}](bright-red)";
       };
       directory.style = "fg:#d442f5";
       nix_shell = {
@@ -24,7 +24,7 @@ in
 
       nodejs = { symbol = "⬡ "; };
       hostname = {
-        style = "bold bright-blue";
+        style = "bold bright-orange";
       };
       username = {
         style_user = "bold fg:93";
