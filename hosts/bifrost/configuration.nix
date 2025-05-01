@@ -12,6 +12,8 @@ in
     ++ [
       (modulesPath + "/virtualisation/digital-ocean-config.nix")
       (modulesDir + "/starship.nix")
+      (modulesDir + "/bash.nix")
+      (modulesDir + "/git.nix")
 
     ];
 
