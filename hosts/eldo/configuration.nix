@@ -102,6 +102,28 @@ in
           host    litellm        postgres         0.0.0.0/0              md5
         '';
       };
+
+      services.minecraftServer = {
+        enable = true;
+        eula = true;
+        package = pkgs.fetchurl {
+          url = "https://launcher.mojang.com/v1/objects/0a269b5f2c5b93b1712d0f5dc43b6182b9ab2547/minecraft_server.jar";
+          sha256 = "0zj2mv6jxf6zyrc4c6fr2g7m7wb7blfjfj4s5cp0g2k4l7r4q4j6";
+        };
+        serverProperties = {
+          server-port = 25565;
+          motd = "Welcome to my Minecraft server!";
+          gamemode = 0;
+          difficulty = 1;
+          max-players = 10;
+          bind = "0.0.0.0"; # Allow connections from any IP address
+        };
+        jvmOpts = [
+          "-Xmx1024M"
+          "-Xms512M"
+        ];
+        # domain = "your-domain.com";
+      };
     };
   users.extraGroups.docker.members = [ username ];
   virtualisation.oci-containers = {
