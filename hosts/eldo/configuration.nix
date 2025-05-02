@@ -103,20 +103,20 @@ in
         '';
       };
 
-      minecraft-server = {
-        enable = true;
-        eula = true;
-        serverProperties = {
-          server-port = 25565;
-          motd = "Welcome to my Minecraft server!";
-          gamemode = 0;
-          difficulty = 1;
-          max-players = 5;
-          bind = "0.0.0.0"; # Allow connections from any IP address
-          enable-rcon = true;
-          "rcon.password" = "meme";
-        };
-      };
+      # minecraft-server = {
+      #   enable = true;
+      #   eula = true;
+      #   serverProperties = {
+      #     server-port = 25565;
+      #     motd = "Welcome to my Minecraft server!";
+      #     gamemode = 0;
+      #     difficulty = 1;
+      #     max-players = 5;
+      #     bind = "0.0.0.0"; # Allow connections from any IP address
+      #     enable-rcon = true;
+      #     "rcon.password" = "meme";
+      #   };
+      # };
     };
   users.extraGroups.docker.members = [ username ];
   virtualisation.oci-containers = {

@@ -28,23 +28,13 @@
     let
       inherit (self.inputs.nixpkgs) lib;
       forAllSystems = lib.genAttrs lib.systems.flakeExposed;
+      packages = forAllSystems
+        (system: import ./. { flake = self; inherit system; });
     in
     {
+      inherit packages;
       inherit (self.inputs) jacobi agenix;
       pins = self.inputs;
-      packages = forAllSystems
-        (system: import self.inputs.nixpkgs {
-          inherit system;
-          # Define cobi repos as an overlay into me
-          overlays = [
-            (_: _: { jacobi = import self.inputs.jacobi { inherit system; }; })
-            (_: prev: { inherit (prev.jacobi) llama-cpp-latest; })
-            (_: _: { nixpkgsRev = self.inputs.nixpkgs.rev; })
-          ] ++ import ./overlays.nix;
-          config = {
-            allowUnfree = true;
-          };
-        });
 
       nixosConfigurations = builtins.listToAttrs
         (map
