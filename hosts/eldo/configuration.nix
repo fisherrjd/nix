@@ -91,7 +91,6 @@ in
       openssh.enable = true;
       postgresql = {
         enable = true;
-        eula = true;
         ensureDatabases = [ "litellm" ];
         authentication = pkgs.lib.mkOverride 10 ''
           #type database  DBuser  auth-method
@@ -106,6 +105,7 @@ in
 
       minecraft-server = {
         enable = true;
+        eula = true;
         serverProperties = {
           server-port = 25565;
           motd = "Welcome to my Minecraft server!";
