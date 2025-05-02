@@ -91,6 +91,7 @@ in
       openssh.enable = true;
       postgresql = {
         enable = true;
+        eula = true;
         ensureDatabases = [ "litellm" ];
         authentication = pkgs.lib.mkOverride 10 ''
           #type database  DBuser  auth-method
