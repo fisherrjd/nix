@@ -108,13 +108,15 @@ in
         eula = true;
         serverProperties = {
           server-port = 25565;
-          motd = "Welcome to my Minecraft server!";
+          motd = "Dan Is a NERD!";
+          server-name = "Hardcore Gamer Legends";
           gamemode = 0;
           difficulty = 1;
           max-players = 5;
           bind = "0.0.0.0"; # Allow connections from any IP address
           enable-rcon = true;
-          "rcon.password" = "meme";
+          "rcon.password" = "meme-password";
+          hardcore = true;
         };
       };
     };
