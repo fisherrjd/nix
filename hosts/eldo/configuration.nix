@@ -105,22 +105,22 @@ in
       };
       # TODO abstract and add more definitions (steal from cobi)
 
-      # minecraft-server = {
-      #   enable = true;
-      #   eula = true;
-      #   openFirewall = true;
-      #   serverProperties = {
-      #     server-port = 25565;
-      #     motd = "Dan Is a NERD!";
-      #     level-name = "hardcore_v2";
-      #     server-name = "Hardcore Gamer Legends";
-      #     gamemode = 0;
-      #     difficulty = 1;
-      #     max-players = 10;
-      #     bind = "0.0.0.0"; # Allow connections from any IP address
-      #     hardcore = true;
-      #   };
-      # };
+      minecraft-server = with common.minecraft; {
+        enable = true;
+        eula = true;
+        openFirewall = true;
+        serverProperties = {
+          server-port = 25565;
+          motd = "Dan Is a NERD!";
+          level-name = "hardcore_v2";
+          server-name = "Hardcore Gamer Legends";
+          gamemode = 0;
+          difficulty = 1;
+          max-players = 10;
+          bind = "0.0.0.0"; # Allow connections from any IP address
+          hardcore = true;
+        };
+      };
     };
   users.extraGroups.docker.members = [ username ];
   virtualisation.oci-containers = {
