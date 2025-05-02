@@ -106,6 +106,7 @@ in
       minecraft-server = {
         enable = true;
         eula = true;
+        openFirewall = true;
         serverProperties = {
           server-port = 25565;
           motd = "Dan Is a NERD!";
