@@ -103,23 +103,18 @@ in
         '';
       };
 
-      minecraftServer = {
+      minecraft-server = {
         enable = true;
-        eula = true;
-        package = pkgs.minecraft-server;
         serverProperties = {
           server-port = 25565;
           motd = "Welcome to my Minecraft server!";
           gamemode = 0;
           difficulty = 1;
-          max-players = 10;
+          max-players = 5;
           bind = "0.0.0.0"; # Allow connections from any IP address
+          enable-rcon = true;
+          "rcon.password" = "meme";
         };
-        jvmOpts = [
-          "-Xmx1024M"
-          "-Xms512M"
-        ];
-        # domain = "your-domain.com";
       };
     };
   users.extraGroups.docker.members = [ username ];
