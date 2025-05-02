@@ -103,7 +103,7 @@ in
         '';
       };
 
-      minecraftServer = {
+      minecraft-server = {
         enable = true;
         eula = true;
         package = pkgs.fetchurl {
