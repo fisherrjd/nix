@@ -64,6 +64,7 @@ in
   environment.variables = {
     NIX_HOST = hostname;
   };
+  networking.firewall.allowedTCPPorts = [ 25565 ];
   networking.hostName = "eldo";
   home-manager.users.jade = common.jade;
   nix = common.nix // {
@@ -116,8 +117,6 @@ in
           difficulty = 1;
           max-players = 5;
           bind = "0.0.0.0"; # Allow connections from any IP address
-          enable-rcon = true;
-          "rcon.password" = "meme-password";
           hardcore = true;
         };
       };

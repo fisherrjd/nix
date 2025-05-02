@@ -104,11 +104,6 @@ in
             to eldo:4000
           }
         '';
-        "minecraft.jade.rip".extraConfig = ''
-          reverse_proxy * {
-            to eldo:25565
-          }
-        '';
       };
     };
   };
