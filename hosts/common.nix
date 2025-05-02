@@ -111,6 +111,8 @@ in
       jre19 = pkgs.temurin-bin-19;
 
       jvmOpts = builtins.concatStringsSep " " [
+        "-Xmx8192M"
+        "-Xms4096M"
         "-XX:+UseG1GC"
         "-XX:+ParallelRefProcEnabled"
         "-XX:MaxGCPauseMillis=200"
