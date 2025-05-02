@@ -109,6 +109,7 @@ in
         serverProperties = {
           server-port = 25565;
           motd = "Dan Is a NERD!";
+          level-name = "hardcore_v1";
           server-name = "Hardcore Gamer Legends";
           gamemode = 0;
           difficulty = 1;
