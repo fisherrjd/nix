@@ -78,7 +78,6 @@ in
   systemd.targets.suspend.enable = false;
   systemd.targets.hibernate.enable = false;
   systemd.targets.hybrid-sleep.enable = false;
-  nixpkgs.config.allowUnfree = true;
   services =
     {
       ntfy-sh = {
