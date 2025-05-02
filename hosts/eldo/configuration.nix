@@ -103,13 +103,10 @@ in
         '';
       };
 
-      minecraft-server = {
+      minecraftServer = {
         enable = true;
         eula = true;
-        package = pkgs.fetchurl {
-          url = "https://launcher.mojang.com/v1/objects/0a269b5f2c5b93b1712d0f5dc43b6182b9ab2547/minecraft_server.jar";
-          sha256 = "0zj2mv6jxf6zyrc4c6fr2g7m7wb7blfjfj4s5cp0g2k4l7r4q4j6";
-        };
+        package = pkgs.minecraft-server;
         serverProperties = {
           server-port = 25565;
           motd = "Welcome to my Minecraft server!";
