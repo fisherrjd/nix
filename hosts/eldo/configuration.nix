@@ -125,7 +125,6 @@ in
 
       calibre-web = {
         enable = true;
-        package = pkgs.python3.pkgs.calibre-web;
         user = "jade";
         group = "jade";
         listen = {
