@@ -10,7 +10,7 @@ in
       nixup
       hax.comma
       docker_pog_scripts
-      zaddy
+      # zaddy
     ];
 
 }
