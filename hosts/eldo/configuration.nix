@@ -123,18 +123,22 @@ in
         };
       };
 
-      calibre-web = {
-        description = "Calibre Web service";
-        after = [ "network.target" ];
-        wantedBy = [ "multi-user.target" ];
-
-        serviceConfig.User = "youruser";
-        serviceConfig.Group = "youruser";
-        preStop = ''
-          # Commands to run before stopping the service
-        '';
-
-        restartIfChanged = true;
+      services.calibre-web = {
+        enable = true;
+        package = pkgs.python3.pkgs.calibre-web;
+        user = "jade";
+        group = "jade";
+        listen = {
+          ip = "0.0.0.0";
+          port = 8181;
+        };
+        dataDir = "/home/jade/calibre-web-data";
+        options = {
+          enableBookUploading = true;
+          enableBookConversion = true;
+          calibreLibrary = "/home/jade/calibre-library";
+        };
+        openFirewall = true;
       };
     };
   users.extraGroups.docker.members = [ username ];
