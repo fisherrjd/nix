@@ -100,6 +100,7 @@ in
         (
           lib.optionals isLinux [
             gnutar
+            calibre-web
           ]
         )
         # Secrets
