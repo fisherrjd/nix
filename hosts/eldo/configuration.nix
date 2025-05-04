@@ -66,7 +66,7 @@ in
   };
   networking.firewall.allowedTCPPorts = [ 25565 ];
   networking.hostName = "eldo";
-  home-manager.users.jade = common.jade;
+  # home-manager.users.jade = flake.jacobi.zaddy;
   nix = common.nix // {
     nixPath = [
       "nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixos"
@@ -121,6 +121,20 @@ in
           bind = "0.0.0.0"; # Allow connections from any IP address
           hardcore = true;
         };
+      };
+
+      calibre-web = {
+        description = "Calibre Web service";
+        after = [ "network.target" ];
+        wantedBy = [ "multi-user.target" ];
+
+        serviceConfig.User = "youruser";
+        serviceConfig.Group = "youruser";
+        preStop = ''
+          # Commands to run before stopping the service
+        '';
+
+        restartIfChanged = true;
       };
     };
   users.extraGroups.docker.members = [ username ];

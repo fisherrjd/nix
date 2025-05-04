@@ -71,6 +71,7 @@ in
   services = {
     tailscale.enable = true;
     caddy = {
+      # package = pkgs.zaddy;
       enable = true;
       virtualHosts = {
         # Push Notifications
