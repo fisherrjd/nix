@@ -123,22 +123,23 @@ in
         };
       };
 
-      calibre-web = {
-        enable = true;
-        user = "jade";
-        group = "jade";
-        listen = {
-          ip = "0.0.0.0";
-          port = 8181;
-        };
-        dataDir = "/home/jade/calibre-web-data";
-        options = {
-          enableBookUploading = true;
-          enableBookConversion = true;
-          calibreLibrary = "/home/jade/calibre-library";
-        };
-        openFirewall = true;
-      };
+      # Book Worm Era
+      # calibre-web = {
+      #   enable = true;
+      #   user = "jade";
+      #   group = "jade";
+      #   listen = {
+      #     ip = "0.0.0.0";
+      #     port = 8181;
+      #   };
+      #   dataDir = "/home/jade/calibre-web-data";
+      #   options = {
+      #     enableBookUploading = true;
+      #     enableBookConversion = true;
+      #     calibreLibrary = "/home/jade/calibre-library";
+      #   };
+      #   openFirewall = true;
+      # };
     };
   users.extraGroups.docker.members = [ username ];
   virtualisation.oci-containers = {
