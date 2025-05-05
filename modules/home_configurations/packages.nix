@@ -17,7 +17,6 @@ in
         cacert
         caddy
         cachix
-        calibre-web
         coreutils-full
         colmena
         curl
