@@ -39,6 +39,7 @@ in
         gzip
         htmlq
         jq
+        k9s
         kubectl
         kubectx
         kubernetes-helm
