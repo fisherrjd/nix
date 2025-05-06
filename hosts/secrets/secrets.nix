@@ -1,5 +1,5 @@
 let
-  constants = import ../hosts/constants.nix;
+  constants = import ../../hosts/constants.nix;
   inherit (constants) dev;
 in
 {

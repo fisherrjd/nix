@@ -92,7 +92,7 @@ in
       openssh.enable = true;
       postgresql = {
         enable = true;
-        ensureDatabases = [ "litellm" ];
+        ensureDatabases = [ "litellm" "calibre" ];
         authentication = pkgs.lib.mkOverride 10 ''
           #type database  DBuser  auth-method
           local all       all     trust
@@ -101,6 +101,7 @@ in
           host    all            postgres         127.0.0.1/32           md5
           host    all            postgres         ::1/128                md5
           host    litellm        postgres         0.0.0.0/0              md5
+          host    calibre        postgres         0.0.0.0/0              md5
         '';
       };
       # TODO abstract and add more definitions (steal from cobi)
@@ -170,6 +171,14 @@ in
         N8N_TEMPLATES_ENABLED = "true";
         N8N_HIRING_BANNER_ENABLED = "false";
       };
+      extraOptions = [
+        "--network=host"
+      ];
+    };
+    containers.calibre-web = {
+      image = "lscr.io/linuxserver/calibre-web:latest";
+      volumes = [ "lite-llm:/app" ];
+      # environmentFiles = [ config.age.secrets.litellm.path ];
       extraOptions = [
         "--network=host"
       ];
