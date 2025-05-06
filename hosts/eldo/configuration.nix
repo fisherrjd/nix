@@ -19,11 +19,11 @@ in
     identityPaths = [ "/home/jade/.ssh/id_ed25519" ];
     secrets = {
       litellm = {
-        file = ../secrets/litellm.age;
+        file = ../../secrets/litellm.age;
         mode = "644";
       };
       openwebui = {
-        file = ../secrets/openwebui.age;
+        file = ../../secrets/openwebui.age;
         mode = "644";
       };
     };
