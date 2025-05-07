@@ -53,9 +53,11 @@ in
       llama-server.servers = {
         Unsloth_Qwen3-4B-Q8_0 = {
           enable = true;
+          package = pkgs.llama-cpp-latest;
           port = 8012;
           model = unsloth "Qwen3-4B-Q8_0.gguf";
           ngl = 99;
+          extraFlags = ''--ctx-size 32768 --seed 420 --prio 2 --temp 0.6 --min-p 0.0 --top-k 20 --top-p 0.95'';
         };
       };
       # llama-server.servers = {
