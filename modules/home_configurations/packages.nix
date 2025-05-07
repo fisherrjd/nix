@@ -16,7 +16,6 @@ in
         bzip2
         cacert
         caddy
-        cachix
         coreutils-full
         colmena
         curl
