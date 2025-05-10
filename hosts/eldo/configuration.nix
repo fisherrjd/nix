@@ -146,7 +146,7 @@ in
   virtualisation.oci-containers = {
     backend = "docker";
     containers.litellm = {
-      image = "ghcr.io/berriai/litellm:main-v1.67.0-stable";
+      image = "ghcr.io/berriai/litellm:main-v1.68.0-stable";
       volumes = [ "lite-llm:/app" ];
       environmentFiles = [ config.age.secrets.litellm.path ];
       extraOptions = [
