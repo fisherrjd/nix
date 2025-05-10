@@ -75,7 +75,6 @@ in
         ruff
         scc
         scrypt
-        searchix
         shfmt
         statix
         time
