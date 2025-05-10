@@ -154,7 +154,7 @@ in
       ];
     };
     containers.openwebui = {
-      image = "ghcr.io/open-webui/open-webui:v0.6.9";
+      image = "ghcr.io/open-webui/open-webui:v0.6.5";
       volumes = [ "open-webui:/app/backend/data" ];
       environmentFiles = [ config.age.secrets.openwebui.path ];
       extraOptions = [
