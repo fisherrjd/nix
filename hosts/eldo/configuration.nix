@@ -175,13 +175,13 @@ in
         "--network=host"
       ];
     };
-    containers.calibre-web = {
-      image = "lscr.io/linuxserver/calibre-web:latest";
-      volumes = [ "lite-llm:/app" ];
-      # environmentFiles = [ config.age.secrets.litellm.path ];
-      extraOptions = [
-        "--network=host"
-      ];
-    };
+    # containers.calibre-web = {
+    #   image = "lscr.io/linuxserver/calibre-web:latest";
+    #   volumes = [ "lite-llm:/app" ];
+    #   # environmentFiles = [ config.age.secrets.litellm.path ];
+    #   extraOptions = [
+    #     "--network=host"
+    #   ];
+    # };
   };
 }
