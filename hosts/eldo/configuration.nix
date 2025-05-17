@@ -145,40 +145,42 @@ in
   users.extraGroups.docker.members = [ username ];
   virtualisation.oci-containers = {
     backend = "docker";
-    containers.litellm = {
-      image = "ghcr.io/berriai/litellm:main-v1.68.0-stable";
-      volumes = [ "lite-llm:/app" ];
-      environmentFiles = [ config.age.secrets.litellm.path ];
-      extraOptions = [
-        "--network=host"
-      ];
-    };
-    containers.openwebui = {
-      image = "ghcr.io/open-webui/open-webui:v0.6.8";
-      volumes = [ "open-webui:/app/backend/data" ];
-      environmentFiles = [ config.age.secrets.openwebui.path ];
-      extraOptions = [
-        "--network=host"
-      ];
-    };
-    containers.n8n = {
-      image = "docker.n8n.io/n8nio/n8n:1.89.2";
-      volumes = [ "n8n_data:/home/node/.n8n" ];
-      ports = [ "5678:5678" ];
-      environment = {
-        GENERIC_TIMEZONE = "America/Denver";
-        N8N_EDITOR_BASE_URL = "https://n8n.jade.rip";
-        N8N_TEMPLATES_ENABLED = "true";
-        N8N_HIRING_BANNER_ENABLED = "false";
+    containers = {
+      litellm = {
+        image = "ghcr.io/berriai/litellm:main-v1.68.0-stable";
+        volumes = [ "lite-llm:/app" ];
+        environmentFiles = [ config.age.secrets.litellm.path ];
+        extraOptions = [
+          "--network=host"
+        ];
       };
-      extraOptions = [
-        "--network=host"
-      ];
-    };
-    containers.coffee_order = {
-      image = "coffee_order:latest"; # or your full registry path
-      ports = [ "8000:8000" ];
-      volumes = [ "/var/lib/coffee_order/coffee_pot.json:/app/coffee_pot.json" ];
+      openwebui = {
+        image = "ghcr.io/open-webui/open-webui:v0.6.8";
+        volumes = [ "open-webui:/app/backend/data" ];
+        environmentFiles = [ config.age.secrets.openwebui.path ];
+        extraOptions = [
+          "--network=host"
+        ];
+      };
+      n8n = {
+        image = "docker.n8n.io/n8nio/n8n:1.89.2";
+        volumes = [ "n8n_data:/home/node/.n8n" ];
+        ports = [ "5678:5678" ];
+        environment = {
+          GENERIC_TIMEZONE = "America/Denver";
+          N8N_EDITOR_BASE_URL = "https://n8n.jade.rip";
+          N8N_TEMPLATES_ENABLED = "true";
+          N8N_HIRING_BANNER_ENABLED = "false";
+        };
+        extraOptions = [
+          "--network=host"
+        ];
+      };
+      coffee_order = {
+        image = "coffee_order:latest"; # or your full registry path
+        ports = [ "8000:8000" ];
+        volumes = [ "/var/lib/coffee_order/coffee_pot.json:/app/coffee_pot.json" ];
+      };
     };
   };
 }
