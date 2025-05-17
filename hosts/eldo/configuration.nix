@@ -184,4 +184,12 @@ in
     #   ];
     # };
   };
+  containers.coffee_order = {
+    image = "coffee_order:latest"; # Use your local image name, or "yourdockerhubusername/coffee_order:latest" if pulled from a registry
+    ports = [ "8000:8000" ];
+    volumes = [ "/host/path:/app/coffee_pot.json" ]; # Optional: persist data
+    extraOptions = [
+      "--network=host"
+    ];
+  };
 }
