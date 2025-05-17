@@ -176,7 +176,7 @@ in
           "--network=host"
         ];
       };
-      coffee_order = {
+      interview = {
         image = "coffee_order:latest"; # or your full registry path
         ports = [ "8000:8000" ];
         volumes = [ "/var/lib/coffee_order/coffee_pot.json:/app/coffee_pot.json" ];
