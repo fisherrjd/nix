@@ -105,7 +105,7 @@ in
             to eldo:4000
           }
         '';
-        "coffee.jade.rip".extraConfig = ''
+        "bertram.jade.rip".extraConfig = ''
           reverse_proxy * {
             to eldo:8000
           }
