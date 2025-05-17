@@ -175,23 +175,13 @@ in
         "--network=host"
       ];
     };
-    containers.coffee_order = {
-      image = "coffee_order:latest"; # Use your local image name, or "yourdockerhubusername/coffee_order:latest" if pulled from a registry
-      ports = [ "8000:8000" ];
-      volumes = [ "/host/path:/app/coffee_pot.json" ]; # Optional: persist data
-      # environment = { ... }; # Optional: set environment variables
-      extraOptions = [
-        "--network=host"
-      ];
-    };
+    # containers.calibre-web = {
+    #   image = "lscr.io/linuxserver/calibre-web:latest";
+    #   volumes = [ "lite-llm:/app" ];
+    #   # environmentFiles = [ config.age.secrets.litellm.path ];
+    #   extraOptions = [
+    #     "--network=host"
+    #   ];
+    # };
   };
-  # containers.calibre-web = {
-  #   image = "lscr.io/linuxserver/calibre-web:latest";
-  #   volumes = [ "lite-llm:/app" ];
-  #   # environmentFiles = [ config.age.secrets.litellm.path ];
-  #   extraOptions = [
-  #     "--network=host"
-  #   ];
-  # };
-};
 }
