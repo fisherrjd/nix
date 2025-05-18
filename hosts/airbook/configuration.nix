@@ -36,6 +36,7 @@ in
   };
 
   system.stateVersion = 4;
+  system.primaryUser = username;
   ids.gids.nixbld = 350;
   nix = common.nix // {
     nixPath = [
