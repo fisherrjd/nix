@@ -176,7 +176,7 @@ in
           "--network=host"
         ];
       };
-      bertram = {
+      bertram_interview = {
         image = "bertram_interview:latest"; # or your full registry path
         ports = [ "8000:8000" ];
         volumes = [ "/var/lib/bertram_interview/coffee_pot.json:/app/coffee_pot.json" ];
