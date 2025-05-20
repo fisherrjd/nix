@@ -1,7 +1,7 @@
-{ config, flake, machine-name, pkgs, ... }:
+{ lib, config, flake, machine-name, pkgs, ... }:
 let
   # inherit (lib.attrsets) mapAttrs' nameValuePair;
-
+  inherit (lib) mkDefault;
   hostname = "workbook";
   common = import ../common.nix { inherit config flake machine-name pkgs username; };
   username = "P3175941";
@@ -22,6 +22,9 @@ in
   };
   environment.darwinConfig = configPath;
 
+  environment.systemPackages = with pkgs; [
+    cassandra
+  ];
   users.users.P3175941 = {
     name = username;
     home = "/Users/${username}";
@@ -31,6 +34,7 @@ in
       eldo
     ];
   };
+  system.primaryUser = mkDefault username;
 
   system.stateVersion = 4;
   ids.gids.nixbld = 350;
@@ -40,5 +44,5 @@ in
       "darwin-config=${configPath}"
     ];
   };
-    services.openssh.enable = true;
+  services.openssh.enable = true;
 }

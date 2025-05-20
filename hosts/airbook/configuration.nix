@@ -1,7 +1,7 @@
-{ config, flake, machine-name, pkgs, ... }:
+{ lib, config, flake, machine-name, pkgs, ... }:
 let
   # inherit (lib.attrsets) mapAttrs' nameValuePair;
-
+  inherit (lib) mkDefault;
   hostname = "airbook";
   common = import ../common.nix { inherit config flake machine-name pkgs username; };
   configPath = "/Users/jade/cfg/hosts/${hostname}/configuration.nix";
@@ -34,6 +34,7 @@ in
       workbook
     ];
   };
+  system.primaryUser = mkDefault username;
 
   system.stateVersion = 4;
   ids.gids.nixbld = 350;

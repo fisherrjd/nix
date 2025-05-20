@@ -1,4 +1,4 @@
-{ lib, config, ... }:
+{ lib, config, username, ... }:
 let
   inherit (lib.lists) subtractLists;
   inherit (lib) mkDefault mkEnableOption;
@@ -14,7 +14,6 @@ in
     #   package = pkgs.darwin.linux-builder-x86_64;
     # };
     system = {
-      primaryUser = mkDefault "jade";
       # activationScripts.postUserActivation.text = ''
       #   # Following line should allow us to avoid a logout/login cycle
       #   /System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u
