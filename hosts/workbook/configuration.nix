@@ -21,10 +21,6 @@ in
     NIXDARWIN_CONFIG = configPath;
   };
   environment.darwinConfig = configPath;
-
-  environment.systemPackages = with pkgs; [
-    cassandra
-  ];
   users.users.P3175941 = {
     name = username;
     home = "/Users/${username}";

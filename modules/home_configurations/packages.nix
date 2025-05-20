@@ -16,6 +16,7 @@ in
         bzip2
         cacert
         caddy
+        cassandra
         coreutils-full
         colmena
         curl
