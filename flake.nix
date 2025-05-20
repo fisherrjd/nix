@@ -64,6 +64,7 @@
               specialArgs = { flake = self; machine-name = name; };
               modules = [
                 ./hosts/common_darwin.nix
+                { }
                 "${self.inputs.jacobi}/hosts/modules/darwin/llama-server.nix"
                 ./hosts/${name}/configuration.nix
               ];
