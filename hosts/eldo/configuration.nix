@@ -181,6 +181,10 @@ in
         ports = [ "8000:8000" ];
         volumes = [ "/var/lib/bertram_interview/coffee_pot.json:/app/coffee_pot.json" ];
       };
+      grocery_list = {
+        image = "grocery_list:latest"; # or your full registry path
+        ports = [ "8069:8069" ];
+      };
     };
   };
 }
