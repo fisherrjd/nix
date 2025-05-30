@@ -110,7 +110,7 @@ in
             to eldo:8000
           }
         '';
-        "list.jade.rip".extraConfig = ''
+        "tasks.jade.rip".extraConfig = ''
           reverse_proxy * {
             to eldo:8069
           }
