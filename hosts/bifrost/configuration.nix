@@ -105,12 +105,7 @@ in
             to eldo:4000
           }
         '';
-        "bertram.jade.rip".extraConfig = ''
-          reverse_proxy * {
-            to eldo:8000
-          }
-        '';
-        "tasks.jade.rip".extraConfig = ''
+        "lists.jade.rip".extraConfig = ''
           reverse_proxy * {
             to eldo:8069
           }
