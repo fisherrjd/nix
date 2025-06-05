@@ -110,6 +110,7 @@ in
         push = {
           autoSetupRemote = true;
         };
+        includeIf."gitdir:~/work/".path = "~/.config/git/config-work";
       };
 
     };
