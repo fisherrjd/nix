@@ -13,6 +13,16 @@ let
     LESS = "-iR";
     PAGER = "less";
   };
+
+  # Define work-specific git config
+  gitWorkConfig = pkgs.writeTextFile {
+    name = "gitconfig-work";
+    text = ''
+      [user]
+        name = Jade Fisher
+        email = C-Jade.Fisher@charter.com
+    '';
+  };
 in
 {
   # gitconfig
@@ -31,8 +41,21 @@ in
     {
       enable = true;
       package = pkgs.gitAndTools.gitFull;
-      userName = "${firstName} ${lastName}";
-      userEmail = "fisherrjd@gmail.com";
+
+      # We no longer use these:
+      # userName = "${firstName} ${lastName}";
+      # userEmail = "fisherrjd@gmail.com";
+
+      # Instead we use conditional config:
+      extraConfig = ''
+        [user]
+          name = ${firstName} ${lastName}
+          email = fisherrjd@gmail.com
+
+        [includeIf "gitdir:~/work/"]
+          path = ${gitWorkConfig}
+      '';
+
       aliases = {
         A = "add -A";
         pu = "pull";
@@ -111,6 +134,5 @@ in
           autoSetupRemote = true;
         };
       };
-
     };
 }
