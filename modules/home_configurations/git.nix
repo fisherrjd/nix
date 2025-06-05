@@ -114,4 +114,12 @@ in
       };
 
     };
+
+  home.file.".config/git/config-work".text = ''
+    [user]
+      name = Jade (P3175941)
+      email = C-Jade.Fisher@charter.com
+  '';
+
 }
+
