@@ -31,8 +31,6 @@ in
     {
       enable = true;
       package = pkgs.gitAndTools.gitFull;
-      userName = "${firstName} ${lastName}";
-      userEmail = "fisherrjd@gmail.com";
       aliases = {
         A = "add -A";
         pu = "pull";
@@ -87,6 +85,10 @@ in
         shake = "remote prune origin";
       };
       extraConfig = {
+        user = {
+          name = "${firstName} ${lastName}";
+          email = "fisherrjd@gmail.com";
+        };
         checkout.defaultRemote = "origin";
         color.ui = true;
         fetch.prune = true;
