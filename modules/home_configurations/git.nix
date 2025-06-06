@@ -85,10 +85,6 @@ in
         shake = "remote prune origin";
       };
       extraConfig = {
-        user = {
-          name = "${firstName} ${lastName}";
-          email = "fisherrjd@gmail.com";
-        };
         checkout.defaultRemote = "origin";
         color.ui = true;
         fetch.prune = true;
