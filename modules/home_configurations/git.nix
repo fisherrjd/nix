@@ -31,6 +31,8 @@ in
     {
       enable = true;
       package = pkgs.gitAndTools.gitFull;
+      userName = "${firstName} ${lastName}";
+      userEmail = "fisherrjd@gmail.com";
       aliases = {
         A = "add -A";
         pu = "pull";
@@ -108,13 +110,8 @@ in
         push = {
           autoSetupRemote = true;
         };
-        # Conditional include for ~/work directory
-        "includeIf.gitdir:~/work/" = {
-          path = "~/.gitconfig-work";
-        };
       };
 
     };
-
 }
 
