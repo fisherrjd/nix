@@ -110,6 +110,10 @@ in
         push = {
           autoSetupRemote = true;
         };
+        # Conditional include for ~/work directory
+        "includeIf.gitdir:~/work/" = {
+          path = "~/.gitconfig-work";
+        };
       };
 
     };
