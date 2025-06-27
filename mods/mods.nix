@@ -21,7 +21,6 @@ rec {
       toplevel="$(nix build ${flags} --no-link --print-out-paths ~/cfg#darwinConfigurations.${host}.system)"
         ${nvd}/bin/nvd diff "$profile" "$toplevel"
         sudo -H nix-env -p "$profile" --set "$toplevel"
-        sudo -u jade "$toplevel"/activate-user
         sudo "$toplevel"/activate
     '';
   _hms = {
