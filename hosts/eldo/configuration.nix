@@ -101,7 +101,7 @@ in
           host    all            postgres         127.0.0.1/32           md5
           host    all            postgres         ::1/128                md5
           host    litellm        postgres         0.0.0.0/0              md5
-          host    calibre        postgres         0.0.0.0/0              md5
+          host    lists        postgres         0.0.0.0/0              md5
         '';
       };
       # TODO abstract and add more definitions (steal from cobi)
