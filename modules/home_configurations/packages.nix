@@ -88,7 +88,6 @@ in
         which
         xh
         yank
-        yarn
         yq-go
         zip
         # Packages for only Macs
