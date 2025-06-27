@@ -94,35 +94,34 @@ in
         enable = true;
         ensureDatabases = [ "litellm" "lists" ];
         authentication = pkgs.lib.mkOverride 10 ''
-          #type database  DBuser  auth-method
-          local all       all     trust
-          host all all 127.0.0.1/32 trust
-          host all all 0.0.0.0/0 trust
-          host    all            postgres         127.0.0.1/32           md5
-          host    all            postgres         ::1/128                md5
-          host    litellm        postgres         0.0.0.0/0              md5
-          host    lists        postgres         0.0.0.0/0              md5
+          #type   database      DBuser      auth-method
+          local   all           all         trust
+          host    all           all         127.0.0.1/32 trust
+          host    lists         postgres    100.66.184.28/32   md5
+          host    litellm       postgres    0.0.0.0/0              md5
+          host    all           postgres    127.0.0.1/32           md5
+          host    all           postgres    ::1/128                md5
         '';
       };
       # TODO abstract and add more definitions (steal from cobi)
 
-      # minecraft-server = with common.minecraft; {
-      #   enable = true;
-      #   eula = true;
-      #   openFirewall = true;
-      #   declarative = true;
-      #   serverProperties = {
-      #     server-port = 25565;
-      #     motd = "Dan Is a NERD!";
-      #     level-name = "hardcore_v2";
-      #     server-name = "Hardcore Gamer Legends";
-      #     gamemode = 0;
-      #     difficulty = 1;
-      #     max-players = 10;
-      #     bind = "0.0.0.0"; # Allow connections from any IP address
-      #     hardcore = true;
-      #   };
-      # };
+      minecraft-server = with common.minecraft; {
+        enable = true;
+        eula = true;
+        openFirewall = true;
+        declarative = true;
+        serverProperties = {
+          server-port = 25565;
+          motd = "Dan Is a NERD!";
+          level-name = "hardcore_v2";
+          server-name = "Hardcore Gamer Legends";
+          gamemode = 0;
+          difficulty = 1;
+          max-players = 10;
+          bind = "0.0.0.0"; # Allow connections from any IP address
+          hardcore = true;
+        };
+      };
 
       # Book Worm Era
       # calibre-web = {
