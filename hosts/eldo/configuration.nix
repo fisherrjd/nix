@@ -92,12 +92,11 @@ in
       openssh.enable = true;
       postgresql = {
         enable = true;
-        ensureDatabases = [ "litellm" "lists" ];
+        ensureDatabases = [ "litellm" ];
         authentication = pkgs.lib.mkOverride 10 ''
           #type   database      DBuser      auth-method
           local   all           all         trust
           host    all           all         127.0.0.1/32 trust
-          host    lists         postgres    100.66.184.28/32   md5
           host    litellm       postgres    0.0.0.0/0              md5
           host    all           postgres    127.0.0.1/32           md5
           host    all           postgres    ::1/128                md5
