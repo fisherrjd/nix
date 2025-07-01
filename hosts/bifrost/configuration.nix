@@ -110,6 +110,11 @@ in
             to eldo:8069
           }
         '';
+        "tri.jade.rip".extraConfig = ''
+          reverse_proxy * {
+            to eldo:9001
+          }
+        '';
       };
     };
   };
