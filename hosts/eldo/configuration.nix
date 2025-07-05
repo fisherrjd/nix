@@ -26,6 +26,10 @@ in
         file = ../../secrets/openwebui.age;
         mode = "644";
       };
+      github-runner-token = {
+        file = ../../secrets/github-runner-token.age;
+        mode = "644";
+      };
     };
   };
   networking.networkmanager.enable = true;
@@ -121,6 +125,15 @@ in
           hardcore = true;
         };
       };
+      github-runners = {
+        lists-runner = {
+          enable = true;
+          name = "lists-runner";
+          tokenFile = config.age.secrets.github-runner-token.path;
+          url = "https://github.com/fisherrjd/lists-backend";
+        };
+      };
+
 
       # Book Worm Era
       # calibre-web = {
