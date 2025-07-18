@@ -90,6 +90,8 @@ in
         yank
         yq-go
         zip
+        podman
+        podman-tui
         # Packages for only Macs
         (
           lib.optionals isDarwin [
@@ -101,8 +103,6 @@ in
           lib.optionals isLinux [
             gnutar
             calibre-web
-            podman
-            podman-tui
           ]
         )
         # Secrets
