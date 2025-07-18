@@ -154,6 +154,7 @@ in
       # };
     };
   users.extraGroups.docker.members = [ username ];
+  virtualisation.podman.enable = true;
   virtualisation.oci-containers = {
     backend = "docker";
     containers = {
@@ -193,4 +194,5 @@ in
       };
     };
   };
+
 }
