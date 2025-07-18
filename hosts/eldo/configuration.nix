@@ -158,7 +158,7 @@ in
     backend = "docker";
     containers = {
       litellm = {
-        image = "ghcr.io/berriai/litellm:main-v1.68.0-stable";
+        image = "ghcr.io/berriai/litellm:main-v1.74.3-stable";
         volumes = [ "lite-llm:/app" ];
         environmentFiles = [ config.age.secrets.litellm.path ];
         extraOptions = [
@@ -166,7 +166,7 @@ in
         ];
       };
       openwebui = {
-        image = "ghcr.io/open-webui/open-webui:v0.6.8";
+        image = "ghcr.io/open-webui/open-webui:v0.6.16";
         volumes = [ "open-webui:/app/backend/data" ];
         environmentFiles = [ config.age.secrets.openwebui.path ];
         extraOptions = [
