@@ -101,6 +101,7 @@ in
           lib.optionals isLinux [
             gnutar
             calibre-web
+            podman
           ]
         )
         # Secrets
