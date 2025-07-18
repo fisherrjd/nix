@@ -102,6 +102,7 @@ in
             gnutar
             calibre-web
             podman
+            podman-tui
           ]
         )
         # Secrets
