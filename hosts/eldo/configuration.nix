@@ -156,7 +156,7 @@ in
   users.extraGroups.docker.members = [ username ];
   virtualisation.podman.enable = true;
   virtualisation.oci-containers = {
-    backend = "docker";
+    backend = "podman";
     containers = {
       litellm = {
         image = "ghcr.io/berriai/litellm:main-v1.74.3-stable";
