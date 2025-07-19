@@ -105,8 +105,8 @@ in
           host    all           postgres    ::1/128                md5
         '';
       };
-      # TODO abstract and add more definitions (steal from cobi)
 
+      # MINECRAFT STUFF
       # minecraft-server = with common.minecraft; {
       #   enable = true;
       #   eula = true;
@@ -124,6 +124,7 @@ in
       #     hardcore = true;
       #   };
       # };
+
       github-runners = {
         lists-runner = {
           enable = true;
@@ -132,25 +133,6 @@ in
           url = "https://github.com/fisherrjd/lists-backend";
         };
       };
-
-
-      # Book Worm Era
-      # calibre-web = {
-      #   enable = true;
-      #   user = "jade";
-      #   group = "jade";
-      #   listen = {
-      #     ip = "0.0.0.0";
-      #     port = 8181;
-      #   };
-      #   dataDir = "/home/jade/calibre-web-data";
-      #   options = {
-      #     enableBookUploading = true;
-      #     enableBookConversion = true;
-      #     calibreLibrary = "/home/jade/calibre-library";
-      #   };
-      #   openFirewall = true;
-      # };
     };
   # DOCKER COMMENTED OUT FOR NOW
   # users.extraGroups.docker.members = [ username ];
