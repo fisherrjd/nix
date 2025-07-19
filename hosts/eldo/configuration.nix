@@ -78,7 +78,6 @@ in
       "/nix/var/nix/profiles/per-user/root/channels"
     ];
   };
-  virtualisation.docker.enable = true;
   systemd.targets.sleep.enable = false;
   systemd.targets.suspend.enable = false;
   systemd.targets.hibernate.enable = false;
@@ -153,10 +152,14 @@ in
       #   openFirewall = true;
       # };
     };
-  users.extraGroups.docker.members = [ username ];
+  # DOCKER COMMENTED OUT FOR NOW
+  # users.extraGroups.docker.members = [ username ];
+  # virtualisation.docker.enable = true;
+
   virtualisation.podman.enable = true;
   virtualisation.oci-containers = {
-    backend = "docker";
+    # backend = "docker";
+    backend = "podman";
     containers = {
       litellm = {
         image = "ghcr.io/berriai/litellm:main-v1.74.3-stable";
