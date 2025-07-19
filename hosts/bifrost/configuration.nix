@@ -87,7 +87,7 @@ in
         '';
         "llama.jade.rip".extraConfig = ''
           reverse_proxy * {
-            to airbook:8012
+            to airbook:6969
           }
         '';
         "meals.jade.rip".extraConfig = ''
