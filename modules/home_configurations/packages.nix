@@ -92,7 +92,6 @@ in
         yq-go
         zip
         podman
-        podman-tui
         # Packages for only Macs
         (
           lib.optionals isDarwin [
