@@ -71,6 +71,7 @@ in
         pssh
         q
         ranger
+        redis
         re2c
         rlwrap
         ruff
