@@ -92,7 +92,7 @@ in
         yank
         yq-go
         zip
-        my_pog_script
+        __test
 
         # Packages for only Macs
         (
