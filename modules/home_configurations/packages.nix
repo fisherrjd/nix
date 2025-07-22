@@ -92,6 +92,7 @@ in
         yq-go
         zip
         podman
+        my_pog_script
         # Packages for only Macs
         (
           lib.optionals isDarwin [
