@@ -3,6 +3,6 @@
   (import ./mods/mods.nix)
 
   # Jade's Pogs
-  (import ./mods/pog/datetime.nix)
+  (import ./mods/pog/now.nix)
 
 ]
