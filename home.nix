@@ -38,8 +38,8 @@ in
     inherit flake;
     inherit machine-name;
   };
-  nixpkgs.overlays = import
-    ./overlays.nix;
+  # nixpkgs.overlays = import
+  #   ./overlays.nix;
 
   programs.home-manager.enable = true;
   programs.home-manager.path = "${home-manager}";
