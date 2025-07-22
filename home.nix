@@ -2,6 +2,8 @@
 let
   inherit (pkgs.hax) isDarwin isLinux isM1;
   inherit (pkgs.hax) attrIf optionalString words;
+  notBifrost = machine-name != "bifrost";
+
   firstName = "jade";
   lastName = "fisher";
   promptChar = ">";
@@ -24,7 +26,6 @@ let
 in
 {
   imports = [
-    ./modules/home_configurations/packages.nix
     ./modules/home_configurations/starship.nix
     ./modules/home_configurations/cobi.nix
     ./modules/home_configurations/git.nix
@@ -49,7 +50,119 @@ in
 
   home = {
     inherit username homeDirectory sessionVariables;
-    packages = with pkgs; [ pog_test ];
+    packages = with pkgs;
+      lib.flatten
+        [
+          (writeShellScriptBin "machine-name" ''
+            echo "${machine-name}"
+          '')
+          bash-completion
+          bashInteractive
+          bat
+          bzip2
+          cacert
+          caddy
+          cassandra
+          coreutils-full
+          colmena
+          curl
+          diffutils
+          docker
+          dyff
+          erdtree
+          fd
+          figlet
+          file
+          fq
+          gawk
+          gitAndTools.delta
+          gnugrep
+          gnumake
+          gnupg
+          gnused
+          gron
+          gum # learn about this
+          gzip
+          htmlq
+          jq
+          k9s
+          kubectl
+          kubectx
+          kubernetes-helm
+          lsof
+          man-pages
+          manix
+          # minecraft-server
+          moreutils # learn about this
+          nano
+          nanorc
+          netcat-gnu
+          ntfy-sh
+          nil
+          nix
+          nix-info
+          nix-output-monitor
+          nix-prefetch-github
+          nix-prefetch-scripts
+          nix-tree
+          nix-update
+          nixpkgs-fmt
+          nixpkgs-review
+          nodePackages.prettier
+          openssh
+          p7zip
+          patch
+          pigz
+          podman
+          procps
+          pssh
+          q
+          ranger
+          redis
+          re2c
+          rlwrap
+          ruff
+          scc
+          scrypt
+          shfmt
+          statix
+          time
+          tmux
+          unzip
+          uv
+          vale
+          watch
+          wget
+          which
+          xh
+          yank
+          yq-go
+          zip
+          pog_test
+          # Packages for only Macs
+          (
+            lib.optionals isDarwin [
+            ]
+          )
+
+          # Packages for only Linux
+          (
+            lib.optionals isLinux [
+              gnutar
+              calibre-web
+            ]
+          )
+          # Secrets
+          flake.inputs.agenix.packages.${pkgs.system}.default
+
+          #Packages NOT on Bifrost
+          (lib.optionals notBifrost [
+            hms
+          ])
+          # TODO: Pog scripts
+          [ ]
+        ];
+
     stateVersion = "22.11";
   };
 
