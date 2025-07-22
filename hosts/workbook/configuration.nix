@@ -31,7 +31,6 @@ in
     ];
   };
   system.primaryUser = mkDefault username;
-
   system.stateVersion = 4;
   ids.gids.nixbld = 350;
   nix = common.nix // {

@@ -5,6 +5,21 @@ let
     inherit home-manager flake machine-name pkgs username;
   };
   constants = import ./constants.nix;
+
+  subs = {
+    jacobi = {
+      url = "https://jacobi.cachix.org";
+      key = "jacobi.cachix.org-1:JJghCz+ZD2hc9BHO94myjCzf4wS3DeBLKHOz3jCukMU=";
+    };
+    jade = {
+      url = "https://fisherrjd.cachix.org";
+      key = "fisherrjd.cachix.org-1:21bdYeKCoWN19OGUDTGU41o60gnEsLHY5+tIpEq7w+A=";
+    };
+    g7c = {
+      url = "https://cache.g7c.us";
+      key = "cache.g7c.us:dSWpE2B5zK/Fahd7npIQWM4izRnVL+a4LiCAnrjdoFY=";
+    };
+  };
 in
 {
   inherit (constants) pubkeys;
@@ -15,8 +30,8 @@ in
       max-jobs = auto
       narinfo-cache-negative-ttl = 10
       extra-experimental-features = nix-command flakes
-      extra-substituters = https://jacobi.cachix.org https://fisherrjd.cachix.org
-      extra-trusted-public-keys = jacobi.cachix.org-1:JJghCz+ZD2hc9BHO94myjCzf4wS3DeBLKHOz3jCukMU= fisherrjd.cachix.org-1:21bdYeKCoWN19OGUDTGU41o60gnEsLHY5+tIpEq7w+A=
+      extra-substituters = ${subs.g7c.url} ${subs.jacobi.url} ${subs.jade.url}
+      extra-trusted-public-keys = ${subs.g7c.key} ${subs.jacobi.key} ${subs.jade.key}
     '';
     settings = {
       trusted-users = [ "root" "jade" "P3175941" ];
