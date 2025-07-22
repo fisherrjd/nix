@@ -6,6 +6,11 @@ let
   };
   constants = import ./constants.nix;
 
+  _base_nix_options = ''
+    max-jobs = auto
+    narinfo-cache-negative-ttl = 10
+    extra-experimental-features = nix-command flakes
+  '';
   subs = {
     jacobi = {
       url = "https://jacobi.cachix.org";
@@ -27,9 +32,7 @@ in
 
   nix = {
     extraOptions = ''
-      max-jobs = auto
-      narinfo-cache-negative-ttl = 10
-      extra-experimental-features = nix-command flakes
+      ${_base_nix_options}
       extra-substituters = ${subs.g7c.url} ${subs.jacobi.url} ${subs.jade.url}
       extra-trusted-public-keys = ${subs.g7c.key} ${subs.jacobi.key} ${subs.jade.key}
     '';
