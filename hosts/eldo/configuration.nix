@@ -70,7 +70,8 @@ in
   };
   networking.firewall.allowedTCPPorts = [ 25565 ];
   networking.hostName = "eldo";
-  # home-manager.users.jade = flake.jacobi.zaddy;
+  home-manager.users.jade = common.jade;
+
   nix = common.nix // {
     nixPath = [
       "nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixos"
