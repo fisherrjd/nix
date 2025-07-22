@@ -8,9 +8,6 @@ import nixpkgs {
   inherit system;
   overlays = [
     # Ensure pog is available as final.pog in all overlays
-    (final: prev: {
-      pog = flake.inputs.pog.packages.${system}.default;
-    })
     (_: _: { nixpkgsRev = nixpkgs.rev; })
     (_: _: { jacobi = import flake.inputs.jacobi { inherit system; }; })
     (_: prev: { inherit (prev.jacobi) llama-cpp-latest; })
