@@ -1,6 +1,6 @@
 final: prev: {
-  my_pog_script = final.pog {
-    name = "my_pog_script";
+  __test = final.pog {
+    name = "__test";
     description = "A custom pog script";
     flags = [
       # define your flags here
