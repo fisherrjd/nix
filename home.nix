@@ -138,7 +138,6 @@ in
           yank
           yq-go
           zip
-          pog_test
           # Packages for only Macs
           (
             lib.optionals isDarwin [
@@ -159,8 +158,10 @@ in
           (lib.optionals notBifrost [
             hms
           ])
-          # TODO: Pog scripts
-          [ ]
+          # Jade's Pog scripts
+          [
+            pog_test
+          ]
         ];
 
     stateVersion = "22.11";
