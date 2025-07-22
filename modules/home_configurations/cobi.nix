@@ -11,6 +11,7 @@ in
       hax.comma
       docker_pog_scripts
       k8s_pog_scripts
+      pog
       # zaddy
     ];
 
