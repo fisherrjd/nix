@@ -92,7 +92,6 @@ in
         yank
         yq-go
         zip
-        pog_test
 
         # Packages for only Macs
         (

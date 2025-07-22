@@ -28,8 +28,6 @@ in
     ./modules/home_configurations/starship.nix
     ./modules/home_configurations/cobi.nix
     ./modules/home_configurations/git.nix
-
-
     # Look more into these ex: optionalAttrs
     (pkgs.lib.optionalAttrs isLinux "${flake.inputs.vscode-server}/modules/vscode-server/home.nix")
   ];
@@ -38,9 +36,6 @@ in
     inherit flake;
     inherit machine-name;
   };
-
-  # nixpkgs.overlays = import
-  #   ./overlays.nix;
 
   programs.home-manager.enable = true;
   programs.home-manager.path = "${home-manager}";
@@ -54,9 +49,10 @@ in
 
   home = {
     inherit username homeDirectory sessionVariables;
-
+    packages = with pkgs; [ pog_test ];
     stateVersion = "22.11";
   };
+
 
   programs.less.enable = true;
   programs.lesspipe.enable = true;
