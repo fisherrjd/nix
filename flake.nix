@@ -6,6 +6,7 @@
     # TODO maybe add Keiths / DigDugs things see if they have anything cobi didn't already steal
     jacobi.url = "github:jpetrucciani/nix";
     nixpkgs.url = "nixpkgs/nixos-unstable";
+    pog.url = "github:jpetrucciani/pog";
     nixos-wsl = {
       url = "github:nix-community/NixOS-WSL";
       inputs.nixpkgs.follows = "nixpkgs";
