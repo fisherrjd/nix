@@ -67,6 +67,7 @@ in
         p7zip
         patch
         pigz
+        podman
         procps
         pssh
         q
@@ -91,8 +92,8 @@ in
         yank
         yq-go
         zip
-        podman
         my_pog_script
+
         # Packages for only Macs
         (
           lib.optionals isDarwin [
