@@ -329,6 +329,7 @@ in
           ${optionalString isDarwin mac_meme}
           
         Host workbook
+          HostName 10.0.0.61
           User P3175941
           PasswordAuthentication no
           IdentitiesOnly yes
