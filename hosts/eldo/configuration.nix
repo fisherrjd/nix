@@ -139,13 +139,24 @@ in
   # users.extraGroups.docker.members = [ username ];
   # virtualisation.docker.enable = true;
 
-  virtualisation.podman.enable = true;
+  virtualisation.podman = {
+    enable = true;
+    pods = {
+      ai_services = {
+        containers = [ "litellm" "openwebui" "n8n" ];
+      };
+      lists = {
+        containers = [ "grocery_list" ];
+      };
+    };
+  };
   virtualisation.oci-containers = {
     # backend = "docker";
     backend = "podman";
     containers = {
       litellm = {
         image = "ghcr.io/berriai/litellm:main-v1.74.3-stable";
+        pod = "ai_services";
         volumes = [ "lite-llm:/app" ];
         environmentFiles = [ config.age.secrets.litellm.path ];
         extraOptions = [
@@ -154,6 +165,7 @@ in
       };
       openwebui = {
         image = "ghcr.io/open-webui/open-webui:v0.6.16";
+        pod = "ai_services";
         volumes = [ "open-webui:/app/backend/data" ];
         environmentFiles = [ config.age.secrets.openwebui.path ];
         extraOptions = [
@@ -162,6 +174,7 @@ in
       };
       n8n = {
         image = "docker.n8n.io/n8nio/n8n:1.89.2";
+        pod = "ai_services";
         volumes = [ "n8n_data:/home/node/.n8n" ];
         ports = [ "5678:5678" ];
         environment = {
@@ -176,6 +189,7 @@ in
       };
       grocery_list = {
         image = "grocery_list:latest"; # or your full registry path
+        pod = "lists";
         ports = [ "8069:8069" ];
       };
     };
