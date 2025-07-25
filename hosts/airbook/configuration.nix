@@ -27,6 +27,7 @@ in
   users.users.jade = {
     name = username;
     home = "/Users/${username}";
+    shell = pkgs.bashInteractive;
     openssh.authorizedKeys.keys = with common.pubkeys; [
       atlantis
       neverland
