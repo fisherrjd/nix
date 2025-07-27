@@ -21,17 +21,17 @@ rec {
 
   cola = final.pog {
     name = "cola";
-    description = "Run colmena build on a target host";
+    description = "Run colmena apply on a target host";
     flags = [
       {
         name = "destination";
-        description = "Target host for colmena build";
+        description = "Target host for colmena apply";
         required = true;
       }
     ];
     script = ''
       cd ~/cfg/colmena || exit
-      ${colmena}/bin/colmena build --on "$destination"
+      ${colmena}/bin/colmena apply --on "$destination"
     '';
   };
 
