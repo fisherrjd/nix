@@ -1,4 +1,8 @@
-final: prev: {
+final: prev:
+let
+  inherit (final) colmena;
+in
+{
   colb = final.pog {
     name = "colb";
     description = "Run colmena build on a target host";
@@ -11,7 +15,7 @@ final: prev: {
     ];
     script = ''
       cd ~/cfg/colmena || exit
-      "colmena build --on $destination"
+      ${colmena} build --on "$destination"
     '';
   };
 }
