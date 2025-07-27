@@ -1,6 +1,6 @@
 final: prev: {
   colb = final.pog {
-    name = "cola";
+    name = "colb";
     description = "Run colmena build on a target host";
     flags = [
       {
@@ -10,8 +10,8 @@ final: prev: {
       }
     ];
     script = h: with h; ''
-      cd ~/cfg/colmena
-      colmena build --on $host
+      "cd ~/cfg/colmena || exit"
+      "colmena build --on $host"
     '';
   };
 }
