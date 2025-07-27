@@ -206,21 +206,11 @@ in
       export PATH="$PATH:$HOME/.bin/"
       export PATH="$PATH:$HOME/.npm/bin/"
 
-      # asdf and base nix
+      # base nix
     '' + (if isM1 then ''
       export CONFIGURE_OPTS="--build aarch64-apple-darwin20"
     ''
     else ""
-    ) + (
-      if isDarwin then ''
-        # load asdf if its there
-        asdf_dir="$(brew --prefix asdf)"
-        [[ -e "$asdf_dir/asdf.sh" ]] && source "$asdf_dir/asdf.sh"
-        [[ -e "$asdf_dir/etc/bash_completion.d/asdf.bash" ]] && source "$asdf_dir/etc/bash_completion.d/asdf.bash"
-      '' else ''
-        [[ -e $HOME/.asdf/asdf.sh ]] && source $HOME/.asdf/asdf.sh
-        [[ -e $HOME/.asdf/completions/asdf.bash ]] && source $HOME/.asdf/completions/asdf.bash
-      ''
     ) + ''
       # additional aliases
       [[ -e ~/.aliases ]] && source ~/.aliases
