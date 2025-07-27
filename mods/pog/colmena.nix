@@ -1,17 +1,17 @@
 final: prev: {
   colb = final.pog {
     name = "cola";
-    description = "Run colmena apply on a target host";
+    description = "Run colmena build on a target host";
     flags = [
       {
         name = "host";
-        description = "Target host for colmena apply";
+        description = "Target host for colmena build";
         required = true;
       }
     ];
     script = h: with h; ''
       cd ~/cfg/colmena
-      colmena build --on ${h.host}
+      colmena build --on $host
     '';
   };
 }
