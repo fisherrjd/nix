@@ -64,6 +64,7 @@ in
           caddy
           cassandra
           coreutils-full
+          colb
           colmena
           curl
           diffutils
