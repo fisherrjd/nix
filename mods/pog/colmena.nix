@@ -10,7 +10,7 @@ final: prev: {
       }
     ];
     script = ''
-      "cd ~/cfg/colmena || exit"
+      cd ~/cfg/colmena || exit
       "colmena build --on $destination"
     '';
   };
