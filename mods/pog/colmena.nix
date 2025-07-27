@@ -15,7 +15,7 @@ in
     ];
     script = ''
       cd ~/cfg/colmena || exit
-      ${colmena} build --on "$destination"
+      ${colmena}/bin/colmena build --on "$destination"
     '';
   };
 }
