@@ -10,7 +10,7 @@ A collection of handy pog scripts for Docker, Kubernetes, AWS, and more.
 
 ### `pog_test`
 
-### `pog_weather`
+### `colmena_pog_scripts`
 
 > Testing out pogging.
 
