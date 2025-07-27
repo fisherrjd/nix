@@ -212,13 +212,6 @@ in
     else ""
     ) + (
       if isDarwin then ''
-        # add brew to path
-        brew_path="/opt/homebrew/bin/brew"
-        if [ -f /usr/local/bin/brew ]; then
-          brew_path="/usr/local/bin/brew"
-        fi
-        eval "$($brew_path shellenv)"
-
         # load asdf if its there
         asdf_dir="$(brew --prefix asdf)"
         [[ -e "$asdf_dir/asdf.sh" ]] && source "$asdf_dir/asdf.sh"
