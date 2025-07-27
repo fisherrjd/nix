@@ -4,14 +4,14 @@ final: prev: {
     description = "Run colmena build on a target host";
     flags = [
       {
-        name = "host";
+        name = "destination";
         description = "Target host for colmena build";
         required = true;
       }
     ];
-    script = h: with h; ''
+    script = ''
       "cd ~/cfg/colmena || exit"
-      "colmena build --on $host"
+      "colmena build --on $destination"
     '';
   };
 }
