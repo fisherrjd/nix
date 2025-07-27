@@ -64,7 +64,6 @@ in
           caddy
           cassandra
           coreutils-full
-          colb
           colmena
           curl
           diffutils
@@ -162,6 +161,7 @@ in
           # Jade's Pog scripts
           [
             pog_test
+            colmena_pog_scripts
           ]
         ];
 
