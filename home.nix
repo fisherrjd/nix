@@ -160,7 +160,6 @@ in
           ])
           # Jade's Pog scripts
           [
-            pog_test
             colmena_pog_scripts
           ]
         ];
