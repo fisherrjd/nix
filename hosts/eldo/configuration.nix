@@ -62,7 +62,6 @@ in
   environment.systemPackages = with pkgs; [
     vim
     vscode
-    python313
   ];
   system.stateVersion = "24.05";
   security.sudo = common.security.sudo;
