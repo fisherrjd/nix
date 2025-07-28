@@ -8,8 +8,6 @@ A collection of handy pog scripts for Docker, Kubernetes, AWS, and more.
 
 ## 🛠 Jade's Pogs
 
-### - `pog_test`
-
 ### - `colmena_pog_scripts`
 
 ---
