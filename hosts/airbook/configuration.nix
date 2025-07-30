@@ -52,7 +52,7 @@ in
     {
       openssh.enable = true;
       llama-server.servers = {
-        jade = {
+        Qwen3-30B-A3B-Instruct-2507-UD-Q2_K_XL = {
           enable = true;
           package = pkgs.llama-cpp-latest;
           port = 6969;
