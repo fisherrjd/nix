@@ -58,7 +58,7 @@ in
           port = 6969;
           model = unsloth "Qwen3-Coder-30B-A3B-Instruct-UD-Q2_K_XL.gguf";
           ngl = 99;
-          extraFlags = ''--ctx-size 32768 --seed 420 --prio 2 --temp 0.6 --min-p 0.0 --top-k 20 --top-p 0.95'';
+          extraFlags = ''--ctx-size 16384 --seed 420 --prio 2 --temp 0.6 --min-p 0.0 --top-k 20 --top-p 0.95'';
         };
       };
 
