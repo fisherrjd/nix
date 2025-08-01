@@ -52,11 +52,11 @@ in
     {
       openssh.enable = true;
       llama-server.servers = {
-        Qwen3-30B-A3B-Instruct-2507-UD-Q2_K_XL = {
+        Qwen3-Coder-30B-A3B-Instruct-UD-Q2_K_XL = {
           enable = true;
           package = pkgs.llama-cpp-latest;
           port = 6969;
-          model = unsloth "Qwen3-30B-A3B-Instruct-2507-UD-Q2_K_XL.gguf";
+          model = unsloth "Qwen3-Coder-30B-A3B-Instruct-UD-Q2_K_XL.gguf";
           ngl = 99;
           extraFlags = ''--ctx-size 32768 --seed 420 --prio 2 --temp 0.6 --min-p 0.0 --top-k 20 --top-p 0.95'';
         };
