@@ -169,7 +169,6 @@ in
         ports = [ "5678:5678" ];
         environment = {
           GENERIC_TIMEZONE = "America/Denver";
-
           N8N_EDITOR_BASE_URL = "https://n8n.jade.rip";
           N8N_TEMPLATES_ENABLED = "true";
           N8N_HIRING_BANNER_ENABLED = "false";
