@@ -83,11 +83,6 @@
         ];
       };
 
-      # colmena = {
-      #   hive = import ./hive.nix {
-      #     inherit inputs;
-      #   };
-      # };
     };
 
 

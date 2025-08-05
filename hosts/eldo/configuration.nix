@@ -87,10 +87,13 @@ in
     {
       ntfy-sh = {
         enable = true;
-        user = "jade";
         settings = {
-          base-url = "http://localhost:8081";
-          listen-http = ":8081";
+          base-url = "https://ntfy.jade.rip";
+          listen-http = "0.0.0.0:8081";
+          web-push-public-key = "BCAoXlScmXxcQtD28mXsk_P6u8YWeQX3qW0K3tUfOnX-dP_yfBPTGYG-GzwpbcYOyZqSnlSUx2O1yQBaH4LQlec";
+          web-push-private-key = "s1GJFuYtO2YcDnkr_IfwouyP6C_ekSxsihWDM8yvDwI";
+          web-push-file = "/var/lib/ntfy-sh/webpush.db";
+          web-push-email-address = "fisherrjd@gmail.com";
         };
       };
       openssh.enable = true;
@@ -161,18 +164,18 @@ in
         ];
       };
       n8n = {
-        image = "docker.n8n.io/n8nio/n8n:1.89.2";
+        image = "docker.n8n.io/n8nio/n8n:1.105.3";
         volumes = [ "n8n_data:/home/node/.n8n" ];
         ports = [ "5678:5678" ];
         environment = {
           GENERIC_TIMEZONE = "America/Denver";
+
           N8N_EDITOR_BASE_URL = "https://n8n.jade.rip";
           N8N_TEMPLATES_ENABLED = "true";
           N8N_HIRING_BANNER_ENABLED = "false";
+          N8N_WEBHOOK_URL = "https://n8n.jade.rip";
+          N8N_HOST = "n8n.jade.rip";
         };
-        extraOptions = [
-          "--network=host"
-        ];
       };
       grocery_list = {
         image = "grocery_list:latest"; # or your full registry path

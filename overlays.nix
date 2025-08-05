@@ -3,7 +3,6 @@
   (import ./mods/mods.nix)
 
   # Jade's Pogs
-
-  (import ./mods/pog/test.nix)
+  (import ./mods/pog/colmena.nix)
 
 ]

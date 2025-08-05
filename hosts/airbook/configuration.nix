@@ -47,37 +47,29 @@ in
   };
   services =
     let
-      bartowski = name: "/opt/box/models/bartowski/${name}";
       unsloth = name: "/opt/box/models/unsloth/${name}";
+      hunyuan = name: "/opt/box/models/hunyuan/${name}";
     in
     {
       openssh.enable = true;
       # llama-server.servers = {
-      #   Qwen3-4B-UD-Q6_K_XL = {
+      #   tencent_Hunyuan-7B-Instruct-Q8_0 = {
       #     enable = true;
       #     package = pkgs.llama-cpp-latest;
       #     port = 6969;
-      #     model = unsloth "Qwen3-4B-UD-Q6_K_XL.gguf";
+      #     model = hunyuan "tencent_Hunyuan-7B-Instruct-Q8_0.gguf";
       #     ngl = 99;
-      #     extraFlags = ''--ctx-size 32768 --seed 420 --prio 2 --temp 0.6 --min-p 0.0 --top-k 20 --top-p 0.95'';
-      #   };
-      # };
-      # llama-server.servers = {
-      #   Bartowski_Qwen3-4B-Q8_0 = {
-      #     enable = true;
-      #     port = 8012;
-      #     model = bartowski "Qwen_Qwen3-4B-Q8_0.gguf";
-      #     ngl = 99;
+      #     extraFlags = ''--ctx-size 8192 --seed 420 --prio 2 --temp 0.6 --min-p 0.0 --top-k 20 --top-p 0.95'';
       #   };
       # };
 
     };
-  # launchd.user.agents.caffeinate = {
-  #   serviceConfig = {
-  #     Label = "jade.caffeinate";
-  #     ProgramArguments = [ "/usr/bin/caffeinate" "-dims" ];
-  #     RunAtLoad = true;
-  #     KeepAlive = true; # Keeps caffeinate running even if it exits
-  #   };
-  # };
+  launchd.user.agents.caffeinate = {
+    serviceConfig = {
+      Label = "jade.caffeinate";
+      ProgramArguments = [ "/usr/bin/caffeinate" "-dims" ];
+      RunAtLoad = true;
+      KeepAlive = true; # Keeps caffeinate running even if it exits
+    };
+  };
 }
