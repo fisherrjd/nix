@@ -164,7 +164,7 @@ in
         ];
       };
       n8n = {
-        image = "docker.n8n.io/n8nio/n8n:1.89.2";
+        image = "docker.n8n.io/n8nio/n8n:1.105.3";
         volumes = [ "n8n_data:/home/node/.n8n" ];
         ports = [ "5678:5678" ];
         environment = {
@@ -172,10 +172,9 @@ in
           N8N_EDITOR_BASE_URL = "https://n8n.jade.rip";
           N8N_TEMPLATES_ENABLED = "true";
           N8N_HIRING_BANNER_ENABLED = "false";
+          N8N_WEBHOOK_URL = "https://n8n.jade.rip";
+          N8N_HOST = "n8n.jade.rip";
         };
-        extraOptions = [
-          "--network=host"
-        ];
       };
       grocery_list = {
         image = "grocery_list:latest"; # or your full registry path
