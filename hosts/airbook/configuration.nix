@@ -23,10 +23,7 @@ in
     NIXDARWIN_CONFIG = configPath;
   };
   environment.darwinConfig = configPath;
-  environment.systemPackages = with pkgs; [
-    vim
-    vscode
-  ];
+
   users.users.jade = {
     name = username;
     home = "/Users/${username}";
@@ -51,6 +48,7 @@ in
   services =
     let
       unsloth = name: "/opt/box/models/unsloth/${name}";
+      hunyuan = name: "/opt/box/models/hunyuan/${name}";
     in
     {
       openssh.enable = true;
@@ -59,7 +57,7 @@ in
           enable = true;
           package = pkgs.llama-cpp-latest;
           port = 6969;
-          model = unsloth "tencent_Hunyuan-7B-Instruct-Q8_0.gguf";
+          model = hunyuan "tencent_Hunyuan-7B-Instruct-Q8_0.gguf";
           ngl = 99;
           extraFlags = ''--ctx-size 32768 --seed 420 --prio 2 --temp 0.6 --min-p 0.0 --top-k 20 --top-p 0.95'';
         };
