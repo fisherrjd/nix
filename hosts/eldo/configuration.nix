@@ -30,6 +30,10 @@ in
         file = ../../secrets/github-runner-token.age;
         mode = "644";
       };
+      ntfy-serveryml = {
+        file = ../../secrets/ntfy-server.age;
+        mode = "644";
+      };
     };
   };
   networking.networkmanager.enable = true;
@@ -88,6 +92,7 @@ in
       ntfy-sh = {
         enable = true;
         user = "jade";
+        settingsFile = config.age.secrets.ntfy-serveryml.path;
         settings = {
           base-url = "http://localhost:8081";
           listen-http = ":8081";
