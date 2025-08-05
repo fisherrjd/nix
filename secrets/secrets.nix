@@ -8,5 +8,4 @@ in
   "openwebui.age".publicKeys = default;
   "caddy.age".publicKeys = default;
   "github-runner-token.age".publicKeys = default;
-  "ntfy-server".publicKeys = default;
 }
