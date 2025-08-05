@@ -59,7 +59,7 @@ in
           port = 6969;
           model = hunyuan "tencent_Hunyuan-7B-Instruct-Q8_0.gguf";
           ngl = 99;
-          extraFlags = ''--ctx-size 32768 --seed 420 --prio 2 --temp 0.6 --min-p 0.0 --top-k 20 --top-p 0.95'';
+          extraFlags = ''--ctx-size 8192 --seed 420 --prio 2 --temp 0.6 --min-p 0.0 --top-k 20 --top-p 0.95'';
         };
       };
 
