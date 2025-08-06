@@ -58,7 +58,7 @@ in
           enable = true;
           package = pkgs.llama-cpp-latest;
           port = 6969;
-          model = hunyuan "Qwen_Qwen3-4B-Thinking-2507-Q8_0.gguf";
+          model = bartowski "Qwen_Qwen3-4B-Thinking-2507-Q8_0.gguf";
           ngl = 99;
           extraFlags = ''--ctx-size 8192 --seed 420 --prio 2 --temp 0.6 --min-p 0.0 --top-k 20 --top-p 0.95'';
         };
