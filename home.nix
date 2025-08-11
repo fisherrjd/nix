@@ -3,6 +3,7 @@ let
   inherit (pkgs.hax) isDarwin isLinux isM1;
   inherit (pkgs.hax) attrIf optionalString words;
   notBifrost = machine-name != "bifrost";
+  isWork = machine-name == "workbook";
 
   firstName = "jade";
   lastName = "fisher";
@@ -157,6 +158,9 @@ in
           #Packages NOT on Bifrost
           (lib.optionals notBifrost [
             hms
+          ])
+          (lib.optionals isWork[
+            awscli2
           ])
           # Jade's Pog scripts
           [
