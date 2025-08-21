@@ -177,7 +177,7 @@ in
       #   };
       # };
       grocery_list = {
-        image = "grocery_list:latest"; # or your full registry path
+        image = "ghcr.io/fisherrjd/lists-backend:v0.3.0-dev"; # or your full registry path
         ports = [ "8069:8069" ];
       };
     };
