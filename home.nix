@@ -296,8 +296,9 @@ in
 
   programs.ssh = {
     enable = true;
-    compression = true;
+    enableDefaultConfig = false;
     includes = [ "config.d/*" ];
+    matchBlocks."*".compression = true;
     extraConfig =
       let
         mac_meme = ''
