@@ -41,6 +41,14 @@ in
   };
   services.openssh.enable = true;
 
-  homebrew.enable = true;
+  homebrew = {
+    enable = true;
+    brews = [
+      "cassandra"
+    ];
+    casks = [
+      "bruno"
+    ];
+  };
 
 }
