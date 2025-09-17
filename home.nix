@@ -69,6 +69,7 @@ in
           curl
           diffutils
           docker
+          dogdns
           dyff
           erdtree
           fd
@@ -117,7 +118,6 @@ in
           podman
           procps
           pssh
-          q
           ranger
           redis
           re2c
@@ -305,6 +305,13 @@ in
         '';
       in
       ''
+        ${optionalString isWork ''
+        Host bastion
+          User P3175941
+          PasswordAuthentication no
+          ProxyCommand sh -c 'export AWS_PROFILE="it-cloud-shared-services"; aws ssm start-session --target "$(aws ec2 describe-instances --filters "Name=tag:Name,Values=shared-bastion" "Name=instance-state-name,Values=running" --output text --query "Reservations[*].Instances[0].InstanceId")" --document-name AWS-StartSSHSession --parameters "portNumber=%p"'
+        ''}
+        
         Host airbook
           User jade
           PasswordAuthentication no

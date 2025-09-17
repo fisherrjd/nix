@@ -40,4 +40,7 @@ in
     ];
   };
   services.openssh.enable = true;
+
+  homebrew.enable = true;
+
 }
