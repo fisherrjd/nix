@@ -68,7 +68,7 @@ in
   environment.variables = {
     NIX_HOST = hostname;
   };
-  networking.firewall.allowedTCPPorts = [ 25565 ];
+  networking.firewall.allowedTCPPorts = [ 25565 8069 ];
   networking.hostName = "eldo";
   home-manager.users.jade = common.jade;
 
@@ -177,10 +177,11 @@ in
       #     N8N_HOST = "n8n.jade.rip";
       #   };
       # };
-      grocery_list = {
-        image = "ghcr.io/fisherrjd/lists-backend:v0.3.0-dev"; # or your full registry path
-        ports = [ "8069:8069" ];
-      };
+      # grocery_list = {
+      #   image = "ghcr.io/fisherrjd/lists-backend:v0.3.0-dev";
+      #   ports = [ "8069:8069" ];
+      #   volumes = [ "grocery-list-data:/app/data" ];
+      # };
     };
   };
 
