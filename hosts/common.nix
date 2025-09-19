@@ -64,10 +64,7 @@ in
       LC_TIME = utf8;
     };
 
-  env = {
-    JAVA_11 = "/Users/P3175941/Library/Java/JavaVirtualMachines/azul-11.0.25/Contents/Home";
-    JAVA_21 = "/Users/P3175941/Library/Java/JavaVirtualMachines/azul-21.0.5/Contents/Home";
-  };
+  env = { };
 
   name = rec {
     first = "jade";
