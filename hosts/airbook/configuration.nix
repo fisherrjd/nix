@@ -65,12 +65,35 @@ in
       };
 
     };
-  launchd.user.agents.caffeinate = {
-    serviceConfig = {
-      Label = "jade.caffeinate";
-      ProgramArguments = [ "/usr/bin/caffeinate" "-dims" ];
-      RunAtLoad = true;
-      KeepAlive = true; # Keeps caffeinate running even if it exits
-    };
-  };
+  # launchd.user.agents.caffeinate = {
+  #   serviceConfig = {
+  #     Label = "jade.caffeinate";
+  #     ProgramArguments = [ "/usr/bin/caffeinate" "-dims" ];
+  #     RunAtLoad = true;
+  #     KeepAlive = true; # Keeps caffeinate running even if it exits
+  #   };
+  # };
+
+  # 1. Enable the Homebrew module
+homebrew = {
+  enable = true;                       # turn the module on
+
+  # 2. Where the Homebrew installation lives (only needed if it’s not in /opt/homebrew or /usr/local)
+  # homebrewDirectory = "/opt/homebrew";
+
+  # 3. Taps you need
+  taps = [];
+
+  # 4. Formulae (CLI tools)
+  brews = [];
+
+  # 5. Casks (GUI apps)
+  casks = [
+    "visual-studio-code"
+    "firefox"
+    "discord"
+    "webex"
+  ];
+
+};
 }
