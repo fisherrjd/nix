@@ -142,7 +142,6 @@ in
           # Packages for only Macs
           (
             lib.optionals isDarwin [
-              amazon-q-cli
             ]
           )
 
@@ -162,6 +161,8 @@ in
           ])
           (lib.optionals isWork [
             awscli2
+            nodejs
+            amazon-q-cli
           ])
           # Jade's Pog scripts
           [
