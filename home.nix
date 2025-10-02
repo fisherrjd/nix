@@ -142,7 +142,6 @@ in
           # Packages for only Macs
           (
             lib.optionals isDarwin [
-              amazon-q-cli
             ]
           )
 
@@ -160,7 +159,7 @@ in
           (lib.optionals notBifrost [
             hms
           ])
-          (lib.optionals isWork[
+          (lib.optionals isWork [
             awscli2
           ])
           # Jade's Pog scripts
