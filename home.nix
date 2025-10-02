@@ -142,6 +142,7 @@ in
           # Packages for only Macs
           (
             lib.optionals isDarwin [
+              amazon-q-cli
             ]
           )
 

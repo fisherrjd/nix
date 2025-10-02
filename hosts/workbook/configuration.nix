@@ -50,7 +50,6 @@ in
     ];
     casks = [
       "bruno"
-      "amazon-q"
     ];
   };
 
