@@ -63,31 +63,16 @@ in
           extraFlags = ''--ctx-size 8192 --seed 420 --prio 2 --temp 0.6 --min-p 0.0 --top-k 20 --top-p 0.95'';
         };
       };
-      syncthing = {
-        enable = true;
-        user = username;
-
-        # ⚠️ OPTIONAL: Set a GUI password, otherwise you'll be prompted
-        # to set one the first time you access the GUI.
-        settings.gui = {
-          enable = true;
-          address = "127.0.0.1:8384";
-          # user = "syncthing_user"; 
-          # password = "YOUR_PASSWORD_HASH"; 
-        };
-
-        # IMPORTANT: If you omit overrideDevices/overrideFolders, 
-        # Syncthing will save all GUI changes to its internal config.xml.
-      };
+      
     };
-  # launchd.user.agents.caffeinate = {
-  #   serviceConfig = {
-  #     Label = "jade.caffeinate";
-  #     ProgramArguments = [ "/usr/bin/caffeinate" "-dims" ];
-  #     RunAtLoad = true;
-  #     KeepAlive = true; # Keeps caffeinate running even if it exits
-  #   };
-  # };
+  launchd.user.agents.caffeinate = {
+    serviceConfig = {
+      Label = "jade.caffeinate";
+      ProgramArguments = [ "/usr/bin/caffeinate" "-dims" ];
+      RunAtLoad = true;
+      KeepAlive = true; # Keeps caffeinate running even if it exits
+    };
+  };
 
   # 1. Enable the Homebrew module
   homebrew = {
@@ -108,6 +93,7 @@ in
       "firefox"
       "discord"
       "webex"
+      "syncthing"
     ];
 
   };
