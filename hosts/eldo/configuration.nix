@@ -96,6 +96,20 @@ in
       #     web-push-email-address = "fisherrjd@gmail.com";
       #   };
       # };
+
+      syncthing = {
+        enable = true;
+        openDefaultPorts = true;
+
+        # 1. CRITICAL: RUN AS THE 'jade' USER for home directory access
+        user = username; # This resolves to "jade"
+        group = "users";
+
+        # 2. SET CONFIG/DATA DIRECTORIES within the user's home
+        dataDir = "/home/${username}/.local/share/syncthing";
+        configDir = "/home/${username}/.config/syncthing";
+      };
+
       openssh.enable = true;
       postgresql = {
         enable = true;

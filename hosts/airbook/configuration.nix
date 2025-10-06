@@ -63,7 +63,22 @@ in
           extraFlags = ''--ctx-size 8192 --seed 420 --prio 2 --temp 0.6 --min-p 0.0 --top-k 20 --top-p 0.95'';
         };
       };
+      syncthing = {
+        enable = true;
+        user = username;
 
+        # ⚠️ OPTIONAL: Set a GUI password, otherwise you'll be prompted
+        # to set one the first time you access the GUI.
+        settings.gui = {
+          enable = true;
+          address = "127.0.0.1:8384";
+          # user = "syncthing_user"; 
+          # password = "YOUR_PASSWORD_HASH"; 
+        };
+
+        # IMPORTANT: If you omit overrideDevices/overrideFolders, 
+        # Syncthing will save all GUI changes to its internal config.xml.
+      };
     };
   # launchd.user.agents.caffeinate = {
   #   serviceConfig = {
@@ -75,25 +90,25 @@ in
   # };
 
   # 1. Enable the Homebrew module
-homebrew = {
-  enable = true;                       # turn the module on
+  homebrew = {
+    enable = true; # turn the module on
 
-  # 2. Where the Homebrew installation lives (only needed if it’s not in /opt/homebrew or /usr/local)
-  # homebrewDirectory = "/opt/homebrew";
+    # 2. Where the Homebrew installation lives (only needed if it’s not in /opt/homebrew or /usr/local)
+    # homebrewDirectory = "/opt/homebrew";
 
-  # 3. Taps you need
-  taps = [];
+    # 3. Taps you need
+    taps = [ ];
 
-  # 4. Formulae (CLI tools)
-  brews = [];
+    # 4. Formulae (CLI tools)
+    brews = [ ];
 
-  # 5. Casks (GUI apps)
-  casks = [
-    "visual-studio-code"
-    "firefox"
-    "discord"
-    "webex"
-  ];
+    # 5. Casks (GUI apps)
+    casks = [
+      "visual-studio-code"
+      "firefox"
+      "discord"
+      "webex"
+    ];
 
-};
+  };
 }
