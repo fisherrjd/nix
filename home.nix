@@ -160,9 +160,9 @@ in
             hms
           ])
           (lib.optionals isWork [
-            awscli2
+            # awscli2
+            # amazon-q-cli
             nodejs
-            amazon-q-cli
           ])
           # Jade's Pog scripts
           [

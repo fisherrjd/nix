@@ -47,10 +47,12 @@ in
     enable = true;
     brews = [
       "cassandra"
+      "awscli"
     ];
     casks = [
       "bruno"
       "notion"
+      "amazon-q"
     ];
   };
 
