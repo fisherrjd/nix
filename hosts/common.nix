@@ -12,10 +12,6 @@ let
     extra-experimental-features = nix-command flakes
   '';
   subs = {
-    jacobi = {
-      url = "https://jacobi.cachix.org";
-      key = "jacobi.cachix.org-1:JJghCz+ZD2hc9BHO94myjCzf4wS3DeBLKHOz3jCukMU=";
-    };
     jade = {
       url = "https://fisherrjd.cachix.org";
       key = "fisherrjd.cachix.org-1:21bdYeKCoWN19OGUDTGU41o60gnEsLHY5+tIpEq7w+A=";
@@ -33,8 +29,8 @@ in
   nix = {
     extraOptions = ''
       ${_base_nix_options}
-      extra-substituters = ${subs.g7c.url} ${subs.jacobi.url} ${subs.jade.url}
-      extra-trusted-public-keys = ${subs.g7c.key} ${subs.jacobi.key} ${subs.jade.key}
+      extra-substituters = ${subs.g7c.url} ${subs.jade.url}
+      extra-trusted-public-keys = ${subs.g7c.key} ${subs.jade.key}
     '';
     settings = {
       trusted-users = [ "root" "jade" "P3175941" ];
