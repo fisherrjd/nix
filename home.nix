@@ -149,6 +149,7 @@ in
             lib.optionals isLinux [
               gnutar
               calibre-web
+              claude-code
             ]
           )
           # Secrets
