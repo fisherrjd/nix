@@ -4,6 +4,8 @@ let
   inherit (pkgs.hax) attrIf optionalString words;
   notBifrost = machine-name != "bifrost";
   isWork = machine-name == "workbook";
+  isAirbook = machine-name == "airbook";
+  isEldo = machine-name == "eldo";
 
   firstName = "jade";
   lastName = "fisher";
@@ -126,7 +128,6 @@ in
           scrypt
           shfmt
           statix
-          time
           tmux
           unzip
           uv
@@ -162,6 +163,13 @@ in
             # awscli2
             # amazon-q-cli
             nodejs
+          ])
+          (lib.optionals isAirbook [
+            claude-code
+            (pkgs.writeShellScriptBin "mcp-osrs" ''
+              export PATH="${pkgs.nodejs}/bin:$PATH"
+              exec ${pkgs.nodejs}/bin/npx -y @jayarrowz/mcp-osrs "$@"
+            '')
           ])
           # Jade's Pog scripts
           [
