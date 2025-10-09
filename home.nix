@@ -128,7 +128,6 @@ in
           scrypt
           shfmt
           statix
-          time
           tmux
           unzip
           uv
