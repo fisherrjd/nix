@@ -457,11 +457,11 @@
         "vscode-server": "vscode-server"
       },
       "locked": {
-        "lastModified": 1761092606,
-        "narHash": "sha256-wOFqObhUUk2s0Fjrek5MMVPm9PH9Fjd4yCYTU5nWEqc=",
+        "lastModified": 1761137061,
+        "narHash": "sha256-AhsGbwS8fVBbqN3lXvFcJ+vsEhdRJyF3+W7hPsiZx+4=",
         "owner": "jpetrucciani",
         "repo": "nix",
-        "rev": "a90775795c001b2b5a07af42e36a62f5bfe9d634",
+        "rev": "7ab4a4e89422c02c7c56a51e16e7c35e7b1a0ff9",
         "type": "github"
       },
       "original": {
@@ -871,11 +871,11 @@
     },
     "nixpkgs_9": {
       "locked": {
-        "lastModified": 1760878510,
-        "narHash": "sha256-K5Osef2qexezUfs0alLvZ7nQFTGS9DL2oTVsIXsqLgs=",
+        "lastModified": 1761114652,
+        "narHash": "sha256-f/QCJM/YhrV/lavyCVz8iU3rlZun6d+dAiC3H+CDle4=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "5e2a59a5b1a82f89f2c7e598302a9cacebb72a67",
+        "rev": "01f116e4df6a15f4ccdffb1bcd41096869fb385c",
         "type": "github"
       },
       "original": {
