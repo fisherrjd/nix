@@ -3,6 +3,9 @@ let
   inherit (pkgs.hax) isDarwin isLinux isM1;
   inherit (pkgs.hax) attrIf optionalString words;
   notBifrost = machine-name != "bifrost";
+  isWork = machine-name == "workbook";
+  isAirbook = machine-name == "airbook";
+  isEldo = machine-name == "eldo";
 
   firstName = "jade";
   lastName = "fisher";
@@ -62,12 +65,12 @@ in
           bzip2
           cacert
           caddy
-          cassandra
           coreutils-full
           colmena
           curl
           diffutils
           docker
+          dogdns
           dyff
           erdtree
           fd
@@ -75,7 +78,7 @@ in
           file
           fq
           gawk
-          gitAndTools.delta
+          delta
           gnugrep
           gnumake
           gnupg
@@ -116,7 +119,6 @@ in
           podman
           procps
           pssh
-          q
           ranger
           redis
           re2c
@@ -126,7 +128,6 @@ in
           scrypt
           shfmt
           statix
-          time
           tmux
           unzip
           uv
@@ -148,7 +149,7 @@ in
           (
             lib.optionals isLinux [
               gnutar
-              calibre-web
+              claude-code
             ]
           )
           # Secrets
@@ -157,6 +158,18 @@ in
           #Packages NOT on Bifrost
           (lib.optionals notBifrost [
             hms
+          ])
+          (lib.optionals isWork [
+            # awscli2
+            # amazon-q-cli
+            nodejs
+          ])
+          (lib.optionals isAirbook [
+            claude-code
+            (pkgs.writeShellScriptBin "mcp-osrs" ''
+              export PATH="${pkgs.nodejs}/bin:$PATH"
+              exec ${pkgs.nodejs}/bin/npx -y @jayarrowz/mcp-osrs "$@"
+            '')
           ])
           # Jade's Pog scripts
           [
@@ -291,8 +304,9 @@ in
 
   programs.ssh = {
     enable = true;
-    compression = true;
+    enableDefaultConfig = false;
     includes = [ "config.d/*" ];
+    matchBlocks."*".compression = true;
     extraConfig =
       let
         mac_meme = ''
@@ -300,6 +314,13 @@ in
         '';
       in
       ''
+        ${optionalString isWork ''
+        Host bastion
+          User P3175941
+          PasswordAuthentication no
+          ProxyCommand sh -c 'export AWS_PROFILE="it-cloud-shared-services"; aws ssm start-session --target "$(aws ec2 describe-instances --filters "Name=tag:Name,Values=shared-bastion" "Name=instance-state-name,Values=running" --output text --query "Reservations[*].Instances[0].InstanceId")" --document-name AWS-StartSSHSession --parameters "portNumber=%p"'
+        ''}
+        
         Host airbook
           User jade
           PasswordAuthentication no

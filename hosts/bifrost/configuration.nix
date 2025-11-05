@@ -75,11 +75,11 @@ in
       enable = true;
       virtualHosts = {
         # Push Notifications
-        "ntfy.jade.rip".extraConfig = ''
-          reverse_proxy * {
-            to eldo:8081
-          }
-        '';
+        # "ntfy.jade.rip".extraConfig = ''
+        #   reverse_proxy * {
+        #     to eldo:8081
+        #   }
+        # '';
         "chat.jade.rip".extraConfig = ''
           reverse_proxy * {
             to eldo:8080
@@ -95,11 +95,11 @@ in
             to eldo:5000
           }
         '';
-        "n8n.jade.rip".extraConfig = ''
-          reverse_proxy * {
-            to eldo:5678
-          }
-        '';
+        # "n8n.jade.rip".extraConfig = ''
+        #   reverse_proxy * {
+        #     to eldo:5678
+        #   }
+        # '';
         "litellm.jade.rip".extraConfig = ''
           reverse_proxy * {
             to eldo:4000
@@ -108,11 +108,6 @@ in
         "lists.jade.rip".extraConfig = ''
           reverse_proxy * {
             to eldo:8069
-          }
-        '';
-        "tri.jade.rip".extraConfig = ''
-          reverse_proxy * {
-            to eldo:9001
           }
         '';
       };

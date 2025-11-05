@@ -68,7 +68,20 @@ in
   environment.variables = {
     NIX_HOST = hostname;
   };
-  networking.firewall.allowedTCPPorts = [ 25565 ];
+
+  # networking.firewall.allowedTCPPorts = [
+  #   25565
+  #   8069
+  #   22000 # <--- NEW: Syncthing Sync Port (TCP)
+  #   8384 # <--- OPTIONAL: Syncthing GUI Port (TCP)
+  #   2026 # <--- DEV Postgres DB
+  # ];
+
+  # networking.firewall.allowedUDPPorts = [
+  #   # <--- NEW BLOCK: UDP Ports
+  #   22000 # <--- NEW: Syncthing Sync Port (UDP)
+  #   21027 # <--- NEW: Syncthing Discovery Port (UDP)
+  # ];
   networking.hostName = "eldo";
   home-manager.users.jade = common.jade;
 
@@ -85,17 +98,31 @@ in
   systemd.targets.hybrid-sleep.enable = false;
   services =
     {
-      ntfy-sh = {
+      # ntfy-sh = {
+      #   enable = true;
+      #   settings = {
+      #     base-url = "https://ntfy.jade.rip";
+      #     listen-http = "0.0.0.0:8081";
+      #     web-push-public-key = "BCAoXlScmXxcQtD28mXsk_P6u8YWeQX3qW0K3tUfOnX-dP_yfBPTGYG-GzwpbcYOyZqSnlSUx2O1yQBaH4LQlec";
+      #     web-push-private-key = "s1GJFuYtO2YcDnkr_IfwouyP6C_ekSxsihWDM8yvDwI";
+      #     web-push-file = "/var/lib/ntfy-sh/webpush.db";
+      #     web-push-email-address = "fisherrjd@gmail.com";
+      #   };
+      # };
+
+      syncthing = {
         enable = true;
-        settings = {
-          base-url = "https://ntfy.jade.rip";
-          listen-http = "0.0.0.0:8081";
-          web-push-public-key = "BCAoXlScmXxcQtD28mXsk_P6u8YWeQX3qW0K3tUfOnX-dP_yfBPTGYG-GzwpbcYOyZqSnlSUx2O1yQBaH4LQlec";
-          web-push-private-key = "s1GJFuYtO2YcDnkr_IfwouyP6C_ekSxsihWDM8yvDwI";
-          web-push-file = "/var/lib/ntfy-sh/webpush.db";
-          web-push-email-address = "fisherrjd@gmail.com";
-        };
+        openDefaultPorts = true;
+
+        # 1. CRITICAL: RUN AS THE 'jade' USER for home directory access
+        user = username; # This resolves to "jade"
+        group = "users";
+
+        # 2. SET CONFIG/DATA DIRECTORIES within the user's home
+        dataDir = "/home/${username}/.local/share/syncthing";
+        configDir = "/home/${username}/.config/syncthing";
       };
+
       openssh.enable = true;
       postgresql = {
         enable = true;
@@ -111,23 +138,24 @@ in
       };
 
       # MINECRAFT STUFF
-      # minecraft-server = with common.minecraft; {
-      #   enable = true;
-      #   eula = true;
-      #   openFirewall = true;
-      #   declarative = true;
-      #   serverProperties = {
-      #     server-port = 25565;
-      #     motd = "Dan Is a NERD!";
-      #     level-name = "hardcore_v2";
-      #     server-name = "Hardcore Gamer Legends";
-      #     gamemode = 0;
-      #     difficulty = 1;
-      #     max-players = 10;
-      #     bind = "0.0.0.0"; # Allow connections from any IP address
-      #     hardcore = true;
-      #   };
-      # };
+      minecraft-server = with common.minecraft; {
+        enable = true;
+        eula = true;
+        openFirewall = true;
+        declarative = true;
+        serverProperties = {
+          server-port = 25565;
+          motd = "Not Artistic SMP";
+          level-name = "community_server";
+          level-seed = "46182117";
+          server-name = "NotArtistic";
+          gamemode = 0;
+          difficulty = 3;
+          max-players = 10;
+          bind = "0.0.0.0"; # Allow connections from any IP address
+          hardcore = false;
+        };
+      };
 
       github-runners = {
         lists-runner = {
@@ -163,24 +191,24 @@ in
           "--network=host"
         ];
       };
-      n8n = {
-        image = "docker.n8n.io/n8nio/n8n:1.105.3";
-        volumes = [ "n8n_data:/home/node/.n8n" ];
-        ports = [ "5678:5678" ];
-        environment = {
-          GENERIC_TIMEZONE = "America/Denver";
-
-          N8N_EDITOR_BASE_URL = "https://n8n.jade.rip";
-          N8N_TEMPLATES_ENABLED = "true";
-          N8N_HIRING_BANNER_ENABLED = "false";
-          N8N_WEBHOOK_URL = "https://n8n.jade.rip";
-          N8N_HOST = "n8n.jade.rip";
-        };
-      };
-      grocery_list = {
-        image = "grocery_list:latest"; # or your full registry path
-        ports = [ "8069:8069" ];
-      };
+      # n8n = {
+      #   image = "docker.n8n.io/n8nio/n8n:1.105.3";
+      #   volumes = [ "n8n_data:/home/node/.n8n" ];
+      #   ports = [ "5678:5678" ];
+      #   environment = {
+      #     GENERIC_TIMEZONE = "America/Denver";
+      #     N8N_EDITOR_BASE_URL = "https://n8n.jade.rip";
+      #     N8N_TEMPLATES_ENABLED = "true";
+      #     N8N_HIRING_BANNER_ENABLED = "false";
+      #     N8N_WEBHOOK_URL = "https://n8n.jade.rip";
+      #     N8N_HOST = "n8n.jade.rip";
+      #   };
+      # };
+      # grocery_list = {
+      #   image = "ghcr.io/fisherrjd/lists-backend:v0.3.0-dev";
+      #   ports = [ "8069:8069" ];
+      #   volumes = [ "grocery-list-data:/app/data" ];
+      # };
     };
   };
 

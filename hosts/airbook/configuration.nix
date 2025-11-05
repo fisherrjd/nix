@@ -49,20 +49,21 @@ in
     let
       unsloth = name: "/opt/box/models/unsloth/${name}";
       hunyuan = name: "/opt/box/models/hunyuan/${name}";
+      bartowski = name: "/opt/box/models/bartowski/${name}";
     in
     {
       openssh.enable = true;
-      # llama-server.servers = {
-      #   tencent_Hunyuan-7B-Instruct-Q8_0 = {
-      #     enable = true;
-      #     package = pkgs.llama-cpp-latest;
-      #     port = 6969;
-      #     model = hunyuan "tencent_Hunyuan-7B-Instruct-Q8_0.gguf";
-      #     ngl = 99;
-      #     extraFlags = ''--ctx-size 8192 --seed 420 --prio 2 --temp 0.6 --min-p 0.0 --top-k 20 --top-p 0.95'';
-      #   };
-      # };
-
+      llama-server.servers = {
+        Qwen_Qwen3-4B-Thinking-2507-Q8_0 = {
+          enable = true;
+          package = pkgs.llama-cpp-latest;
+          port = 6969;
+          model = bartowski "Qwen_Qwen3-4B-Thinking-2507-Q8_0.gguf";
+          ngl = 99;
+          extraFlags = ''--ctx-size 8192 --seed 420 --prio 2 --temp 0.6 --min-p 0.0 --top-k 20 --top-p 0.95'';
+        };
+      };
+      
     };
   launchd.user.agents.caffeinate = {
     serviceConfig = {
@@ -71,5 +72,29 @@ in
       RunAtLoad = true;
       KeepAlive = true; # Keeps caffeinate running even if it exits
     };
+  };
+
+  # 1. Enable the Homebrew module
+  homebrew = {
+    enable = true; # turn the module on
+
+    # 2. Where the Homebrew installation lives (only needed if it’s not in /opt/homebrew or /usr/local)
+    # homebrewDirectory = "/opt/homebrew";
+
+    # 3. Taps you need
+    taps = [ ];
+
+    # 4. Formulae (CLI tools)
+    brews = [ ];
+
+    # 5. Casks (GUI apps)
+    casks = [
+      "visual-studio-code"
+      "firefox"
+      "discord"
+      "webex"
+      "syncthing"
+    ];
+
   };
 }
