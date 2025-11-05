@@ -78,7 +78,7 @@ in
           file
           fq
           gawk
-          gitAndTools.delta
+          delta
           gnugrep
           gnumake
           gnupg

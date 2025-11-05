@@ -30,7 +30,7 @@ in
     in
     {
       enable = true;
-      package = pkgs.gitAndTools.gitFull;
+      package = pkgs.gitFull;
       settings = {
         user = {
           name = "${firstName} ${lastName}";
