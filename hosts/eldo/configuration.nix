@@ -69,17 +69,19 @@ in
     NIX_HOST = hostname;
   };
 
-  networking.firewall.allowedTCPPorts = [ 
-    25565 
-    8069 
-    22000  # <--- NEW: Syncthing Sync Port (TCP)
-    8384   # <--- OPTIONAL: Syncthing GUI Port (TCP)
-  ];
-  
-  networking.firewall.allowedUDPPorts = [ # <--- NEW BLOCK: UDP Ports
-    22000  # <--- NEW: Syncthing Sync Port (UDP)
-    21027  # <--- NEW: Syncthing Discovery Port (UDP)
-  ];
+  # networking.firewall.allowedTCPPorts = [
+  #   25565
+  #   8069
+  #   22000 # <--- NEW: Syncthing Sync Port (TCP)
+  #   8384 # <--- OPTIONAL: Syncthing GUI Port (TCP)
+  #   2026 # <--- DEV Postgres DB
+  # ];
+
+  # networking.firewall.allowedUDPPorts = [
+  #   # <--- NEW BLOCK: UDP Ports
+  #   22000 # <--- NEW: Syncthing Sync Port (UDP)
+  #   21027 # <--- NEW: Syncthing Discovery Port (UDP)
+  # ];
   networking.hostName = "eldo";
   home-manager.users.jade = common.jade;
 
