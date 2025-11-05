@@ -19,6 +19,8 @@ in
   environment.variables = {
     NIX_HOST = hostname;
     NIXDARWIN_CONFIG = configPath;
+    JAVA_11 = "/Users/P3175941/Library/Java/JavaVirtualMachines/azul-11.0.25/Contents/Home";
+    JAVA_21 = "/Users/P3175941/Library/Java/JavaVirtualMachines/azul-21.0.5/Contents/Home";
   };
   environment.darwinConfig = configPath;
   users.users.P3175941 = {
@@ -40,4 +42,18 @@ in
     ];
   };
   services.openssh.enable = true;
+
+  homebrew = {
+    enable = true;
+    brews = [
+      "cassandra"
+      "awscli"
+    ];
+    casks = [
+      "bruno"
+      "notion"
+      "amazon-q"
+    ];
+  };
+
 }
