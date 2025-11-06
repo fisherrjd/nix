@@ -160,9 +160,10 @@ in
             hms
           ])
           (lib.optionals isWork [
-            # awscli2
+            awscli2
             # amazon-q-cli
             nodejs
+            ssm-session-manager-plugin
           ])
           (lib.optionals isAirbook [
             claude-code
