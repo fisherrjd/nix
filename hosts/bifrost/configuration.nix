@@ -90,11 +90,6 @@ in
             to airbook:6969
           }
         '';
-        "meals.jade.rip".extraConfig = ''
-          reverse_proxy * {
-            to eldo:5000
-          }
-        '';
         # "n8n.jade.rip".extraConfig = ''
         #   reverse_proxy * {
         #     to eldo:5678
@@ -105,10 +100,8 @@ in
             to eldo:4000
           }
         '';
-        "lists.jade.rip".extraConfig = ''
-          reverse_proxy * {
-            to eldo:8069
-          }
+        "nix.jade.rip".extraConfig = ''
+          redir https://github.com/fisherrjd/nix permanent
         '';
       };
     };
