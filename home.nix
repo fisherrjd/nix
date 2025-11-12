@@ -161,6 +161,7 @@ in
           ])
           (lib.optionals isWork [
             awscli2
+            k8s_pog_scripts
             # amazon-q-cli
             nodejs
             ssm-session-manager-plugin
