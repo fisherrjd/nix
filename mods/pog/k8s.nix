@@ -15,6 +15,13 @@ rec {
         required = true;
         completion = ''echo "beta int stable qa uat"'';
       }
+      {
+        name = "gateway";
+        short = "g";
+        description = "Target which gateway for pod restarts";
+        required = false;
+        completion = ''echo "video shared sgui"'';
+      }
     ];
     
   script = helpers: with helpers; ''
