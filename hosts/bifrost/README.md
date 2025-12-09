@@ -1,6 +1,6 @@
-# Eldo
+# Bifrost
 
-This is a bare-metal nixos server I am messing with
+Reverse Proxy Gateway
 
 ## Setup
 
