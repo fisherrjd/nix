@@ -5,8 +5,8 @@ let
   envConfig = {
     beta = { gwContext = "beta-gw"; kopsContext = "dev-kops-shared"; namespace = "pinxt-dev"; };
     int = { gwContext = "int-gw"; kopsContext = "dev-kops-shared"; namespace = "pinxt-int"; };
-    stable = { gwContext = "dev-gw"; kopsContext = "dev-kops-shared"; namespace = "pinxt"; };
-    qa = { gwContext = "qa-gw"; kopsContext = "qa-kops-shared"; namespace = "pinxt"; };
+    stable = { gwContext = "dev-gw"; kopsContext = "dev-idp-shared"; namespace = "pinxt"; };
+    qa = { gwContext = "qa-gw"; kopsContext = "qa-idp-shared"; namespace = "pinxt"; };
     uat = { gwContext = "uat-gw"; kopsContext = "uat-kops-shared"; namespace = "pinxt"; };
     # perf1 = { gwContext = "perf1-gw-eks"; kopsContext = "perf1-idp-eks"; namespace = "pinxt"; };
     perf2 = { gwContext = "perf2-gw-eks"; kopsContext = "perf2-idp-eks"; namespace = "pinxt"; };
