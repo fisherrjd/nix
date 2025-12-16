@@ -45,9 +45,13 @@ in
 
   homebrew = {
     enable = true;
+    taps = [
+      "microcks/tap"
+    ];
     brews = [
       "cassandra"
       "awscli"
+      "microcks-cli"
     ];
     casks = [
       "bruno"
