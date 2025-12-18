@@ -3,7 +3,7 @@ let
   inherit (final) kubectl;
   
   envConfig = {
-    beta = { gwContext = "beta-gw"; kopsContext = "dev-kops-shared"; namespace = "pinxt-dev"; };
+    beta = { gwContext = "beta-gw"; kopsContext = "dev-idp-shared"; namespace = "pinxt-dev"; };
     int = { gwContext = "int-gw"; kopsContext = "dev-kops-shared"; namespace = "pinxt-int"; };
     stable = { gwContext = "dev-gw"; kopsContext = "dev-idp-shared"; namespace = "pinxt"; };
     qa = { gwContext = "qa-gw"; kopsContext = "qa-idp-shared"; namespace = "pinxt"; };
