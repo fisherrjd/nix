@@ -85,6 +85,11 @@ in
             to eldo:8080
           }
         '';
+        "osrs.jade.rip".extraConfig = ''
+          reverse_proxy * {
+            to eldo:8000
+          }
+        '';
         "llama.jade.rip".extraConfig = ''
           reverse_proxy * {
             to airbook:6969
