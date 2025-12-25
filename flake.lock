@@ -338,11 +338,11 @@
         "pog": "pog"
       },
       "locked": {
-        "lastModified": 1766068622,
-        "narHash": "sha256-KrI4liPsfS960bBjosI/N7YRvF19YHPWjE2l1Bvf7pY=",
+        "lastModified": 1766563128,
+        "narHash": "sha256-NgRsTm1oMdbUL8pDwaaxP4QcM6M/L/EaKO1hNRG4MS4=",
         "owner": "jpetrucciani",
         "repo": "hex",
-        "rev": "032384619d1c0b2626ca35f5fd36586b2811c023",
+        "rev": "d49fa1a0a3701b6600929289d7d609335fdabfbf",
         "type": "github"
       },
       "original": {
@@ -379,11 +379,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1766529376,
-        "narHash": "sha256-+HR+i6cEesSJnT+yYYdY1HZHTX4m3eNpLYximRkYH1U=",
+        "lastModified": 1766553851,
+        "narHash": "sha256-hHKQhHkXxuPJwLkI8wdu826GLV5AcuW9/HVdc9eBnTU=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "20728df08f6ecf69a99ee6f031c235bf393ea585",
+        "rev": "7eca7f7081036a7b740090994c9ec543927f89a7",
         "type": "github"
       },
       "original": {
@@ -457,11 +457,11 @@
         "vscode-server": "vscode-server"
       },
       "locked": {
-        "lastModified": 1766535239,
-        "narHash": "sha256-PkcZzlf1fgculpqNbftqG6MJm2sdEcTyo0DeE6c9Wso=",
+        "lastModified": 1766563171,
+        "narHash": "sha256-dVi07sY9pKUmYXvfawjnsroIi/MyCtgfO+iuS2vvh5A=",
         "owner": "jpetrucciani",
         "repo": "nix",
-        "rev": "af5ae4096b60313f5f113a325fe100978a2b25b0",
+        "rev": "81f3838c7c2f11afc6ac8b0c955fd91938254c88",
         "type": "github"
       },
       "original": {
@@ -600,16 +600,16 @@
         "nixpkgs": "nixpkgs_4"
       },
       "locked": {
-        "lastModified": 1761716996,
+        "lastModified": 1766388657,
         "narHash": "sha256-vdOuy2pid2/DasUgb08lDOswdPJkN5qjXfBYItVy/R4=",
         "owner": "nlewo",
         "repo": "nix2container",
-        "rev": "e5496ab66e9de9e3f67dc06f692dfbc471b6316e",
+        "rev": "93aa7880805df3c8d3b9008923c4c3b47e2bd70b",
         "type": "github"
       },
       "original": {
         "owner": "nlewo",
-        "ref": "e5496ab66e9de9e3f67dc06f692dfbc471b6316e",
+        "ref": "93aa7880805df3c8d3b9008923c4c3b47e2bd70b",
         "repo": "nix2container",
         "type": "github"
       }
