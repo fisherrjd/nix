@@ -75,11 +75,6 @@ in
     2026 # <--- DEV Postgres DB
   ];
 
-  # networking.firewall.allowedUDPPorts = [
-  #   # <--- NEW BLOCK: UDP Ports
-  #   22000 # <--- NEW: Syncthing Sync Port (UDP)
-  #   21027 # <--- NEW: Syncthing Discovery Port (UDP)
-  # ];
   networking.hostName = "eldo";
   home-manager.users.jade = common.jade;
 
@@ -108,18 +103,6 @@ in
       #   };
       # };
 
-      syncthing = {
-        enable = true;
-        openDefaultPorts = true;
-
-        # 1. CRITICAL: RUN AS THE 'jade' USER for home directory access
-        user = username; # This resolves to "jade"
-        group = "users";
-
-        # 2. SET CONFIG/DATA DIRECTORIES within the user's home
-        dataDir = "/home/${username}/.local/share/syncthing";
-        configDir = "/home/${username}/.config/syncthing";
-      };
 
       openssh.enable = true;
       postgresql = {
