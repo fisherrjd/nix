@@ -117,6 +117,7 @@ in
           patch
           pigz
           podman
+          podman-compose
           procps
           pssh
           ranger
@@ -323,7 +324,7 @@ in
           PasswordAuthentication no
           ProxyCommand sh -c 'export AWS_PROFILE="it-cloud-shared-services"; aws ssm start-session --target "$(aws ec2 describe-instances --filters "Name=tag:Name,Values=shared-bastion" "Name=instance-state-name,Values=running" --output text --query "Reservations[*].Instances[0].InstanceId")" --document-name AWS-StartSSHSession --parameters "portNumber=%p"'
         ''}
-        
+
         Host airbook
           User jade
           PasswordAuthentication no
@@ -334,7 +335,7 @@ in
           MACs hmac-sha2-256-etm@openssh.com,hmac-sha2-512-etm@openssh.com,umac-128-etm@openssh.com
           HostKeyAlgorithms ssh-ed25519,rsa-sha2-256,rsa-sha2-512
           ${optionalString isDarwin mac_meme}
-          
+
         Host workbook
           HostName 10.0.0.61
           User P3175941
