@@ -12,13 +12,10 @@ jobs:
       matrix:
         attrs:
           - os: ubuntu-24.04
-            config_name: eldo 
+            config_name: eldo
             cmd: .#nixosConfigurations.eldo.config.system.build.toplevel
-          - os: ubuntu-24.04
-            config_name: bifrost 
-            cmd: .#nixosConfigurations.bifrost.config.system.build.toplevel
           - os: macos-15
-            config_name: airbook 
+            config_name: airbook
             cmd: .#darwinConfigurations.airbook.system
 
     # Updated job name to use the config_name and os
