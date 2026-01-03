@@ -45,14 +45,19 @@ in
 
   homebrew = {
     enable = true;
+    taps = [
+      "microcks/tap"
+    ];
     brews = [
       "cassandra"
       "awscli"
+      "microcks-cli"
+      "strands-agents-sops"
     ];
     casks = [
       "bruno"
       "notion"
-      "amazon-q"
+      "kiro-cli"
     ];
   };
 
