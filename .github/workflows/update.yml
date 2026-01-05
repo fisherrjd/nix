@@ -1,10 +1,8 @@
 name: check for flake updates
-on: { workflow_dispatch, schedule: [cron: '0 0 * * *'] }
+on: {workflow_dispatch, schedule: [cron: '0 0 * * *']}
 jobs:
   check-for-updates:
     runs-on: ubuntu-24.04
-    env:
-      GITHUB_TOKEN: ${{ secrets.NIX_TOKEN }}
     steps:
       - uses: actions/checkout@v6.0.1
       - uses: cachix/install-nix-action@v31
