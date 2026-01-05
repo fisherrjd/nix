@@ -70,7 +70,7 @@ in
           curl
           diffutils
           docker
-          dogdns
+          doggo
           dyff
           erdtree
           fd
@@ -154,7 +154,7 @@ in
             ]
           )
           # Secrets
-          flake.inputs.agenix.packages.${pkgs.system}.default
+          flake.inputs.agenix.packages.${pkgs.stdenv.hostPlatform.system}.default
 
           #Packages NOT on Bifrost
           (lib.optionals notBifrost [
