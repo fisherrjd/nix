@@ -70,7 +70,7 @@ in
           curl
           diffutils
           docker
-          dogdns
+          doggo
           dyff
           erdtree
           fd
