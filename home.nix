@@ -213,7 +213,7 @@ in
     };
     bashrcExtra =
       if isDarwin then ''
-        export PATH="$PATH:${homeDirectory}/.nix-profile/bin"
+        export PATH="${homeDirectory}/.nix-profile/bin:$PATH"
       '' else "";
     initExtra = ''
       HISTCONTROL=ignoreboth
