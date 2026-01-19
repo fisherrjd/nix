@@ -91,17 +91,18 @@ in
   systemd.targets.hybrid-sleep.enable = false;
   services =
     {
-      # ntfy-sh = {
-      #   enable = true;
-      #   settings = {
-      #     base-url = "https://ntfy.jade.rip";
-      #     listen-http = "0.0.0.0:8081";
-      #     web-push-public-key = "BCAoXlScmXxcQtD28mXsk_P6u8YWeQX3qW0K3tUfOnX-dP_yfBPTGYG-GzwpbcYOyZqSnlSUx2O1yQBaH4LQlec";
-      #     web-push-private-key = "s1GJFuYtO2YcDnkr_IfwouyP6C_ekSxsihWDM8yvDwI";
-      #     web-push-file = "/var/lib/ntfy-sh/webpush.db";
-      #     web-push-email-address = "fisherrjd@gmail.com";
-      #   };
-      # };
+      ntfy-sh = {
+        enable = true;
+        settings = {
+          base-url = "https://ntfy.jade.rip";
+          upstream-base-url = "https://ntfy.sh";
+          listen-http = "0.0.0.0:8081";
+          web-push-public-key = "BCAoXlScmXxcQtD28mXsk_P6u8YWeQX3qW0K3tUfOnX-dP_yfBPTGYG-GzwpbcYOyZqSnlSUx2O1yQBaH4LQlec";
+          web-push-private-key = "s1GJFuYtO2YcDnkr_IfwouyP6C_ekSxsihWDM8yvDwI";
+          web-push-file = "/var/lib/ntfy-sh/webpush.db";
+          web-push-email-address = "fisherrjd@gmail.com";
+        };
+      };
 
 
       openssh.enable = true;

@@ -75,11 +75,11 @@ in
       enable = true;
       virtualHosts = {
         # Push Notifications
-        # "ntfy.jade.rip".extraConfig = ''
-        #   reverse_proxy * {
-        #     to eldo:8081
-        #   }
-        # '';
+        "ntfy.jade.rip".extraConfig = ''
+          reverse_proxy * {
+            to eldo:8081
+          }
+        '';
         "chat.jade.rip".extraConfig = ''
           reverse_proxy * {
             to eldo:8080
