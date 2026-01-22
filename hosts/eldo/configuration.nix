@@ -173,24 +173,24 @@ in
           "--network=host"
         ];
       };
-      # n8n = {
-      #   image = "docker.n8n.io/n8nio/n8n:1.105.3";
-      #   volumes = [ "n8n_data:/home/node/.n8n" ];
-      #   ports = [ "5678:5678" ];
-      #   environment = {
-      #     GENERIC_TIMEZONE = "America/Denver";
-      #     N8N_EDITOR_BASE_URL = "https://n8n.jade.rip";
-      #     N8N_TEMPLATES_ENABLED = "true";
-      #     N8N_HIRING_BANNER_ENABLED = "false";
-      #     N8N_WEBHOOK_URL = "https://n8n.jade.rip";
-      #     N8N_HOST = "n8n.jade.rip";
-      #   };
-      # };
-      # grocery_list = {
-      #   image = "ghcr.io/fisherrjd/lists-backend:v0.3.0-dev";
-      #   ports = [ "8069:8069" ];
-      #   volumes = [ "grocery-list-data:/app/data" ];
-      # };
+      n8n = {
+        image = "docker.n8n.io/n8nio/n8n:1.105.3";
+        volumes = [ "n8n_data:/home/node/.n8n" ];
+        ports = [ "5678:5678" ];
+        environment = {
+          GENERIC_TIMEZONE = "America/Denver";
+          N8N_EDITOR_BASE_URL = "https://n8n.jade.rip";
+          N8N_TEMPLATES_ENABLED = "true";
+          N8N_HIRING_BANNER_ENABLED = "false";
+          N8N_WEBHOOK_URL = "https://n8n.jade.rip";
+          N8N_HOST = "n8n.jade.rip";
+        };
+      };
+      grocery_list = {
+        image = "ghcr.io/fisherrjd/lists-backend:v0.3.0-dev";
+        ports = [ "8069:8069" ];
+        volumes = [ "grocery-list-data:/app/data" ];
+      };
     };
   };
 

@@ -95,11 +95,11 @@ in
             to airbook:6969
           }
         '';
-        # "n8n.jade.rip".extraConfig = ''
-        #   reverse_proxy * {
-        #     to eldo:5678
-        #   }
-        # '';
+        "n8n.jade.rip".extraConfig = ''
+          reverse_proxy * {
+            to eldo:5678
+          }
+        '';
         "litellm.jade.rip".extraConfig = ''
           reverse_proxy * {
             to eldo:4000
