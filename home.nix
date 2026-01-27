@@ -167,6 +167,7 @@ in
             # amazon-q-cli
             nodejs
             ssm-session-manager-plugin
+            pandoc
           ])
           (lib.optionals isAirbook [
             claude-code
