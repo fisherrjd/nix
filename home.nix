@@ -71,6 +71,7 @@ in
           diffutils
           docker
           doggo
+          duckdb
           dyff
           erdtree
           fd
