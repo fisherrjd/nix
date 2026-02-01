@@ -2,7 +2,10 @@
 let
   hostname = "eldo";
   username = "jade";
-  common = import ../common.nix { inherit config flake machine-name pkgs username; };
+  ts_ip = "100.66.184.28";
+  common = import ../common.nix {
+    inherit config flake machine-name pkgs username;
+  };
 in
 {
   imports =
@@ -104,6 +107,11 @@ in
         };
       };
 
+      k3s = {
+        enable = true;
+        role = "server";
+        extraFlags = "--disable traefik --tls-san '${ts_ip}'";
+      };
 
       openssh.enable = true;
       postgresql = {
@@ -139,14 +147,6 @@ in
         };
       };
 
-      github-runners = {
-        lists-runner = {
-          enable = true;
-          name = "lists-runner";
-          tokenFile = config.age.secrets.github-runner-token.path;
-          url = "https://github.com/fisherrjd/lists-backend";
-        };
-      };
     };
   # DOCKER COMMENTED OUT FOR NOW
   # users.extraGroups.docker.members = [ username ];

@@ -89,8 +89,6 @@ in
           gzip
           htmlq
           jq
-          k9s
-          kubectl
           kubectx
           kubernetes-helm
           lsof
@@ -197,6 +195,9 @@ in
     historySize = -1;
     shellAliases = {
       ls = "ls --color=auto";
+      k = "kubectl";
+      kctx = "kubectx";
+      kns = "kubens";
       # l = "lsd -lA --permission octal";
       ll = "ls -ahlFG";
       mkdir = "mkdir -pv";
