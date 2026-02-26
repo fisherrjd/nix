@@ -166,6 +166,9 @@ in
             nodejs
             ssm-session-manager-plugin
             pandoc
+            kubectl
+            kubectx
+            k9s
           ])
           (lib.optionals isAirbook [
             claude-code
