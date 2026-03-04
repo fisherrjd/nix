@@ -18,6 +18,11 @@ in
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
+  boot.kernel.sysctl = {
+    "net.ipv4.ip_forward" = 1;
+    "net.ipv4.conf.all.forwarding" = 1;
+    "net.ipv4.conf.default.forwarding" = 1;
+  };
   age = {
     identityPaths = [ "/home/jade/.ssh/id_ed25519" ];
     secrets = {
@@ -36,6 +41,8 @@ in
     };
   };
   networking.networkmanager.enable = true;
+  networking.interfaces.enp24s0.ipv6.addresses = [ ];
+  networking.enableIPv6 = false;
   time.timeZone = "America/Denver";
   i18n.defaultLocale = "en_US.UTF-8";
   i18n.extraLocaleSettings = {
@@ -157,40 +164,40 @@ in
     # backend = "docker";
     backend = "podman";
     containers = {
-      litellm = {
-        image = "ghcr.io/berriai/litellm:main-v1.74.3-stable";
-        volumes = [ "lite-llm:/app" ];
-        environmentFiles = [ config.age.secrets.litellm.path ];
-        extraOptions = [
-          "--network=host"
-        ];
-      };
-      openwebui = {
-        image = "ghcr.io/open-webui/open-webui:v0.6.16";
-        volumes = [ "open-webui:/app/backend/data" ];
-        environmentFiles = [ config.age.secrets.openwebui.path ];
-        extraOptions = [
-          "--network=host"
-        ];
-      };
-      n8n = {
-        image = "docker.n8n.io/n8nio/n8n:1.105.3";
-        volumes = [ "n8n_data:/home/node/.n8n" ];
-        ports = [ "5678:5678" ];
-        environment = {
-          GENERIC_TIMEZONE = "America/Denver";
-          N8N_EDITOR_BASE_URL = "https://n8n.jade.rip";
-          N8N_TEMPLATES_ENABLED = "true";
-          N8N_HIRING_BANNER_ENABLED = "false";
-          N8N_WEBHOOK_URL = "https://n8n.jade.rip";
-          N8N_HOST = "n8n.jade.rip";
-        };
-      };
-      grocery_list = {
-        image = "ghcr.io/fisherrjd/lists-backend:v0.3.0-dev";
-        ports = [ "8069:8069" ];
-        volumes = [ "grocery-list-data:/app/data" ];
-      };
+      # litellm = {
+      #   image = "ghcr.io/berriai/litellm:main-v1.74.3-stable";
+      #   volumes = [ "lite-llm:/app" ];
+      #   environmentFiles = [ config.age.secrets.litellm.path ];
+      #   extraOptions = [
+      #     "--network=host"
+      #   ];
+      # };
+      # openwebui = {
+      #   image = "ghcr.io/open-webui/open-webui:v0.6.16";
+      #   volumes = [ "open-webui:/app/backend/data" ];
+      #   environmentFiles = [ config.age.secrets.openwebui.path ];
+      #   extraOptions = [
+      #     "--network=host"
+      #   ];
+      # };
+      # n8n = {
+      #   image = "docker.n8n.io/n8nio/n8n:1.105.3";
+      #   volumes = [ "n8n_data:/home/node/.n8n" ];
+      #   ports = [ "5678:5678" ];
+      #   environment = {
+      #     GENERIC_TIMEZONE = "America/Denver";
+      #     N8N_EDITOR_BASE_URL = "https://n8n.jade.rip";
+      #     N8N_TEMPLATES_ENABLED = "true";
+      #     N8N_HIRING_BANNER_ENABLED = "false";
+      #     N8N_WEBHOOK_URL = "https://n8n.jade.rip";
+      #     N8N_HOST = "n8n.jade.rip";
+      #   };
+      # };
+      # grocery_list = {
+      #   image = "ghcr.io/fisherrjd/lists-backend:v0.3.0-dev";
+      #   ports = [ "8069:8069" ];
+      #   volumes = [ "grocery-list-data:/app/data" ];
+      # };
     };
   };
 
