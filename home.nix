@@ -99,7 +99,6 @@ in
           nano
           nanorc
           netcat-gnu
-          ntfy-sh
           nil
           nix
           nix-info
@@ -149,6 +148,7 @@ in
           (
             lib.optionals isLinux [
               gnutar
+              ntfy-sh
               claude-code
             ]
           )
