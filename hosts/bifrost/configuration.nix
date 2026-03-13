@@ -113,6 +113,11 @@ in
             to eldo:5173
           }
         '';
+        "ctf.jade.rip".extraConfig = ''
+          reverse_proxy * {
+            to eldo:5050
+          }
+        '';
       };
     };
   };

@@ -12,6 +12,7 @@ in
     [
       # Include the results of the hardware scan.
       "${common.home-manager}/nixos"
+      "${common.mms}/nixos/modules/services/games/minecraft-servers"
       ./hardware-configuration.nix
       { services = common.services; }
     ];
@@ -135,22 +136,50 @@ in
       };
 
       # MINECRAFT STUFF
-      minecraft-server = with common.minecraft; {
-        enable = true;
+      # minecraft-server = with common.minecraft; {
+      #   enable = true;
+      #   eula = true;
+      #   openFirewall = true;
+      #   declarative = true;
+      #   serverProperties = {
+      #     server-port = 25565;
+      #     motd = "Not Artistic SMP";
+      #     level-name = "community_server";
+      #     level-seed = "46182117";
+      #     server-name = "NotArtistic";
+      #     gamemode = 0;
+      #     difficulty = 3;
+      #     max-players = 10;
+      #     bind = "0.0.0.0"; # Allow connections from any IP address
+      #     hardcore = false;
+      #   };
+      # };
+      #
+      modded-minecraft-servers = with common.minecraft; {
         eula = true;
-        openFirewall = true;
-        declarative = true;
-        serverProperties = {
-          server-port = 25565;
-          motd = "Not Artistic SMP";
-          level-name = "community_server";
-          level-seed = "46182117";
-          server-name = "NotArtistic";
-          gamemode = 0;
-          difficulty = 3;
-          max-players = 10;
-          bind = "0.0.0.0"; # Allow connections from any IP address
-          hardcore = false;
+        instances = {
+          atm10 = {
+            inherit (conf) jvmOpts;
+            enable = true;
+            rsyncSSHKeys = [ common.pubkeys.atlantis common.pubkeys.neverland ];
+            jvmPackage = conf.jre21;
+            jvmInitialAllocation = "6G";
+            jvmMaxAllocation = "10G";
+            serverConfig =
+              conf.defaults
+              // {
+                server-port = 25565;
+                rcon-port = 25575;
+                motd = "jade's atm10 server";
+                server-ip = "0.0.0.0";
+                enable-rcon = true;
+                rcon-password = "changeme";
+                difficulty = 2;
+                max-tick-time = -1;
+                enable-command-block = true;
+              };
+          };
+
         };
       };
 
@@ -164,35 +193,35 @@ in
     # backend = "docker";
     backend = "podman";
     containers = {
-      # litellm = {
-      #   image = "ghcr.io/berriai/litellm:main-v1.74.3-stable";
-      #   volumes = [ "lite-llm:/app" ];
-      #   environmentFiles = [ config.age.secrets.litellm.path ];
-      #   extraOptions = [
-      #     "--network=host"
-      #   ];
-      # };
-      # openwebui = {
-      #   image = "ghcr.io/open-webui/open-webui:v0.6.16";
-      #   volumes = [ "open-webui:/app/backend/data" ];
-      #   environmentFiles = [ config.age.secrets.openwebui.path ];
-      #   extraOptions = [
-      #     "--network=host"
-      #   ];
-      # };
-      # n8n = {
-      #   image = "docker.n8n.io/n8nio/n8n:1.105.3";
-      #   volumes = [ "n8n_data:/home/node/.n8n" ];
-      #   ports = [ "5678:5678" ];
-      #   environment = {
-      #     GENERIC_TIMEZONE = "America/Denver";
-      #     N8N_EDITOR_BASE_URL = "https://n8n.jade.rip";
-      #     N8N_TEMPLATES_ENABLED = "true";
-      #     N8N_HIRING_BANNER_ENABLED = "false";
-      #     N8N_WEBHOOK_URL = "https://n8n.jade.rip";
-      #     N8N_HOST = "n8n.jade.rip";
-      #   };
-      # };
+      litellm = {
+        image = "ghcr.io/berriai/litellm:main-v1.74.3-stable";
+        volumes = [ "lite-llm:/app" ];
+        environmentFiles = [ config.age.secrets.litellm.path ];
+        extraOptions = [
+          "--network=host"
+        ];
+      };
+      openwebui = {
+        image = "ghcr.io/open-webui/open-webui:v0.6.16";
+        volumes = [ "open-webui:/app/backend/data" ];
+        environmentFiles = [ config.age.secrets.openwebui.path ];
+        extraOptions = [
+          "--network=host"
+        ];
+      };
+      n8n = {
+        image = "docker.n8n.io/n8nio/n8n:1.105.3";
+        volumes = [ "n8n_data:/home/node/.n8n" ];
+        ports = [ "5678:5678" ];
+        environment = {
+          GENERIC_TIMEZONE = "America/Denver";
+          N8N_EDITOR_BASE_URL = "https://n8n.jade.rip";
+          N8N_TEMPLATES_ENABLED = "true";
+          N8N_HIRING_BANNER_ENABLED = "false";
+          N8N_WEBHOOK_URL = "https://n8n.jade.rip";
+          N8N_HOST = "n8n.jade.rip";
+        };
+      };
       # grocery_list = {
       #   image = "ghcr.io/fisherrjd/lists-backend:v0.3.0-dev";
       #   ports = [ "8069:8069" ];
