@@ -163,8 +163,8 @@ in
             enable = true;
             rsyncSSHKeys = [ common.pubkeys.atlantis common.pubkeys.neverland ];
             jvmPackage = conf.jre21;
-            jvmInitialAllocation = "6G";
-            jvmMaxAllocation = "10G";
+            jvmInitialAllocation = "8G";
+            jvmMaxAllocation = "14G";
             serverConfig =
               conf.defaults
               // {
