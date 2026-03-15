@@ -52,23 +52,15 @@ in
       bartowski = name: "/opt/box/models/bartowski/${name}";
     in
     {
-      # openssh.enable = true;
+      openssh.enable = true;
       # llama-server.servers = {
-      #   Qwen2_5-VL-7B-Instruct-Q4_K_M = {
+      #   Qwen3_5-9B-Uncensored-HauhauCS-Aggressive-Q8_0 = {
       #     enable = true;
-      #     package = pkgs.llama-cpp-latest;
+      #     package = pkgs.llama-cpp;
       #     port = 6969;
-      #     model = unsloth "Qwen2.5-VL-7B-Instruct-Q4_K_M.gguf";
-      #     ngl = 99;
-      #     extraFlags = ''
-      #       --ctx-size 8192
-      #       --seed 420
-      #       --prio 2
-      #       --temp 0.6
-      #       --min-p 0.0
-      #       --top-k 20
-      #       --top-p 0.95
-      #     '';
+      #     model = unsloth "Qwen3.5-9B-Uncensored-HauhauCS-Aggressive-Q8_0.gguf";
+      #     ngl = 0;
+      #     extraFlags = "--ctx-size 8192 --seed 420 --prio 2 --temp 0.6 --min-p 0.0 --top-k 20 --top-p 0.95";
       #   };
       # };
 
