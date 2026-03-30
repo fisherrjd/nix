@@ -20,7 +20,7 @@ let
     };
     qa = {
       gwContext = "qa-gw";
-      kopsContext = "qa-idp-shared";
+      kopsContext = "qa-idp-eks";
       namespace = "pinxt";
     };
     uat = {

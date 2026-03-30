@@ -71,6 +71,7 @@ in
           diffutils
           docker
           doggo
+          duckdb
           dyff
           erdtree
           fd
@@ -88,8 +89,6 @@ in
           gzip
           htmlq
           jq
-          k9s
-          kubectl
           kubectx
           kubernetes-helm
           lsof
@@ -100,7 +99,6 @@ in
           nano
           nanorc
           netcat-gnu
-          ntfy-sh
           nil
           nix
           nix-info
@@ -150,6 +148,7 @@ in
           (
             lib.optionals isLinux [
               gnutar
+              ntfy-sh
               claude-code
             ]
           )
@@ -166,6 +165,10 @@ in
             # amazon-q-cli
             nodejs
             ssm-session-manager-plugin
+            pandoc
+            kubectl
+            kubectx
+            k9s
           ])
           (lib.optionals isAirbook [
             claude-code
@@ -195,6 +198,9 @@ in
     historySize = -1;
     shellAliases = {
       ls = "ls --color=auto";
+      k = "kubectl";
+      kctx = "kubectx";
+      kns = "kubens";
       # l = "lsd -lA --permission octal";
       ll = "ls -ahlFG";
       mkdir = "mkdir -pv";
@@ -267,10 +273,6 @@ in
   programs.direnv = {
     enable = true;
     nix-direnv.enable = true;
-  };
-
-  programs.nushell = {
-    enable = true;
   };
 
   programs.readline = {
