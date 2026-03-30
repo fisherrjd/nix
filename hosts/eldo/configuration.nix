@@ -2,19 +2,28 @@
 let
   hostname = "eldo";
   username = "jade";
-  common = import ../common.nix { inherit config flake machine-name pkgs username; };
+  ts_ip = "100.66.184.28";
+  common = import ../common.nix {
+    inherit config flake machine-name pkgs username;
+  };
 in
 {
   imports =
     [
       # Include the results of the hardware scan.
       "${common.home-manager}/nixos"
+      "${common.mms}/nixos/modules/services/games/minecraft-servers"
       ./hardware-configuration.nix
       { services = common.services; }
     ];
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
+  boot.kernel.sysctl = {
+    "net.ipv4.ip_forward" = 1;
+    "net.ipv4.conf.all.forwarding" = 1;
+    "net.ipv4.conf.default.forwarding" = 1;
+  };
   age = {
     identityPaths = [ "/home/jade/.ssh/id_ed25519" ];
     secrets = {
@@ -33,6 +42,8 @@ in
     };
   };
   networking.networkmanager.enable = true;
+  networking.interfaces.enp24s0.ipv6.addresses = [ ];
+  networking.enableIPv6 = false;
   time.timeZone = "America/Denver";
   i18n.defaultLocale = "en_US.UTF-8";
   i18n.extraLocaleSettings = {
@@ -104,6 +115,11 @@ in
         };
       };
 
+      k3s = {
+        enable = true;
+        role = "server";
+        extraFlags = "--disable traefik --tls-san '${ts_ip}'";
+      };
 
       openssh.enable = true;
       postgresql = {
@@ -120,33 +136,53 @@ in
       };
 
       # MINECRAFT STUFF
-      minecraft-server = with common.minecraft; {
-        enable = true;
+      # minecraft-server = with common.minecraft; {
+      #   enable = true;
+      #   eula = true;
+      #   openFirewall = true;
+      #   declarative = true;
+      #   serverProperties = {
+      #     server-port = 25565;
+      #     motd = "Not Artistic SMP";
+      #     level-name = "community_server";
+      #     level-seed = "46182117";
+      #     server-name = "NotArtistic";
+      #     gamemode = 0;
+      #     difficulty = 3;
+      #     max-players = 10;
+      #     bind = "0.0.0.0"; # Allow connections from any IP address
+      #     hardcore = false;
+      #   };
+      # };
+      #
+      modded-minecraft-servers = with common.minecraft; {
         eula = true;
-        openFirewall = true;
-        declarative = true;
-        serverProperties = {
-          server-port = 25565;
-          motd = "Not Artistic SMP";
-          level-name = "community_server";
-          level-seed = "46182117";
-          server-name = "NotArtistic";
-          gamemode = 0;
-          difficulty = 3;
-          max-players = 10;
-          bind = "0.0.0.0"; # Allow connections from any IP address
-          hardcore = false;
+        instances = {
+          atm10 = {
+            inherit (conf) jvmOpts;
+            enable = true;
+            rsyncSSHKeys = [ common.pubkeys.atlantis common.pubkeys.neverland ];
+            jvmPackage = conf.jre21;
+            jvmInitialAllocation = "8G";
+            jvmMaxAllocation = "14G";
+            serverConfig =
+              conf.defaults
+              // {
+                server-port = 25565;
+                rcon-port = 25575;
+                motd = "jade's atm10 server";
+                server-ip = "0.0.0.0";
+                enable-rcon = true;
+                rcon-password = "changeme";
+                difficulty = 2;
+                max-tick-time = -1;
+                enable-command-block = true;
+              };
+          };
+
         };
       };
 
-      github-runners = {
-        lists-runner = {
-          enable = true;
-          name = "lists-runner";
-          tokenFile = config.age.secrets.github-runner-token.path;
-          url = "https://github.com/fisherrjd/lists-backend";
-        };
-      };
     };
   # DOCKER COMMENTED OUT FOR NOW
   # users.extraGroups.docker.members = [ username ];
@@ -186,11 +222,11 @@ in
           N8N_HOST = "n8n.jade.rip";
         };
       };
-      grocery_list = {
-        image = "ghcr.io/fisherrjd/lists-backend:v0.3.0-dev";
-        ports = [ "8069:8069" ];
-        volumes = [ "grocery-list-data:/app/data" ];
-      };
+      # grocery_list = {
+      #   image = "ghcr.io/fisherrjd/lists-backend:v0.3.0-dev";
+      #   ports = [ "8069:8069" ];
+      #   volumes = [ "grocery-list-data:/app/data" ];
+      # };
     };
   };
 

@@ -108,9 +108,17 @@ in
         "nix.jade.rip".extraConfig = ''
           redir https://github.com/fisherrjd/nix permanent
         '';
+        "resume.jade.rip".extraConfig = ''
+          redir https://github.com/fisherrjd/resume/blob/main/resume.pdf permanent
+        '';
         "ge.jade.rip".extraConfig = ''
           reverse_proxy * {
             to eldo:5173
+          }
+        '';
+        "ctf.jade.rip".extraConfig = ''
+          reverse_proxy * {
+            to eldo:5050
           }
         '';
       };
