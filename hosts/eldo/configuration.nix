@@ -136,7 +136,14 @@ in
           backend = "podman";
         };
         settings = {
-          toolsets = [ "all" ];
+          model = {
+            default = "accounts/fireworks/routers/kimi-k2p5-turbo";
+            provider = "custom";
+            context_length = 131072;
+            name = "accounts/fireworks/routers/kimi-k2p5-turbo";
+            base_url = "https://api.fireworks.ai/inference/v1";
+          };
+          toolsets = [ "hermes-cli" ];
           terminal = {
             backend = "local";
             timeout = 180;
@@ -144,6 +151,12 @@ in
           memory = {
             memory_enabled = true;
             user_profile_enabled = true;
+          };
+          approvals.mode = "auto";
+          discord = {
+            require_mention = true;
+            free_response_channels = "";
+            auto_thread = false;
           };
           documents = "SOUL.md";
         };
