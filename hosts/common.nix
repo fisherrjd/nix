@@ -46,18 +46,15 @@ in
     gc = {
       automatic = true;
       options = "--delete-older-than 30d";
-      interval =
-        if pkgs.hax.isDarwin
-        then { Weekday = 0; Hour = 3; Minute = 0; }
-        else "Sun *-*-* 03:00:00";
-    };
+    } // (if pkgs.hax.isDarwin
+    then { interval = { Weekday = 0; Hour = 3; Minute = 0; }; }
+    else { dates = "Sun *-*-* 03:00:00"; });
+
     optimise = {
       automatic = true;
-      interval =
-        if pkgs.hax.isDarwin
-        then { Weekday = 0; Hour = 4; Minute = 0; }
-        else "Sun *-*-* 04:00:00";
-    };
+    } // (if pkgs.hax.isDarwin
+    then { interval = { Weekday = 0; Hour = 4; Minute = 0; }; }
+    else { dates = "Sun *-*-* 04:00:00"; });
   };
 
   extraGroups = [ "wheel" "networkmanager" "docker" "podman" ];
