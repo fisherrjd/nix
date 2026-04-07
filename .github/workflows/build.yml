@@ -28,4 +28,20 @@ jobs:
         with:
           name: fisherrjd
           authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
-      - run: nix --show-trace build ${{ matrix.attrs.cmd }}
+      - name: build nix configuration
+        run: |
+          nix --show-trace build ${{ matrix.attrs.cmd }} 2>&1 | tee /tmp/build.log
+        continue-on-error: true
+        id: nix-build
+
+      - name: upload build log on failure
+        if: steps.nix-build.outcome == 'failure'
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-log-${{ matrix.attrs.config_name }}
+          path: /tmp/build.log
+          retention-days: 7
+
+      - name: fail if build failed
+        if: steps.nix-build.outcome == 'failure'
+        run: exit 1
