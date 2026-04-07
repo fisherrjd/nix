@@ -116,7 +116,7 @@ jobs:
             '{
               username: "Nix CI",
               avatar_url: "https://nixos.org/logo/nixos-logo-only-hires.png",
-              content: "🔴 **Build Failed** — <@1491182017096843300>",
+              content: "🔴 **Build Failed** — <@1485777872462413885>",
               embeds: [{
                 title: ("Failed: " + $failed_jobs),
                 url: $run_url,
