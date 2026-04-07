@@ -1,4 +1,4 @@
-{ pkgs, flake, machine-name, username, ... }:
+{ pkgs, flake, machine-name, username, isDarwin ? false, ... }:
 let
   inherit (flake.inputs) home-manager nix-darwin;
 
@@ -42,6 +42,19 @@ in
     settings = {
       trusted-users = [ "root" "jade" "P3175941" ];
     };
+
+    gc = {
+      automatic = true;
+      options = "--delete-older-than 30d";
+    } // (if pkgs.hax.isDarwin
+    then { interval = { Weekday = 0; Hour = 3; Minute = 0; }; }
+    else { dates = "Sun *-*-* 03:00:00"; });
+
+    optimise = {
+      automatic = true;
+    } // (if pkgs.hax.isDarwin
+    then { interval = { Weekday = 0; Hour = 4; Minute = 0; }; }
+    else { dates = "Sun *-*-* 04:00:00"; });
   };
 
   extraGroups = [ "wheel" "networkmanager" "docker" "podman" ];

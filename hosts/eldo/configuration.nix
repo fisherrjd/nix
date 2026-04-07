@@ -13,6 +13,7 @@ in
       # Include the results of the hardware scan.
       "${common.home-manager}/nixos"
       "${common.mms}/nixos/modules/services/games/minecraft-servers"
+      flake.inputs.hermes-agent.nixosModules.default
       ./hardware-configuration.nix
       { services = common.services; }
     ];
@@ -73,6 +74,7 @@ in
   environment.systemPackages = with pkgs; [
     vim
     vscode
+    flake.inputs.hermes-agent.packages.${pkgs.system}.default
   ];
   system.stateVersion = "24.05";
   security.sudo = common.security.sudo;
@@ -102,6 +104,18 @@ in
   systemd.targets.hybrid-sleep.enable = false;
   services =
     {
+      github-runners.eldo-runner = {
+        enable = true;
+        name = "eldo-runner";
+        url = "https://github.com/fisherrjd/ops";
+        tokenFile = config.age.secrets.github-runner-token.path;
+        extraLabels = [ "nix" "k3s" "eldo" ];
+
+        extraPackages = with pkgs; [
+          kubectl
+          git
+        ];
+      };
       ntfy-sh = {
         enable = true;
         settings = {
@@ -113,6 +127,40 @@ in
           web-push-file = "/var/lib/ntfy-sh/webpush.db";
           web-push-email-address = "fisherrjd@gmail.com";
         };
+      };
+
+      hermes-agent = {
+        enable = true;
+        container = {
+          enable = true;
+          backend = "podman";
+        };
+        settings = {
+          model = {
+            default = "accounts/fireworks/routers/kimi-k2p5-turbo";
+            provider = "custom";
+            context_length = 131072;
+            name = "accounts/fireworks/routers/kimi-k2p5-turbo";
+            base_url = "https://api.fireworks.ai/inference/v1";
+          };
+          toolsets = [ "hermes-cli" ];
+          terminal = {
+            backend = "local";
+            timeout = 180;
+          };
+          memory = {
+            memory_enabled = true;
+            user_profile_enabled = true;
+          };
+          approvals.mode = "auto";
+          discord = {
+            require_mention = true;
+            free_response_channels = "";
+            auto_thread = false;
+          };
+          documents = "SOUL.md";
+        };
+        environmentFiles = [ "/home/jade/.hermes/.env" ];
       };
 
       k3s = {
@@ -188,7 +236,10 @@ in
   # users.extraGroups.docker.members = [ username ];
   # virtualisation.docker.enable = true;
 
-  virtualisation.podman.enable = true;
+  virtualisation.podman = {
+    enable = true;
+    dockerCompat = true; # provide docker → podman symlink for hermes-agent
+  };
   virtualisation.oci-containers = {
     # backend = "docker";
     backend = "podman";

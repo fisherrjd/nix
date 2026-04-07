@@ -37,6 +37,7 @@ in
   ids.gids.nixbld = 350;
   nix = common.nix // {
     nixPath = [
+      "nixpkgs=${flake.inputs.nixpkgs}"
       "darwin=${common.nix-darwin}"
       "darwin-config=${configPath}"
     ];
@@ -60,5 +61,4 @@ in
       "kiro-cli"
     ];
   };
-
 }

@@ -8,7 +8,6 @@ in
   home.packages = with jacobi;
     lib.flatten [
       nixup
-      hax.comma
       docker_pog_scripts
       k8s_pog_scripts
       aws_pog_scripts
