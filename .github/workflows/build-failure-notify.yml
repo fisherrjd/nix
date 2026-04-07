@@ -92,67 +92,45 @@ jobs:
 
       - name: prepare discord payload for reaper
         id: payload
+        env:
+          FAILED_JOBS: ${{ steps.context.outputs.failed_jobs }}
+          RUN_URL: ${{ steps.context.outputs.run_url }}
+          COMMIT: ${{ steps.context.outputs.commit }}
+          BRANCH: ${{ steps.context.outputs.branch }}
+          FAILED_CONFIGS: ${{ steps.context.outputs.failed_configs }}
+          REPO: ${{ github.repository }}
         run: |
-          FAILED_JOBS="${{ steps.context.outputs.failed_jobs }}"
-          RUN_URL="${{ steps.context.outputs.run_url }}"
-          COMMIT="${{ steps.context.outputs.commit }}"
-          BRANCH="${{ steps.context.outputs.branch }}"
-          FAILED_CONFIGS="${{ steps.context.outputs.failed_configs }}"
+          EXCERPT=$(cat /tmp/all_failures.txt 2>/dev/null | head -80 || echo "No excerpt available")
+          FLAKE_ANALYSIS=$(cat /tmp/analysis.txt 2>/dev/null || echo "No analysis")
+          COMMIT_SHORT="${COMMIT:0:8}"
 
-          # Read failure excerpts (limit for Discord 1024 char field limit)
-          EXCERPT=$(cat /tmp/all_failures.txt 2>/dev/null | head -80 | sed 's/"/\\"/g' | sed ':a;N;$!ba;s/\n/\\n/g' || echo "No excerpt available")
-
-          # Read flake analysis
-          FLAKE_ANALYSIS=$(cat /tmp/analysis.txt 2>/dev/null | sed 's/"/\\"/g' | sed ':a;N;$!ba;s/\n/\\n/g' || echo "No analysis")
-
-          # Build structured JSON payload for Reaper
-          cat > /tmp/payload.json << 'JSONEOF'
-          {
-            "username": "Nix CI",
-            "avatar_url": "https://nixos.org/logo/nixos-logo-only-hires.png",
-            "content": "🔴 **Build Failed** — <@1491182017096843300>",
-            "embeds": [
-              {
-                "title": "Failed: ${FAILED_JOBS}",
-                "url": "${RUN_URL}",
-                "color": 15158332,
-                "fields": [
-                  {
-                    "name": "Branch",
-                    "value": "${BRANCH}",
-                    "inline": true
-                  },
-                  {
-                    "name": "Commit",
-                    "value": "[\`${COMMIT:0:8}\`](https://github.com/${{ github.repository }}/commit/${COMMIT})",
-                    "inline": true
-                  },
-                  {
-                    "name": "Configs",
-                    "value": "${FAILED_CONFIGS}",
-                    "inline": true
-                  },
-                  {
-                    "name": "Failure Logs",
-                    "value": "\`\`\`\n${EXCERPT}\n\`\`\`",
-                    "inline": false
-                  },
-                  {
-                    "name": "Flake Analysis",
-                    "value": "\`\`\`\n${FLAKE_ANALYSIS}\n\`\`\`",
-                    "inline": false
-                  }
+          jq -n \
+            --arg failed_jobs "$FAILED_JOBS" \
+            --arg run_url "$RUN_URL" \
+            --arg branch "$BRANCH" \
+            --arg commit_short "$COMMIT_SHORT" \
+            --arg commit_url "https://github.com/${REPO}/commit/${COMMIT}" \
+            --arg configs "$FAILED_CONFIGS" \
+            --arg excerpt "\`\`\`\n${EXCERPT}\n\`\`\`" \
+            --arg flake "\`\`\`\n${FLAKE_ANALYSIS}\n\`\`\`" \
+            '{
+              username: "Nix CI",
+              avatar_url: "https://nixos.org/logo/nixos-logo-only-hires.png",
+              content: "🔴 **Build Failed** — <@1491182017096843300>",
+              embeds: [{
+                title: ("Failed: " + $failed_jobs),
+                url: $run_url,
+                color: 15158332,
+                fields: [
+                  {name: "Branch", value: $branch, inline: true},
+                  {name: "Commit", value: ("[`\($commit_short)`](\($commit_url))"), inline: true},
+                  {name: "Configs", value: $configs, inline: true},
+                  {name: "Failure Logs", value: $excerpt, inline: false},
+                  {name: "Flake Analysis", value: $flake, inline: false}
                 ],
-                "footer": {
-                  "text": "Click title to view full run logs"
-                }
-              }
-            ]
-          }
-JSONEOF
-
-          # Expand variables in the payload
-          envsubst < /tmp/payload.json > /tmp/final_payload.json
+                footer: {text: "Click title to view full run logs"}
+              }]
+            }' > /tmp/final_payload.json
           cat /tmp/final_payload.json
 
       - name: send to discord
