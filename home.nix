@@ -81,7 +81,6 @@ in
           gawk
           delta
           gnugrep
-          fake-package69
           gnumake
           gnupg
           gnused
