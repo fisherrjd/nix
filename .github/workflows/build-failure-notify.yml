@@ -12,73 +12,108 @@ jobs:
     steps:
       - uses: actions/checkout@v6.0.2
         with:
-          fetch-depth: 10
+          fetch-depth: 20
+          ref: ${{ github.event.workflow_run.head_sha }}
 
       - name: collect failure context
         id: context
-        run: |
-          # Get the failing jobs info
-          echo "run_id=${{ github.event.workflow_run.id }}" >> $GITHUB_OUTPUT
-          echo "run_url=${{ github.event.workflow_run.html_url }}" >> $GITHUB_OUTPUT
-          echo "commit=${{ github.event.workflow_run.head_sha }}" >> $GITHUB_OUTPUT
-          echo "branch=${{ github.event.workflow_run.head_branch }}" >> $GITHUB_OUTPUT
-          echo "config=${{ github.event.workflow_run.name }}" >> $GITHUB_OUTPUT
-
-          # Get recent flake.lock changes if any
-          git log --oneline -5 >> /tmp/recent_commits.txt || true
-
-          # Get the actual failing build log excerpt (last 100 lines)
-          # We'll fetch this via API since we don't have the raw logs
-          echo "Fetching build logs..."
-
-      - name: download build logs
-        id: logs
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           RUN_ID="${{ github.event.workflow_run.id }}"
+          REPO="${{ github.repository }}"
+          COMMIT="${{ github.event.workflow_run.head_sha }}"
+          BRANCH="${{ github.event.workflow_run.head_branch }}"
 
-          # Get failed jobs
-          gh run view $RUN_ID --json jobs --repo ${{ github.repository }} > /tmp/jobs.json
+          echo "run_id=$RUN_ID" >> $GITHUB_OUTPUT
+          echo "run_url=${{ github.event.workflow_run.html_url }}" >> $GITHUB_OUTPUT
+          echo "commit=$COMMIT" >> $GITHUB_OUTPUT
+          echo "branch=$BRANCH" >> $GITHUB_OUTPUT
 
-          # Extract failed job names
-          FAILED_JOBS=$(cat /tmp/jobs.json | jq -r '.jobs[] | select(.conclusion == "failure") | .name' | tr '\n' ', ')
+          # Get failed job names
+          gh run view $RUN_ID --json jobs --repo $REPO > /tmp/jobs.json
+          FAILED_JOBS=$(cat /tmp/jobs.json | jq -r '.jobs[] | select(.conclusion == "failure") | .name' | tr '\n' ', ' | sed 's/, $//')
           echo "failed_jobs=$FAILED_JOBS" >> $GITHUB_OUTPUT
 
-          # Get logs from first failed job
-          FIRST_FAILED=$(cat /tmp/jobs.json | jq -r '.jobs[] | select(.conclusion == "failure") | .name' | head -1)
-          echo "first_failed=$FIRST_FAILED" >> $GITHUB_OUTPUT
+          # Get list of failed config names (eldo, airbook, etc)
+          FAILED_CONFIGS=$(cat /tmp/jobs.json | jq -r '.jobs[] | select(.conclusion == "failure") | .name' | grep -oP '(?<=nix \()[^ ]+' | tr '\n' ' ')
+          echo "failed_configs=$FAILED_CONFIGS" >> $GITHUB_OUTPUT
 
-          # Download full logs for analysis
-          gh run download $RUN_ID --dir /tmp/run-logs 2>/dev/null || echo "Could not download logs"
+      - name: download build artifacts
+        id: artifacts
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          RUN_ID="${{ github.event.workflow_run.id }}"
+          REPO="${{ github.repository }}"
+          FAILED_CONFIGS="${{ steps.context.outputs.failed_configs }}"
 
-          # Create excerpt of failure
-          find /tmp/run-logs -name "*.txt" -exec tail -150 {} \; 2>/dev/null | head -200 > /tmp/failure_excerpt.txt || echo "No logs available"
+          # Download all artifacts from the failed run
+          mkdir -p /tmp/artifacts
+          gh run download $RUN_ID --dir /tmp/artifacts --repo $REPO 2>/dev/null || echo "Could not download artifacts"
 
-      - name: prepare discord payload
+          # Build failure excerpts from each artifact
+          > /tmp/all_failures.txt
+          for config in $FAILED_CONFIGS; do
+            log_path="/tmp/artifacts/build-log-$config/build.log"
+            if [ -f "$log_path" ]; then
+              echo "=== $config failure ===" >> /tmp/all_failures.txt
+              tail -150 "$log_path" >> /tmp/all_failures.txt
+              echo "" >> /tmp/all_failures.txt
+            fi
+          done
+
+          # If artifacts empty, note that
+          if [ ! -s /tmp/all_failures.txt ]; then
+            echo "No build logs available - artifacts may have expired or failed to upload" > /tmp/all_failures.txt
+          fi
+
+      - name: analyze flake changes
+        id: flake_changes
+        run: |
+          COMMIT="${{ github.event.workflow_run.head_sha }}"
+
+          # Check if flake.lock was modified in this commit
+          if git diff-tree --no-commit-id --name-only -r $COMMIT | grep -q "flake.lock"; then
+            echo "flake.lock modified: yes" >> /tmp/analysis.txt
+            echo "" >> /tmp/analysis.txt
+            echo "=== flake.lock changes ===" >> /tmp/analysis.txt
+            git show $COMMIT -- flake.lock | grep -E "(^\+|^-|rev|lastModified)" | head -50 >> /tmp/analysis.txt || true
+          else
+            echo "flake.lock modified: no" >> /tmp/analysis.txt
+            echo "Recent flake.lock commits:" >> /tmp/analysis.txt
+            git log --oneline -- flake.lock | head -5 >> /tmp/analysis.txt || true
+          fi
+
+          # Get nixpkgs rev before/after if possible
+          echo "" >> /tmp/analysis.txt
+          echo "=== nixpkgs version info ===" >> /tmp/analysis.txt
+          git show $COMMIT:flake.lock 2>/dev/null | grep -A5 '"nixpkgs"' | grep 'rev' | head -1 >> /tmp/analysis.txt || echo "Could not extract nixpkgs rev"
+
+      - name: prepare discord payload for reaper
         id: payload
         run: |
-          # Create the Discord message with context for Hermes to analyze
-          FAILED_JOBS="${{ steps.logs.outputs.failed_jobs }}"
+          FAILED_JOBS="${{ steps.context.outputs.failed_jobs }}"
           RUN_URL="${{ steps.context.outputs.run_url }}"
           COMMIT="${{ steps.context.outputs.commit }}"
           BRANCH="${{ steps.context.outputs.branch }}"
+          FAILED_CONFIGS="${{ steps.context.outputs.failed_configs }}"
 
-          # Read failure excerpt (escape for JSON)
-          EXCERPT=$(cat /tmp/failure_excerpt.txt 2>/dev/null | head -100 | sed 's/"/\\"/g' | sed ':a;N;$!ba;s/\n/\\n/g' || echo "No excerpt available")
+          # Read failure excerpts (limit for Discord 1024 char field limit)
+          EXCERPT=$(cat /tmp/all_failures.txt 2>/dev/null | head -80 | sed 's/"/\\"/g' | sed ':a;N;$!ba;s/\n/\\n/g' || echo "No excerpt available")
 
-          # Read recent commits
-          COMMITS=$(cat /tmp/recent_commits.txt 2>/dev/null | sed 's/"/\\"/g' | sed ':a;N;$!ba;s/\n/\\n/g' || echo "No commits")
+          # Read flake analysis
+          FLAKE_ANALYSIS=$(cat /tmp/analysis.txt 2>/dev/null | sed 's/"/\\"/g' | sed ':a;N;$!ba;s/\n/\\n/g' || echo "No analysis")
 
-          # Build JSON payload
-          cat > /tmp/payload.json << EOF
+          # Build structured JSON payload for Reaper
+          cat > /tmp/payload.json << 'JSONEOF'
           {
             "username": "Nix CI",
             "avatar_url": "https://nixos.org/logo/nixos-logo-only-hires.png",
-            "content": "🔴 **Build Failed** — @everyone",
+            "content": "🔴 **Build Failed** — <@1491182017096843300>",
             "embeds": [
               {
-                "title": "Failed Jobs: ${FAILED_JOBS}",
+                "title": "Failed: ${FAILED_JOBS}",
                 "url": "${RUN_URL}",
                 "color": 15158332,
                 "fields": [
@@ -89,50 +124,41 @@ jobs:
                   },
                   {
                     "name": "Commit",
-                    "value": "\`${COMMIT:0:8}\`",
+                    "value": "[\`${COMMIT:0:8}\`](https://github.com/${{ github.repository }}/commit/${COMMIT})",
                     "inline": true
                   },
                   {
-                    "name": "Recent Commits",
-                    "value": "\`\`\`\n${COMMITS}\n\`\`\`",
+                    "name": "Configs",
+                    "value": "${FAILED_CONFIGS}",
+                    "inline": true
+                  },
+                  {
+                    "name": "Failure Logs",
+                    "value": "\`\`\`\n${EXCERPT}\n\`\`\`",
                     "inline": false
                   },
                   {
-                    "name": "Failure Excerpt",
-                    "value": "\`\`\`\n${EXCERPT}\n\`\`\`",
+                    "name": "Flake Analysis",
+                    "value": "\`\`\`\n${FLAKE_ANALYSIS}\n\`\`\`",
                     "inline": false
                   }
                 ],
                 "footer": {
-                  "text": "Hermes: Please analyze this Nix build failure and suggest fixes."
+                  "text": "Click title to view full run logs"
                 }
               }
             ]
           }
-          EOF
+JSONEOF
 
-          cat /tmp/payload.json
+          # Expand variables in the payload
+          envsubst < /tmp/payload.json > /tmp/final_payload.json
+          cat /tmp/final_payload.json
 
       - name: send to discord
         env:
           WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
         run: |
           curl -X POST -H "Content-Type: application/json" \
-            -d @/tmp/payload.json \
+            -d @/tmp/final_payload.json \
             "$WEBHOOK_URL" || echo "Failed to send webhook"
-
-      - name: also send summary for hermes analysis
-        env:
-          WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
-        run: |
-          # Send a follow-up that explicitly asks Hermes to analyze
-          cat > /tmp/ask_hermes.json << EOF
-          {
-            "username": "Nix CI",
-            "content": "<@200277038492418048> **Hermes, analyze this Nix build failure:**\n\n**Context:**\n- Repo: fisherrjd/ops (cfg)\n- Failed: ${{ steps.logs.outputs.failed_jobs }}\n- Run: ${{ steps.context.outputs.run_url }}\n\n**Please:**\n1. Read the failure excerpt above\n2. Check if flake.lock was recently updated\n3. Identify the failing derivation/package\n4. Propose the fix or rollback strategy\n\nUse your terminal tools to inspect the repo at commit ${{ steps.context.outputs.commit }} if needed."
-          }
-          EOF
-
-          curl -X POST -H "Content-Type: application/json" \
-            -d @/tmp/ask_hermes.json \
-            "$WEBHOOK_URL" || echo "Failed to send follow-up"
