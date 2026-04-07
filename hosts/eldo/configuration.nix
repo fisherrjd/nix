@@ -77,9 +77,7 @@ in
     flake.inputs.hermes-agent.packages.${pkgs.system}.default
   ];
   system.stateVersion = "24.05";
-  
-  # TESTING: Intentional break to test CI failure notification
-  environment.systemPackages = [ pkgs.this-is-a-fake-package-for-ci-testing ];
+
   security.sudo = common.security.sudo;
   environment.variables = {
     NIX_HOST = hostname;
