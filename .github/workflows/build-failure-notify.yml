@@ -100,8 +100,8 @@ jobs:
           FAILED_CONFIGS: ${{ steps.context.outputs.failed_configs }}
           REPO: ${{ github.repository }}
         run: |
-          EXCERPT=$(cat /tmp/all_failures.txt 2>/dev/null | head -80 || echo "No excerpt available")
-          FLAKE_ANALYSIS=$(cat /tmp/analysis.txt 2>/dev/null || echo "No analysis")
+          EXCERPT=$(cat /tmp/all_failures.txt 2>/dev/null | tail -30 | cut -c1-900 || echo "No excerpt available")
+          FLAKE_ANALYSIS=$(cat /tmp/analysis.txt 2>/dev/null | cut -c1-900 || echo "No analysis")
           COMMIT_SHORT="${COMMIT:0:8}"
 
           jq -n \
