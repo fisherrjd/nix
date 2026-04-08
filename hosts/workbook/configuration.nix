@@ -35,12 +35,24 @@ in
   system.primaryUser = mkDefault username;
   system.stateVersion = 4;
   ids.gids.nixbld = 350;
+  security.pki.certificates = [
+    (builtins.readFile ./certs/charter-root-ca.pem)
+    (builtins.readFile ./certs/charter-root-ca-g1.pem)
+  ];
+
   nix = common.nix // {
     nixPath = [
       "nixpkgs=${flake.inputs.nixpkgs}"
       "darwin=${common.nix-darwin}"
       "darwin-config=${configPath}"
     ];
+    extraOptions = ''
+      max-jobs = auto
+      narinfo-cache-negative-ttl = 10
+      extra-experimental-features = nix-command flakes
+      extra-substituters = https://fisherrjd.cachix.org
+      extra-trusted-public-keys = fisherrjd.cachix.org-1:21bdYeKCoWN19OGUDTGU41o60gnEsLHY5+tIpEq7w+A=
+    '';
   };
   services.openssh.enable = true;
 

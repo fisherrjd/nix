@@ -75,6 +75,7 @@ in
           dyff
           erdtree
           fd
+          ffmpeg
           figlet
           file
           fq
