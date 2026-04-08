@@ -31,6 +31,7 @@ in
     {
       enable = true;
       package = pkgs.gitFull;
+      signing.format = "openpgp";
       settings = {
         user = {
           name = "${firstName} ${lastName}";

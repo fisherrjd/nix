@@ -1,0 +1,49 @@
+name: auto-fix on build failure
+
+on:
+  workflow_run:
+    workflows: [build]
+    types: [completed]
+
+jobs:
+  auto-fix:
+    runs-on: [self-hosted, nix, eldo]
+    if: ${{ github.event.workflow_run.conclusion == 'failure' }}
+    steps:
+      - name: run hermes auto-fix agent
+        env:
+          GITHUB_TOKEN: ${{ secrets.HERMES_GITHUB_PAT }}
+        run: |
+          hermes agent \
+            --prompt "A Nix CI build failed.
+
+          Repo: fisherrjd/nix
+          Run ID: ${{ github.event.workflow_run.id }}
+          Branch: ${{ github.event.workflow_run.head_branch }}
+          Commit: ${{ github.event.workflow_run.head_sha }}
+
+          ## Step 1 — Diagnose
+          Run:
+            gh run view ${{ github.event.workflow_run.id }} --repo fisherrjd/nix --json jobs,conclusion,headBranch,headCommit,url
+            gh run view ${{ github.event.workflow_run.id }} --repo fisherrjd/nix --log-failed
+
+          Identify the failure type:
+          - Hash/rev mismatch → fixable
+          - Transient network error → retry once: gh run rerun ${{ github.event.workflow_run.id }} --repo fisherrjd/nix
+          - Broken package upstream → fixable if only the hash needs updating
+          - Logic/syntax error → not auto-fixable, diagnose only
+
+          ## Step 2 — Propose fix (never merge)
+          If fixable, create branch fix/ci-${{ github.event.workflow_run.id }} and apply:
+          - flake.lock drift: nix flake update, commit flake.lock only
+          - Hash mismatch: update the affected hash, commit
+
+          Open a PR against main describing the root cause and what changed.
+          NEVER merge. NEVER push directly to main. Only open the PR.
+
+          ## Step 3 — Notify Discord
+          Post one message to Discord #build-failures:
+          - If PR opened: '✅ Proposed fix: PR #{number} — {one line summary}'
+          - If retried: '🔄 Retried run — transient failure, watching'
+          - If not fixable: '🔴 Needs manual fix — {diagnosis}. @jade'" \
+            --skills "github-repo-management,github-pr-workflow"
