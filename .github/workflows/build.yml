@@ -30,6 +30,7 @@ jobs:
           authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
       - name: build nix configuration
         run: |
+          set -o pipefail
           nix --show-trace build ${{ matrix.attrs.cmd }} 2>&1 | tee /tmp/build.log
         continue-on-error: true
         id: nix-build

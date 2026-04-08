@@ -80,6 +80,7 @@ in
           fq
           gawk
           delta
+          gh
           gnugrep
           gnumake
           gnupg
@@ -109,7 +110,7 @@ in
           nix-update
           nixpkgs-fmt
           nixpkgs-review
-          nodePackages.prettier
+          prettier
           openssh
           p7zip
           patch

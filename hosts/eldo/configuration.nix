@@ -40,6 +40,10 @@ in
         file = ../../secrets/github-runner-token.age;
         mode = "644";
       };
+      github-runner-token-nix = {
+        file = ../../secrets/github-runner-token-nix.age;
+        mode = "644";
+      };
     };
   };
   networking.networkmanager.enable = true;
@@ -74,12 +78,14 @@ in
   environment.systemPackages = with pkgs; [
     vim
     vscode
-    flake.inputs.hermes-agent.packages.${pkgs.system}.default
+    flake.inputs.hermes-agent.packages.${pkgs.stdenv.hostPlatform.system}.default
   ];
   system.stateVersion = "24.05";
-  
-  # TESTING: Intentional break to test CI failure notification
-  environment.systemPackages = [ pkgs.this-is-a-fake-package-for-ci-testing ];
+
+  # Workaround: agenix references `setupSecrets` which was removed in NixOS 25.05+
+  system.activationScripts.setupSecrets = "";
+
+
   security.sudo = common.security.sudo;
   environment.variables = {
     NIX_HOST = hostname;
@@ -112,13 +118,31 @@ in
         name = "eldo-runner";
         url = "https://github.com/fisherrjd/ops";
         tokenFile = config.age.secrets.github-runner-token.path;
-        extraLabels = [ "nix" "k3s" "eldo" ];
+        extraLabels = [ "ops" "k3s" "eldo" ];
 
         extraPackages = with pkgs; [
           kubectl
           git
         ];
       };
+      github-runners.nix-runner = {
+        enable = true;
+        name = "nix-runner";
+        url = "https://github.com/fisherrjd/nix";
+        tokenFile = config.age.secrets.github-runner-token-nix.path;
+        extraLabels = [ "nix" "eldo" ];
+
+        extraPackages = [
+          flake.inputs.hermes-agent.packages.${pkgs.stdenv.hostPlatform.system}.default
+        ] ++ (with pkgs; [ git jq curl gh ]);
+        serviceOverrides = {
+          DynamicUser = false;
+          User = "jade";
+          ProtectHome = false;
+          Environment = "HOME=/home/jade";
+        };
+      };
+
       ntfy-sh = {
         enable = true;
         settings = {
