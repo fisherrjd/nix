@@ -34,8 +34,9 @@ jobs:
           3. Analyze the failure type:
              - Hash mismatch/rev drift in flake.lock → fixable
              - Transient network (timeout, resolve) → retryable
-             - Syntax/logic error in nix files → not auto-fixable
+             - Removed/renamed nixpkgs package (e.g. nodePackages.X → X, renamed attrs) → fixable
              - Broken upstream package → fixable if only hash needs bumping
+             - Syntax/logic error in nix files → not auto-fixable
           4. Write /tmp/analysis.json with fields:
              - failure_type: string (hash_mismatch|transient|syntax|upstream|unknown)
              - fixable: boolean
@@ -87,7 +88,7 @@ jobs:
           2. git config user.name 'Hermes CI' && git config user.email 'hermes@ci.eldo'
           3. git checkout -b $BRANCH
           4. If failure_type is hash_mismatch: run nix flake update, then git add flake.lock
-          5. If failure_type is upstream: identify the broken package and update its hash or pin
+          5. If failure_type is upstream or removed/renamed package: identify the affected attribute in the nix files, apply the rename or replacement (e.g. nodePackages.X → X), commit the change
           6. Commit with descriptive message including root cause
           7. git push origin $BRANCH
           8. Create PR using gh pr create --repo fisherrjd/nix with detailed body explaining:
@@ -122,5 +123,5 @@ jobs:
             DIAGNOSIS=$(jq -r .root_cause /tmp/analysis.json)
             curl -s -X POST "$DISCORD_WEBHOOK_URL" \
               -H "Content-Type: application/json" \
-              -d "{\"content\": \"🔴 Manual fix needed for run ${{ github.event.workflow_run.id }} — $DIAGNOSIS @jade\"}"
+              -d "{\"content\": \"🔴 Manual fix needed for run ${{ github.event.workflow_run.id }} — $DIAGNOSIS <@200277038492418048>\"}"
           fi
