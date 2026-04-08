@@ -10,12 +10,6 @@ jobs:
     runs-on: [self-hosted, nix, eldo]
     if: ${{ github.event.workflow_run.conclusion == 'failure' }}
     steps:
-      - uses: actions/checkout@v6.0.2
-        with:
-          fetch-depth: 20
-          ref: ${{ github.event.workflow_run.head_sha }}
-          token: ${{ secrets.HERMES_GITHUB_PAT }}
-
       - name: diagnose with hermes
         id: diagnose
         env:
@@ -82,11 +76,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.HERMES_GITHUB_PAT }}
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
         run: |
-          git config user.name "Hermes CI"
-          git config user.email "hermes@ci.eldo"
-
           BRANCH="fix/ci-run-${{ github.event.workflow_run.id }}"
-          git checkout -b "$BRANCH"
 
           hermes chat \
             --quiet \
@@ -94,15 +84,19 @@ jobs:
             --source "ci-auto-fix" \
             --query "Apply the fix for this ${{ steps.diagnose.outputs.failure_type }} failure.
 
+          Repo dir: /home/jade/cfg
           Run ID: ${{ github.event.workflow_run.id }}
-          Branch: ${{ github.event.workflow_run.head_branch }}
+          Branch to create: $BRANCH
 
           Steps:
-          1. If failure_type is hash_mismatch: run nix flake update, then git add flake.lock
-          2. If failure_type is upstream: identify the broken package and update its hash or pin
-          3. Commit with descriptive message including root cause
-          4. Push branch $BRANCH
-          5. Create PR using gh pr create with detailed body explaining:
+          1. cd /home/jade/cfg
+          2. git config user.name 'Hermes CI' && git config user.email 'hermes@ci.eldo'
+          3. git checkout -b $BRANCH
+          4. If failure_type is hash_mismatch: run nix flake update, then git add flake.lock
+          5. If failure_type is upstream: identify the broken package and update its hash or pin
+          6. Commit with descriptive message including root cause
+          7. git push origin $BRANCH
+          8. Create PR using gh pr create --repo fisherrjd/nix with detailed body explaining:
              - What failed
              - Root cause from analysis
              - What this fix does
