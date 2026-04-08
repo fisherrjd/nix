@@ -125,3 +125,8 @@ jobs:
           curl -s -X POST "$DISCORD_WEBHOOK_URL" \
             -H "Content-Type: application/json" \
             -d "{\"content\": \"🔴 Manual fix needed for run ${{ github.event.workflow_run.id }} — $DIAGNOSIS @jade\"}"
+
+      - name: cleanup
+        if: always()
+        run: |
+          cd /home/jade/cfg && git checkout main

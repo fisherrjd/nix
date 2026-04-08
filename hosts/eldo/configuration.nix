@@ -134,7 +134,7 @@ in
 
         extraPackages = [
           flake.inputs.hermes-agent.packages.${pkgs.stdenv.hostPlatform.system}.default
-        ] ++ (with pkgs; [ git jq curl ]);
+        ] ++ (with pkgs; [ git jq curl gh ]);
         serviceOverrides = {
           DynamicUser = false;
           User = "jade";
