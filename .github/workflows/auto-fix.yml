@@ -10,40 +10,124 @@ jobs:
     runs-on: [self-hosted, nix, eldo]
     if: ${{ github.event.workflow_run.conclusion == 'failure' }}
     steps:
-      - name: run hermes auto-fix agent
+      - uses: actions/checkout@v6.0.2
+        with:
+          fetch-depth: 20
+          ref: ${{ github.event.workflow_run.head_sha }}
+          token: ${{ secrets.HERMES_GITHUB_PAT }}
+
+      - name: diagnose with hermes
+        id: diagnose
         env:
+          GH_TOKEN: ${{ secrets.HERMES_GITHUB_PAT }}
           GITHUB_TOKEN: ${{ secrets.HERMES_GITHUB_PAT }}
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
         run: |
-          hermes agent \
-            --prompt "A Nix CI build failed.
+          hermes chat \
+            --quiet \
+            --skills "github-repo-management" \
+            --source "ci-diagnosis" \
+            --query "Diagnose this Nix CI failure and write a structured report to /tmp/analysis.json.
 
           Repo: fisherrjd/nix
           Run ID: ${{ github.event.workflow_run.id }}
+          Run URL: ${{ github.event.workflow_run.html_url }}
           Branch: ${{ github.event.workflow_run.head_branch }}
           Commit: ${{ github.event.workflow_run.head_sha }}
 
-          ## Step 1 — Diagnose
-          Run:
-            gh run view ${{ github.event.workflow_run.id }} --repo fisherrjd/nix --json jobs,conclusion,headBranch,headCommit,url
-            gh run view ${{ github.event.workflow_run.id }} --repo fisherrjd/nix --log-failed
+          Steps:
+          1. Run: gh run view ${{ github.event.workflow_run.id }} --repo fisherrjd/nix --json jobs,conclusion,headBranch,headCommit,url
+          2. Get logs: gh run view ${{ github.event.workflow_run.id }} --repo fisherrjd/nix --log-failed > /tmp/failures.log
+          3. Analyze the failure type:
+             - Hash mismatch/rev drift in flake.lock → fixable
+             - Transient network (timeout, resolve) → retryable
+             - Syntax/logic error in nix files → not auto-fixable
+             - Broken upstream package → fixable if only hash needs bumping
+          4. Write /tmp/analysis.json with fields:
+             - failure_type: string (hash_mismatch|transient|syntax|upstream|unknown)
+             - fixable: boolean
+             - root_cause: string (summary)
+             - suggested_action: string (what to do)
+             - retry_first: boolean (should we retry before fixing)
+             - branch_name: string (suggested: fix/ci-${{ github.event.workflow_run.id }})" \
+            2>&1 | tee /tmp/hermes-output.log
 
-          Identify the failure type:
-          - Hash/rev mismatch → fixable
-          - Transient network error → retry once: gh run rerun ${{ github.event.workflow_run.id }} --repo fisherrjd/nix
-          - Broken package upstream → fixable if only the hash needs updating
-          - Logic/syntax error → not auto-fixable, diagnose only
+          if [ -f /tmp/analysis.json ]; then
+            echo "analysis=true" >> $GITHUB_OUTPUT
+            cat /tmp/analysis.json | jq .
+          else
+            echo "analysis=false" >> $GITHUB_OUTPUT
+            echo '{"failure_type": "unknown", "fixable": false, "retry_first": false, "root_cause": "unknown"}' > /tmp/analysis.json
+          fi
 
-          ## Step 2 — Propose fix (never merge)
-          If fixable, create branch fix/ci-${{ github.event.workflow_run.id }} and apply:
-          - flake.lock drift: nix flake update, commit flake.lock only
-          - Hash mismatch: update the affected hash, commit
+          echo "fixable=$(jq -r .fixable /tmp/analysis.json)" >> $GITHUB_OUTPUT
+          echo "failure_type=$(jq -r .failure_type /tmp/analysis.json)" >> $GITHUB_OUTPUT
+          echo "retry_first=$(jq -r .retry_first /tmp/analysis.json)" >> $GITHUB_OUTPUT
 
-          Open a PR against main describing the root cause and what changed.
-          NEVER merge. NEVER push directly to main. Only open the PR.
+      - name: retry transient failures
+        if: steps.diagnose.outputs.retry_first == 'true' || steps.diagnose.outputs.failure_type == 'transient'
+        env:
+          GH_TOKEN: ${{ secrets.HERMES_GITHUB_PAT }}
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: |
+          gh run rerun ${{ github.event.workflow_run.id }} --repo fisherrjd/nix
+          curl -s -X POST "$DISCORD_WEBHOOK_URL" \
+            -H "Content-Type: application/json" \
+            -d "{\"content\": \"🔄 Retried run ${{ github.event.workflow_run.id }} — transient failure detected\"}"
 
-          ## Step 3 — Notify Discord
-          Post one message to Discord #build-failures:
-          - If PR opened: '✅ Proposed fix: PR #{number} — {one line summary}'
-          - If retried: '🔄 Retried run — transient failure, watching'
-          - If not fixable: '🔴 Needs manual fix — {diagnosis}. @jade'" \
-            --skills "github-repo-management,github-pr-workflow"
+      - name: auto-fix and create PR
+        if: steps.diagnose.outputs.fixable == 'true' && steps.diagnose.outputs.retry_first != 'true'
+        env:
+          GH_TOKEN: ${{ secrets.HERMES_GITHUB_PAT }}
+          GITHUB_TOKEN: ${{ secrets.HERMES_GITHUB_PAT }}
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: |
+          git config user.name "Hermes CI"
+          git config user.email "hermes@ci.eldo"
+
+          BRANCH="fix/ci-run-${{ github.event.workflow_run.id }}"
+          git checkout -b "$BRANCH"
+
+          hermes chat \
+            --quiet \
+            --skills "github-repo-management,github-pr-workflow" \
+            --source "ci-auto-fix" \
+            --query "Apply the fix for this ${{ steps.diagnose.outputs.failure_type }} failure.
+
+          Run ID: ${{ github.event.workflow_run.id }}
+          Branch: ${{ github.event.workflow_run.head_branch }}
+
+          Steps:
+          1. If failure_type is hash_mismatch: run nix flake update, then git add flake.lock
+          2. If failure_type is upstream: identify the broken package and update its hash or pin
+          3. Commit with descriptive message including root cause
+          4. Push branch $BRANCH
+          5. Create PR using gh pr create with detailed body explaining:
+             - What failed
+             - Root cause from analysis
+             - What this fix does
+             - Link to failed run: ${{ github.event.workflow_run.html_url }}
+          Save the PR URL to /tmp/pr_url.txt
+          If anything fails, write error to /tmp/fix_error.txt" \
+            2>&1 | tee /tmp/hermes-fix.log
+
+          if [ -f /tmp/pr_url.txt ]; then
+            PR_URL=$(cat /tmp/pr_url.txt)
+            curl -s -X POST "$DISCORD_WEBHOOK_URL" \
+              -H "Content-Type: application/json" \
+              -d "{\"content\": \"✅ Proposed fix: $PR_URL — ${{ steps.diagnose.outputs.failure_type }}\"}"
+          elif [ -f /tmp/fix_error.txt ]; then
+            curl -s -X POST "$DISCORD_WEBHOOK_URL" \
+              -H "Content-Type: application/json" \
+              -d "{\"content\": \"⚠️ Fix attempted but failed for run ${{ github.event.workflow_run.id }} — $(head -100 /tmp/fix_error.txt)\"}"
+          fi
+
+      - name: notify unfixable
+        if: steps.diagnose.outputs.fixable != 'true' && steps.diagnose.outputs.retry_first != 'true'
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: |
+          DIAGNOSIS=$(jq -r .root_cause /tmp/analysis.json)
+          curl -s -X POST "$DISCORD_WEBHOOK_URL" \
+            -H "Content-Type: application/json" \
+            -d "{\"content\": \"🔴 Manual fix needed for run ${{ github.event.workflow_run.id }} — $DIAGNOSIS @jade\"}"
