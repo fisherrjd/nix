@@ -109,7 +109,7 @@ in
           nix-update
           nixpkgs-fmt
           nixpkgs-review
-          prettier
+          nodePackages.prettier
           openssh
           p7zip
           patch
