@@ -139,6 +139,7 @@ in
           DynamicUser = false;
           User = "jade";
           ProtectHome = false;
+          Environment = "HOME=/home/jade";
         };
       };
 
