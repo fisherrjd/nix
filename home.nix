@@ -80,6 +80,7 @@ in
           fq
           gawk
           delta
+          gh
           gnugrep
           gnumake
           gnupg
