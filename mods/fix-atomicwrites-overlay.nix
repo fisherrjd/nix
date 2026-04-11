@@ -3,10 +3,15 @@
 # in build-system.requires but nixpkgs definition hasn't been updated
 # Error: 'No module named setuptools' during wheel build
 # Affected: hermes-agent-env → hermes-agent → system-path → nixos-system-eldo
+#
+# Fix: Override python3 package set to inject setuptools into atomicwrites
 
 final: prev: {
-  # Override atomicwrites to add setuptools to nativeBuildInputs
-  atomicwrites = prev.atomicwrites.overridePythonAttrs (oldAttrs: {
-    nativeBuildInputs = (oldAttrs.nativeBuildInputs or [ ]) ++ [ prev.python3.pkgs.setuptools ];
-  });
+  python3 = prev.python3.override {
+    packageOverrides = pyfinal: pyprev: {
+      atomicwrites = pyprev.atomicwrites.overridePythonAttrs (oldAttrs: {
+        nativeBuildInputs = (oldAttrs.nativeBuildInputs or [ ]) ++ [ pyfinal.setuptools ];
+      });
+    };
+  };
 }
