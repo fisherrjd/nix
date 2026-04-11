@@ -44,7 +44,7 @@ jobs:
              - suggested_action: string (what to do)
              - retry_first: boolean (should we retry before fixing)
              - branch_name: string (suggested: fix/ci-${{ github.event.workflow_run.id }})" \
-            2>&1 | tee /tmp/hermes-output.log
+            > /tmp/hermes-output.log 2>&1
 
           if [ -f /tmp/analysis.json ]; then
             echo "analysis=true" >> $GITHUB_OUTPUT
@@ -98,7 +98,7 @@ jobs:
              - Link to failed run: ${{ github.event.workflow_run.html_url }}
           Save the PR URL to /tmp/pr_url.txt
           If anything fails, write error to /tmp/fix_error.txt" \
-            2>&1 | tee /tmp/hermes-fix.log
+            > /tmp/hermes-fix.log 2>&1
 
       - name: cleanup
         if: always()
