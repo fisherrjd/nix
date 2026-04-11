@@ -144,6 +144,7 @@ in
       jre18 = pkgs.temurin-bin-18;
       jre19 = pkgs.temurin-bin-19;
       jre21 = pkgs.temurin-bin-21;
+      jre25 = pkgs.temurin-bin-25;
 
       jvmOpts = builtins.concatStringsSep " " [
         "-Xmx8192M"
