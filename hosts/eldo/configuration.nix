@@ -229,11 +229,12 @@ in
       #     hardcore = false;
       #   };
       # };
-      #
+
+      # WHERE DOES IT PUT THE SERVER I FORGET
       modded-minecraft-servers = with common.minecraft; {
         eula = true;
         instances = {
-          atm10 = {
+          atmon10 = {
             inherit (conf) jvmOpts;
             enable = true;
             rsyncSSHKeys = [ common.pubkeys.atlantis common.pubkeys.neverland ];
