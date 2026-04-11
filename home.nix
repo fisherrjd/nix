@@ -166,6 +166,7 @@ in
             k8s_pog_scripts
             # amazon-q-cli
             nodejs
+            glab
             ssm-session-manager-plugin
             pandoc
             kubectl

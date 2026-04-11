@@ -12,6 +12,7 @@ in
       k8s_pog_scripts
       aws_pog_scripts
       curl_pog_scripts
+      aq
       # zaddy
     ];
 
