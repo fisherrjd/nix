@@ -106,7 +106,7 @@ in
           nix-info
           nix-output-monitor
           nix-prefetch-github
-          nix-prefetch-scripts
+          (lib.optionals isLinux [ nix-prefetch-scripts ])
           nix-tree
           nix-update
           nixpkgs-fmt

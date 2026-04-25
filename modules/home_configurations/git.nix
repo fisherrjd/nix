@@ -30,7 +30,9 @@ in
     in
     {
       enable = true;
-      package = pkgs.gitFull;
+      # Use gitFull on Linux (with SVN support), plain git on Darwin
+      # Fixes: apr-util-1.6.3 build failure on macOS 15 (SDK compatibility issue)
+      package = if isDarwin then pkgs.git else pkgs.gitFull;
       signing.format = "openpgp";
       settings = {
         user = {
