@@ -1,7 +1,5 @@
 { pkgs, username, ... }:
 let
-  inherit (pkgs.hax) isDarwin isLinux isM1;
-
   firstName = "jade";
   lastName = "fisher";
 
