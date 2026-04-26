@@ -106,7 +106,6 @@ in
           nix-info
           nix-output-monitor
           nix-prefetch-github
-          nix-prefetch-scripts
           nix-tree
           nix-update
           nixpkgs-fmt
@@ -152,6 +151,7 @@ in
               gnutar
               ntfy-sh
               claude-code
+              nix-prefetch-scripts
             ]
           )
           # Secrets
