@@ -106,7 +106,9 @@ in
           nix-info
           nix-output-monitor
           nix-prefetch-github
-          nix-prefetch-scripts
+          # nix-prefetch-scripts disabled on Darwin: apr-util build fails on macOS 15
+          # See: https://github.com/fisherrjd/nix/actions/runs/25029333674
+          (lib.optionals isLinux [ nix-prefetch-scripts ])
           nix-tree
           nix-update
           nixpkgs-fmt
