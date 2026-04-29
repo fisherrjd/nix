@@ -22,27 +22,10 @@ jobs:
     name: nix (${{ matrix.attrs.config_name }} on ${{ matrix.attrs.os }}) # <-- Updated name format
     runs-on: ${{ matrix.attrs.os }}
     steps:
-      - uses: actions/checkout@v6.0.2
+      - uses: actions/checkout@v6.0.1
       - uses: cachix/install-nix-action@v31
       - uses: cachix/cachix-action@master # Consider using a specific tag like @v12 for stability
         with:
           name: fisherrjd
           authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
-      - name: build nix configuration
-        run: |
-          set -o pipefail
-          nix --show-trace build ${{ matrix.attrs.cmd }} 2>&1 | tee /tmp/build.log
-        continue-on-error: true
-        id: nix-build
-
-      - name: upload build log on failure
-        if: steps.nix-build.outcome == 'failure'
-        uses: actions/upload-artifact@v7
-        with:
-          name: build-log-${{ matrix.attrs.config_name }}
-          path: /tmp/build.log
-          retention-days: 7
-
-      - name: fail if build failed
-        if: steps.nix-build.outcome == 'failure'
-        run: exit 1
+      - run: nix --show-trace build ${{ matrix.attrs.cmd }}
