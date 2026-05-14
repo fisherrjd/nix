@@ -66,6 +66,7 @@ in
       "awscli"
       "microcks-cli"
       "strands-agents-sops"
+      "awsdac"
     ];
     casks = [
       "bruno"
