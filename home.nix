@@ -316,7 +316,7 @@ in
     enable = true;
     enableDefaultConfig = false;
     includes = [ "config.d/*" ];
-    settings.Compression = true;
+    settings."*".Compression = true;
     extraConfig =
       let
         mac_meme = ''
