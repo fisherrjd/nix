@@ -9,8 +9,7 @@ import nixpkgs {
   overlays = [
     (_: _: { nixpkgsRev = nixpkgs.rev; })
     (_: _: { jacobi = import flake.inputs.jacobi { inherit system; }; })
-    (_: prev: { inherit (prev.jacobi) llama-cpp-latest codex-latest pog; })
-    (final: _: { hermes-agent = final.jacobi.callPackage "${flake.inputs.jacobi}/pkgs/uv/hermes-agent.nix" { }; })
+    (_: prev: { inherit (prev.jacobi) llama-cpp-latest hermes-agent codex-latest pog; })
     (_: _: { nixpkgsRev = flake.inputs.nixpkgs.rev; })
   ] ++ (import ./overlays.nix) ++ overlays;
   config = {
