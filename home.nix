@@ -96,7 +96,6 @@ in
           lsof
           man-pages
           manix
-          # minecraft-server
           moreutils # learn about this
           nano
           nanorc

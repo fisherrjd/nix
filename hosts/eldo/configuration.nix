@@ -12,7 +12,6 @@ in
     [
       # Include the results of the hardware scan.
       "${common.home-manager}/nixos"
-      "${common.mms}/nixos/modules/services/games/minecraft-servers"
       ./hardware-configuration.nix
       { services = common.services; }
     ];
@@ -175,65 +174,6 @@ in
         '';
       };
 
-      # MINECRAFT STUFF
-      minecraft-server.eula = true;
-      modded-minecraft-servers.eula = true;
-      # minecraft-server = with common.minecraft; {
-      #   enable = true;
-      #   eula = true;
-      #   openFirewall = true;
-      #   declarative = true;
-      #   package = pkgs.minecraft-server.override {
-      #     jre_headless = conf.jre25;
-      #     version = "26.1.2";
-      #     url = "https://piston-data.mojang.com/v1/objects/97ccd4c0ed3f81bbb7bfacddd1090b0c56f9bc51/server.jar";
-      #     sha1 = "a6ygjmhc1c4x3pdcpyvvp09zxp0d9k4p";
-      #   };
-      #   serverProperties = {
-      #     enable-rcon = true;
-      #     "rcon.password" = "fart";
-      #     "rcon.port" = 25576;
-      #     server-port = 25566;
-      #     motd = "Not Artistic SMP";
-      #     level-name = "community_server";
-      #     level-seed = "rex_is_stupid";
-      #     server-name = "NotArtistic";
-      #     gamemode = 0;
-      #     difficulty = 3;
-      #     max-players = 10;
-      #     bind = "0.0.0.0"; # Allow connections from any IP address
-      #     hardcore = false;
-      #   };
-      # };
-      #
-      # # WHERE DOES IT PUT THE SERVER I FORGET
-      # modded-minecraft-servers = with common.minecraft; {
-      #   eula = true;
-      #   instances = {
-      #     atmon10 = {
-      #       inherit (conf) jvmOpts;
-      #       enable = true;
-      #       rsyncSSHKeys = [ common.pubkeys.atlantis common.pubkeys.neverland ];
-      #       jvmPackage = conf.jre21;
-      #       jvmInitialAllocation = "8G";
-      #       jvmMaxAllocation = "14G";
-      #       serverConfig =
-      #         conf.defaults
-      #         // {
-      #           server-port = 25565;
-      #           rcon-port = 25575;
-      #           motd = "jade's atm10 server";
-      #           server-ip = "0.0.0.0";
-      #           enable-rcon = true;
-      #           rcon-password = "changeme";
-      #           difficulty = 2;
-      #           max-tick-time = -1;
-      #           enable-command-block = true;
-      #         };
-      #     };
-
-      #   };
-      # };
 
     };
   # DOCKER COMMENTED OUT FOR NOW
@@ -277,12 +217,7 @@ in
           N8N_HOST = "n8n.jade.rip";
         };
       };
-      # grocery_list = {
-      #   image = "ghcr.io/fisherrjd/lists-backend:v0.3.0-dev";
-      #   ports = [ "8069:8069" ];
-      #   volumes = [ "grocery-list-data:/app/data" ];
-      # };
+
     };
   };
-
 }

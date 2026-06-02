@@ -2,12 +2,6 @@
 let
   inherit (flake.inputs) home-manager nix-darwin;
 
-  mms = import
-    (fetchTarball {
-      url = "https://github.com/mkaito/nixos-modded-minecraft-servers/archive/68f2066499c035fd81c9dacfea2f512d6b0b62e5.tar.gz";
-      sha256 = "1nmw497ahb9hjjh0kwr1z782q41gcw5kw4dl4alg8pnyhgq141r1";
-    });
-
   jade = import ../home.nix {
     inherit home-manager flake machine-name pkgs username;
   };
@@ -31,7 +25,7 @@ let
 in
 {
   inherit (constants) pubkeys;
-  inherit home-manager jade nix-darwin mms pkgs;
+  inherit home-manager jade nix-darwin pkgs;
 
   nix = {
     extraOptions = ''
@@ -137,44 +131,4 @@ in
     };
   };
 
-  # minecraft = {
-  #   conf = {
-  #     jre8 = pkgs.temurin-bin-8;
-  #     jre17 = pkgs.temurin-bin-17;
-  #     jre18 = pkgs.temurin-bin-18;
-  #     jre19 = pkgs.temurin-bin-19;
-  #     jre21 = pkgs.temurin-bin-21;
-  #     jre25 = pkgs.temurin-bin-25;
-
-  #     jvmOpts = builtins.concatStringsSep " " [
-  #       "-Xmx8192M"
-  #       "-Xms4096M"
-  #       "-XX:+UseG1GC"
-  #       "-XX:+ParallelRefProcEnabled"
-  #       "-XX:MaxGCPauseMillis=200"
-  #       "-XX:+UnlockExperimentalVMOptions"
-  #       "-XX:+DisableExplicitGC"
-  #       "-XX:+AlwaysPreTouch"
-  #       "-XX:G1NewSizePercent=40"
-  #       "-XX:G1MaxNewSizePercent=50"
-  #       "-XX:G1HeapRegionSize=16M"
-  #       "-XX:G1ReservePercent=15"
-  #       "-XX:G1HeapWastePercent=5"
-  #       "-XX:G1MixedGCCountTarget=4"
-  #       "-XX:InitiatingHeapOccupancyPercent=20"
-  #       "-XX:G1MixedGCLiveThresholdPercent=90"
-  #       "-XX:G1RSetUpdatingPauseTimePercent=5"
-  #       "-XX:SurvivorRatio=32"
-  #       "-XX:+PerfDisableSharedMem"
-  #       "-XX:MaxTenuringThreshold=1"
-  #     ];
-
-  #     defaults = {
-  #       white-list = false;
-  #       spawn-protection = 0;
-  #       max-tick-time = 5 * 60 * 1000;
-  #       allow-flight = true;
-  #     };
-  #   };
-  # };
 }
