@@ -152,7 +152,8 @@ in
               gnutar
               ntfy-sh
               claude-code
-              codex
+              codex-latest
+              hermes-agent
             ]
           )
           # Secrets

@@ -1,6 +1,3 @@
-let
-  flake = import ../flake.nix;
-in
 {
   meta = {
     nixpkgs = <nixpkgs>;
