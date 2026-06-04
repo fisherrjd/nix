@@ -109,6 +109,28 @@ in
   systemd.targets.suspend.enable = false;
   systemd.targets.hibernate.enable = false;
   systemd.targets.hybrid-sleep.enable = false;
+
+  systemd.services = {
+    obsidian-autocommit = {
+      path = [ pkgs.git pkgs.openssh ];
+      script = ''
+        cd /home/${username}/syncthing/obsidian
+        git add -A
+        if git diff --cached --quiet; then
+          echo "no changes to commit"
+          exit 0
+        fi
+        git -c user.name="eldo" -c user.email="fisherrjd@gmail.com" \
+          commit -m "auto: $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+        git push
+      '';
+      serviceConfig = {
+        User = username;
+        Type = "oneshot";
+      };
+      startAt = "hourly";
+    };
+  };
   services =
     {
       github-runners.eldo-runner = {
@@ -153,6 +175,42 @@ in
         };
       };
 
+      syncthing = {
+        enable = true;
+        user = username;
+        dataDir = "/home/${username}/syncthing";
+        configDir = "/home/${username}/.config/syncthing";
+        openDefaultPorts = true;
+        guiAddress = "0.0.0.0:8384";
+        settings = {
+          devices = {
+            "eldo" = {
+              id = "WXGANFF-PYFZNOY-JMMYYOK-CIGDYOK-7TIFCIQ-QXGBKUZ-KBFT3BC-IDQA3A6";
+              name = "eldo";
+            };
+            "atlantis" = {
+              id = "7ZCBLK3-K37ZMV4-E3RMCJO-57GVJ4R-POJLDTM-TGMF7Y7-J3TLI6V-2734LAA";
+              name = "atlantis";
+            };
+            "airbook" = {
+              id = "7LP4WCW-SJFJC4S-KWM3WTR-PNKUNWV-EZ6BZDZ-NSFKBQ7-WQZFE6U-CRYIDA5";
+              name = "airbook";
+            };
+          };
+          folders = {
+            "obsidian" = {
+              path = "/home/${username}/syncthing/obsidian";
+              devices = [ "eldo" "atlantis" "airbook" ];
+              ignorePatterns = [
+                ".git/"
+                ".obsidian/"
+                "**/.git/**"
+                "**/.obsidian/**"
+              ];
+            };
+          };
+        };
+      };
 
       k3s = {
         enable = true;
@@ -200,6 +258,9 @@ in
         image = "ghcr.io/open-webui/open-webui:v0.6.16";
         volumes = [ "open-webui:/app/backend/data" ];
         environmentFiles = [ config.age.secrets.openwebui.path ];
+        environment = {
+          PORT = "3001";
+        };
         extraOptions = [
           "--network=host"
         ];

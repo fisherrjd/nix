@@ -82,12 +82,7 @@ in
         '';
         "chat.jade.rip".extraConfig = ''
           reverse_proxy * {
-            to eldo:8080
-          }
-        '';
-        "osrs.jade.rip".extraConfig = ''
-          reverse_proxy * {
-            to eldo:8000
+            to eldo:3001
           }
         '';
         "llama.jade.rip".extraConfig = ''
@@ -110,16 +105,6 @@ in
         '';
         "resume.jade.rip".extraConfig = ''
           redir https://github.com/fisherrjd/resume/blob/main/resume.pdf permanent
-        '';
-        "ge.jade.rip".extraConfig = ''
-          reverse_proxy * {
-            to eldo:5173
-          }
-        '';
-        "ctf.jade.rip".extraConfig = ''
-          reverse_proxy * {
-            to eldo:5050
-          }
         '';
       };
     };
