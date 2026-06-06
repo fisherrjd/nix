@@ -137,35 +137,6 @@ in
   };
   services =
     {
-      github-runners.eldo-runner = {
-        enable = true;
-        name = "eldo-runner";
-        url = "https://github.com/fisherrjd/ops";
-        tokenFile = config.age.secrets.github-runner-token.path;
-        extraLabels = [ "ops" "k3s" "eldo" ];
-
-        extraPackages = with pkgs; [
-          kubectl
-          git
-        ];
-      };
-      github-runners.nix-runner = {
-        enable = true;
-        name = "nix-runner";
-        url = "https://github.com/fisherrjd/nix";
-        tokenFile = config.age.secrets.github-runner-token-nix.path;
-        extraLabels = [ "nix" "eldo" ];
-
-        extraPackages = [
-        ] ++ (with pkgs; [ git jq curl gh ]);
-        serviceOverrides = {
-          DynamicUser = false;
-          User = "jade";
-          ProtectHome = false;
-          Environment = "HOME=/home/jade";
-        };
-      };
-
       ntfy-sh = {
         enable = true;
         settings = {
