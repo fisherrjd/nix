@@ -42,6 +42,10 @@ in
         file = ../../secrets/github-runner-token-nix.age;
         mode = "644";
       };
+      ntfy = {
+        file = ../../secrets/ntfy.age;
+        mode = "644";
+      };
     };
   };
   networking.networkmanager.enable = true;
@@ -168,8 +172,7 @@ in
           base-url = "https://ntfy.jade.rip";
           upstream-base-url = "https://ntfy.sh";
           listen-http = "0.0.0.0:8081";
-          web-push-public-key = "BCAoXlScmXxcQtD28mXsk_P6u8YWeQX3qW0K3tUfOnX-dP_yfBPTGYG-GzwpbcYOyZqSnlSUx2O1yQBaH4LQlec";
-          web-push-private-key = "s1GJFuYtO2YcDnkr_IfwouyP6C_ekSxsihWDM8yvDwI";
+          environmentFiles = [ config.age.secrets.litellm.path ];
           web-push-file = "/var/lib/ntfy-sh/webpush.db";
           web-push-email-address = "fisherrjd@gmail.com";
         };
