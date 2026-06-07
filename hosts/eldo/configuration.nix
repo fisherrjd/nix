@@ -134,6 +134,28 @@ in
       };
       startAt = "hourly";
     };
+
+    # The hermes gateway (a `systemctl --user` service) only ticks the
+    # *default* profile's cron scheduler, so the "learning" profile's
+    # daily-learning-nudge job never fires on its own. `cron tick` runs any
+    # due jobs once and exits, delivering to Discord via the shared bot token
+    # over REST — no second gateway, so no websocket/token conflict.
+    hermes-cron-learning = {
+      path = [ pkgs.hermes-agent pkgs.nodejs ];
+      environment = {
+        HERMES_HOME = "/home/${username}/.hermes";
+        HERMES_ACCEPT_HOOKS = "1";
+      };
+      script = ''
+        hermes -p learning cron tick --accept-hooks
+      '';
+      serviceConfig = {
+        User = username;
+        Type = "oneshot";
+        TimeoutStartSec = "600";
+      };
+      startAt = "*:0/10"; # every 10 minutes
+    };
   };
   services =
     {
