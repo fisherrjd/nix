@@ -83,8 +83,6 @@ in
   ];
   system.stateVersion = "24.05";
 
-  # Workaround: agenix references `setupSecrets` which was removed in NixOS 25.05+
-  system.activationScripts.setupSecrets = "";
 
 
   security.sudo = common.security.sudo;
@@ -218,14 +216,6 @@ in
       postgresql = {
         enable = true;
         ensureDatabases = [ "litellm" ];
-        authentication = pkgs.lib.mkOverride 10 ''
-          #type   database      DBuser      auth-method
-          local   all           all         trust
-          host    all           all         127.0.0.1/32 trust
-          host    litellm       postgres    0.0.0.0/0              md5
-          host    all           postgres    127.0.0.1/32           md5
-          host    all           postgres    ::1/128                md5
-        '';
       };
 
 
