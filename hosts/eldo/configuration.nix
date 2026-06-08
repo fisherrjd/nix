@@ -116,7 +116,6 @@ in
     user = username;
     repoPath = "/home/${username}/syncthing/obsidian";
     gitName = hostname;
-    # interval and gitEmail use the module defaults — no need to redeclare
   };
 
   systemd.services = {
