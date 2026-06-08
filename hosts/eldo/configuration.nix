@@ -13,6 +13,7 @@ in
       # Include the results of the hardware scan.
       "${common.home-manager}/nixos"
       ./hardware-configuration.nix
+      ../../modules/obsidian-autocommit.nix
       { services = common.services; }
     ];
   # Bootloader.
@@ -110,27 +111,15 @@ in
   systemd.targets.hibernate.enable = false;
   systemd.targets.hybrid-sleep.enable = false;
 
-  systemd.services = {
-    obsidian-autocommit = {
-      path = [ pkgs.git pkgs.openssh ];
-      script = ''
-        cd /home/${username}/syncthing/obsidian
-        git add -A
-        if git diff --cached --quiet; then
-          echo "no changes to commit"
-          exit 0
-        fi
-        git -c user.name="eldo" -c user.email="fisherrjd@gmail.com" \
-          commit -m "auto: $(date -u +%Y-%m-%dT%H:%M:%SZ)"
-        git push
-      '';
-      serviceConfig = {
-        User = username;
-        Type = "oneshot";
-      };
-      startAt = "hourly";
-    };
+  services.obsidian-autocommit = {
+    enable = true;
+    user = username;
+    repoPath = "/home/${username}/syncthing/obsidian";
+    gitName = hostname;
+    # interval and gitEmail use the module defaults — no need to redeclare
+  };
 
+  systemd.services = {
     hermes-cron-learning = {
       path = [ pkgs.hermes-agent pkgs.nodejs ];
       environment = {
