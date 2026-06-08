@@ -83,8 +83,6 @@ in
   ];
   system.stateVersion = "24.05";
 
-
-
   security.sudo = common.security.sudo;
   environment.variables = {
     NIX_HOST = hostname;
@@ -133,11 +131,6 @@ in
       startAt = "hourly";
     };
 
-    # The hermes gateway (a `systemctl --user` service) only ticks the
-    # *default* profile's cron scheduler, so the "learning" profile's
-    # daily-learning-nudge job never fires on its own. `cron tick` runs any
-    # due jobs once and exits, delivering to Discord via the shared bot token
-    # over REST — no second gateway, so no websocket/token conflict.
     hermes-cron-learning = {
       path = [ pkgs.hermes-agent pkgs.nodejs ];
       environment = {
@@ -217,17 +210,13 @@ in
         enable = true;
         ensureDatabases = [ "litellm" ];
       };
-
-
     };
-  # DOCKER COMMENTED OUT FOR NOW
-  # users.extraGroups.docker.members = [ username ];
-  # virtualisation.docker.enable = true;
 
   virtualisation.podman = {
     enable = true;
     dockerCompat = true; # provide docker → podman symlink for hermes-agent
   };
+
   virtualisation.oci-containers = {
     # backend = "docker";
     backend = "podman";
