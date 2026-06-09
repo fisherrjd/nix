@@ -176,7 +176,6 @@ in
             k9s
           ])
           (lib.optionals isAirbook [
-            claude-code
             (pkgs.writeShellScriptBin "mcp-osrs" ''
               export PATH="${pkgs.nodejs}/bin:$PATH"
               exec ${pkgs.nodejs}/bin/npx -y @jayarrowz/mcp-osrs "$@"
