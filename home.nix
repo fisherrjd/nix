@@ -164,7 +164,6 @@ in
           ])
           (lib.optionals isWork [
             awscli2
-            # hiro
             k8s_pog_scripts
             # amazon-q-cli
             nodejs

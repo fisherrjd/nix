@@ -103,7 +103,6 @@ Deduplicate; keep tools that are truly global out of the per-host lists.
 
 ## 5. Dead code & unused arguments
 
-- `mods/hiro.nix` — imported nowhere (commented out in `overlays.nix:4` and
   `home.nix:167`). Delete it or wire it in.
 - `flake.nix:67` — a stray empty `{ }` module in the darwin `modules` list.
 - `home.nix:10,12` — `firstName`/`lastName`/`promptChar` are unused (starship has
