@@ -118,24 +118,6 @@ in
     gitName = hostname;
   };
 
-  systemd.services = {
-    hermes-cron-learning = {
-      path = [ pkgs.hermes-agent pkgs.nodejs ];
-      environment = {
-        HERMES_HOME = "/home/${username}/.hermes";
-        HERMES_ACCEPT_HOOKS = "1";
-      };
-      script = ''
-        hermes -p learning cron tick --accept-hooks
-      '';
-      serviceConfig = {
-        User = username;
-        Type = "oneshot";
-        TimeoutStartSec = "600";
-      };
-      startAt = "*:0/10"; # every 10 minutes
-    };
-  };
   services =
     {
       ntfy-sh = {
