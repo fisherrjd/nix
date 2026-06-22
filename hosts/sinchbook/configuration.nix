@@ -34,6 +34,7 @@ in
   ids.gids.nixbld = 350;
 
   nix = common.nix // {
+    enable = false;
     nixPath = [
       "nixpkgs=${flake.inputs.nixpkgs}"
       "darwin=${common.nix-darwin}"
