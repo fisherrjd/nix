@@ -17,6 +17,7 @@ let
 
     work = [
       workbook
+      sinchbook
     ];
 
     all = dev ++ work;

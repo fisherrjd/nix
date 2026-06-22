@@ -3,7 +3,7 @@ let
   inherit (pkgs.hax) isDarwin isLinux isM1;
   inherit (pkgs.hax) attrIf optionalString words;
   notBifrost = machine-name != "bifrost";
-  isWork = machine-name == "workbook";
+  isWork = machine-name == "sinchbook";
   isAirbook = machine-name == "airbook";
   isEldo = machine-name == "eldo";
 
@@ -164,12 +164,9 @@ in
           ])
           (lib.optionals isWork [
             awscli2
-            k8s_pog_scripts
-            # amazon-q-cli
             nodejs
             glab
             ssm-session-manager-plugin
-            pandoc
             kubectl
             kubectx
             k9s
