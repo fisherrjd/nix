@@ -161,13 +161,6 @@ in
             hms
           ])
           (lib.optionals isWork [
-            awscli2
-            nodejs
-            glab
-            ssm-session-manager-plugin
-            kubectl
-            kubectx
-            k9s
           ])
           (lib.optionals isAirbook [
             (pkgs.writeShellScriptBin "mcp-osrs" ''
