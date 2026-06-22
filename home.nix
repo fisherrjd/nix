@@ -66,7 +66,6 @@ in
           cacert
           caddy
           coreutils-full
-          colmena
           curl
           diffutils
           doggo
@@ -150,7 +149,8 @@ in
               codex-latest
               hermes-agent
               procps
-
+              colmena
+              colmena_pog_scripts
             ]
           )
           # Secrets
@@ -168,10 +168,7 @@ in
               exec ${pkgs.nodejs}/bin/npx -y @jayarrowz/mcp-osrs "$@"
             '')
           ])
-          # Jade's Pog scripts
-          [
-            colmena_pog_scripts
-          ]
+
         ];
 
     stateVersion = "22.11";
