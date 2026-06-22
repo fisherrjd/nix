@@ -69,7 +69,6 @@ in
           colmena
           curl
           diffutils
-          docker
           doggo
           duckdb
           dyff
@@ -115,9 +114,6 @@ in
           p7zip
           patch
           pigz
-          podman
-          podman-compose
-          procps
           pssh
           ranger
           redis
@@ -153,6 +149,8 @@ in
               claude-code
               codex-latest
               hermes-agent
+              procps
+
             ]
           )
           # Secrets
