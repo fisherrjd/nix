@@ -6,7 +6,7 @@ let
     workbook = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDMR5a3uP1lZndQ8BZhirgYwHwbZNdzeoLeAwdOnslZf jade@work"; #m1pro work CHARTER
     bifrost = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKz+MKsAIJwcp/KOmafEWebxPiZ+GrqvGrfYKi6VSljR jade@bifrost"; #DO droplet
     airbook = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJ8MkkKNzgkqXP0cX0GkvAWET0ko06bDD738ePbQAyUA jade@airbook";
-    sinchbook = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDB35NyHnCwlbLTP+KHILJhv3yjvJgRYNCf1/+fFmfTi jade@sinch";
+    gjallar = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDB35NyHnCwlbLTP+KHILJhv3yjvJgRYNCf1/+fFmfTi jade@sinch";
 
     dev = [
       neverland
@@ -17,7 +17,7 @@ let
 
     work = [
       workbook
-      sinchbook
+      gjallar
     ];
 
     all = dev ++ work;

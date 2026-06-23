@@ -2,7 +2,7 @@
 let
   # inherit (lib.attrsets) mapAttrs' nameValuePair;
   inherit (lib) mkDefault;
-  hostname = "sinchbook";
+  hostname = "gjallar";
   common = import ../common.nix { inherit config flake machine-name pkgs username; };
   username = "jadfis";
   configPath = "/Users/${username}/cfg/hosts/${hostname}/configuration.nix";
@@ -26,6 +26,7 @@ in
     home = "/Users/${username}";
     openssh.authorizedKeys.keys = with common.pubkeys; [
       atlantis
+      airbook
       eldo
     ];
   };

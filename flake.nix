@@ -73,7 +73,7 @@
           [
             "airbook"
             "workbook"
-            "sinchbook"
+            "gjallar"
           ]
         );
       do-builder = self.inputs.nixos-generators.nixosGenerate {

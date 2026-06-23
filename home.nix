@@ -3,7 +3,7 @@ let
   inherit (pkgs.hax) isDarwin isLinux isM1;
   inherit (pkgs.hax) attrIf optionalString words;
   notBifrost = machine-name != "bifrost";
-  isWork = machine-name == "sinchbook";
+  isWork = machine-name == "gjallar";
   isAirbook = machine-name == "airbook";
   isEldo = machine-name == "eldo";
 
@@ -326,7 +326,7 @@ in
           HostKeyAlgorithms ssh-ed25519,rsa-sha2-256,rsa-sha2-512
           ${optionalString isDarwin mac_meme}
 
-          Host sinchbook
+          Host gjallar
             HostName 192.168.50.169
             User jadfis
             PasswordAuthentication no
