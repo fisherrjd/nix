@@ -1,7 +1,7 @@
 { pkgs ? import ./default.nix { }, flake ? null, machine-name ? "void", home-manager ? null, username }:
 let
   inherit (pkgs.hax) isDarwin isLinux isM1;
-  inherit (pkgs.hax) attrIf optionalString words;
+  inherit (pkgs.hax) attrIf words;
   notBifrost = machine-name != "bifrost";
   isWork = machine-name == "gjallar";
   isAirbook = machine-name == "airbook";
@@ -32,6 +32,7 @@ in
     ./modules/home_configurations/starship.nix
     ./modules/home_configurations/cobi.nix
     ./modules/home_configurations/git.nix
+    ./modules/home_configurations/ssh.nix
     # Look more into these ex: optionalAttrs
     (pkgs.lib.optionalAttrs isLinux "${flake.inputs.vscode-server}/modules/vscode-server/home.nix")
   ];
@@ -39,6 +40,9 @@ in
   _module.args = {
     inherit flake;
     inherit machine-name;
+    # forward the overlaid `hax` helpers to sub-modules; home-manager's own
+    # pkgs doesn't carry the overlay, so `pkgs.hax` is unavailable there.
+    inherit (pkgs) hax;
   };
 
   programs.home-manager.enable = true;
@@ -291,50 +295,6 @@ in
     defaultOptions = words "--ansi --reverse --multi --filepath-word";
   };
 
-  programs.ssh = {
-    enable = true;
-    enableDefaultConfig = false;
-    includes = [ "config.d/*" ];
-    settings."*".Compression = true;
-    extraConfig =
-      let
-        mac_meme = ''
-          XAuthLocation /opt/X11/bin/xauth
-        '';
-      in
-      ''
-        ${optionalString isWork ''
-        Host bastion
-          User p3175941
-          IdentityFile ~/.ssh/id_ed25519
-          PasswordAuthentication no
-          ProxyCommand sh -c 'export AWS_PROFILE="it-cloud-shared-services"; aws ssm start-session --target "$(aws ec2 describe-instances --filters "Name=tag:Name,Values=shared-bastion" "Name=instance-state-name,Values=running" --output text --query "Reservations[*].Instances[0].InstanceId")" --document-name AWS-StartSSHSession --parameters "portNumber=%p"'
-        ''}
-
-        Host airbook
-          User jade
-          PasswordAuthentication no
-          IdentitiesOnly yes
-          # secure stuff
-          Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr
-          KexAlgorithms curve25519-sha256,curve25519-sha256@libssh.org,diffie-hellman-group16-sha512,diffie-hellman-group18-sha512,diffie-hellman-group-exchange-sha256
-          MACs hmac-sha2-256-etm@openssh.com,hmac-sha2-512-etm@openssh.com,umac-128-etm@openssh.com
-          HostKeyAlgorithms ssh-ed25519,rsa-sha2-256,rsa-sha2-512
-          ${optionalString isDarwin mac_meme}
-
-        Host gjallar
-          HostName 192.168.50.169
-          User jadfis
-          PasswordAuthentication no
-          IdentitiesOnly yes
-          # secure stuff
-          Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr
-          KexAlgorithms curve25519-sha256,curve25519-sha256@libssh.org,diffie-hellman-group16-sha512,diffie-hellman-group18-sha512,diffie-hellman-group-exchange-sha256
-          MACs hmac-sha2-256-etm@openssh.com,hmac-sha2-512-etm@openssh.com,umac-128-etm@openssh.com
-          HostKeyAlgorithms ssh-ed25519,rsa-sha2-256,rsa-sha2-512
-          ${optionalString isDarwin mac_meme}
-      '';
-  };
   programs.tmux = {
     enable = true;
     tmuxp.enable = false;
@@ -410,10 +370,6 @@ in
     '';
   };
   home.file = {
-    ssh_config_github = {
-      target = ".ssh/config.d/github";
-      text = pkgs.hax.ssh.github;
-    };
     curlrc = {
       target = ".curlrc";
       text = ''
