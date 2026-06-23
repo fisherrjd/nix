@@ -111,6 +111,7 @@ in
         (lib.optionals isWork [
           awscli2
           ssm-session-manager-plugin
+          opencode
         ])
       ];
 }
