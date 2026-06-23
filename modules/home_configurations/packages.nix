@@ -5,7 +5,6 @@
 { opkgs, flake, machine-name, ... }:
 let
   inherit (opkgs.hax) isLinux;
-  notBifrost = machine-name != "bifrost";
   isWork = machine-name == "gjallar";
   isAirbook = machine-name == "airbook";
 in
@@ -44,6 +43,7 @@ in
         gron
         gum # learn about this
         gzip
+        hms
         htmlq
         jq
         kubectx
@@ -108,10 +108,6 @@ in
         # Secrets
         flake.inputs.agenix.packages.${opkgs.stdenv.hostPlatform.system}.default
 
-        #Packages NOT on Bifrost
-        (lib.optionals notBifrost [
-          hms
-        ])
         (lib.optionals isWork [
           awscli2
           ssm-session-manager-plugin

@@ -4,10 +4,6 @@ let
   inherit (pkgs.hax) attrIf words;
   isEldo = machine-name == "eldo";
 
-  firstName = "jade";
-  lastName = "fisher";
-  promptChar = ">";
-
   homeDirectory =
     if isLinux then
       "/home/${username}"

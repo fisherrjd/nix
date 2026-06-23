@@ -2,7 +2,6 @@
 
 let
   jacobi = flake.inputs.jacobi.packages.${pkgs.stdenv.hostPlatform.system};
-  inherit (pkgs.hax) isDarwin isLinux;
 in
 {
   home.packages = with jacobi;

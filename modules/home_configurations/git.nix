@@ -1,21 +1,9 @@
-{ pkgs, username, ... }:
+{ pkgs, config, ... }:
 let
-  inherit (pkgs.hax) isDarwin isLinux isM1;
-
   firstName = "jade";
   lastName = "fisher";
-
-  sessionVariables = {
-    BASH_SILENCE_DEPRECATION_WARNING = "1";
-    EDITOR = "nano";
-    GIT_SSH_COMMAND = "${pkgs.openssh}/bin/ssh";
-    HISTCONTROL = "ignoreboth";
-    LESS = "-iR";
-    PAGER = "less";
-  };
 in
 {
-  # gitconfig
   programs.git =
     let
       gs = text:
@@ -100,7 +88,7 @@ in
         push.default = "simple";
         rebase.instructionFormat = "<%ae >%s";
         core = {
-          editor = sessionVariables.EDITOR;
+          editor = config.home.sessionVariables.EDITOR;
           pager = "delta --dark";
           autocrlf = "input";
           hooksPath = "/dev/null";
@@ -119,4 +107,3 @@ in
 
     };
 }
-
