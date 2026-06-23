@@ -57,6 +57,7 @@ in
     brews = [
     ];
     casks = [
+      "font-caskaydia-cove-nerd-font"
     ];
   };
 }
