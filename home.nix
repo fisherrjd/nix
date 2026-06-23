@@ -22,6 +22,7 @@ let
 in
 {
   imports = [
+    ./modules/home_configurations/core.nix
     ./modules/home_configurations/starship.nix
     ./modules/home_configurations/cobi.nix
     ./modules/home_configurations/git.nix
@@ -34,7 +35,7 @@ in
 
   _module.args = {
     inherit flake;
-    inherit machine-name;
+    inherit machine-name username home-manager;
     # forward the overlaid `hax` helpers to sub-modules; home-manager's own
     # pkgs doesn't carry the overlay, so `pkgs.hax` is unavailable there.
     inherit (pkgs) hax;
@@ -43,21 +44,9 @@ in
     opkgs = pkgs;
   };
 
-  programs.home-manager.enable = true;
-  programs.home-manager.path = "${home-manager}";
-
   programs.btop.enable = true;
   programs.htop.enable = true;
   programs.dircolors.enable = true;
-
-  # broken manpages upstream, see: https://github.com/nix-community/home-manager/issues/3342
-  manual.manpages.enable = false;
-
-  home = {
-    inherit username homeDirectory sessionVariables;
-    stateVersion = "22.11";
-  };
-
 
   programs.less.enable = true;
   programs.lesspipe.enable = true;

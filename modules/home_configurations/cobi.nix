@@ -1,4 +1,4 @@
-{ pkgs, flake, ... }:
+{ pkgs, flake, lib, ... }:
 
 let
   jacobi = flake.inputs.jacobi.packages.${pkgs.stdenv.hostPlatform.system};
