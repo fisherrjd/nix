@@ -134,11 +134,6 @@ in
           yank
           yq-go
           zip
-          # Packages for only Macs
-          (
-            lib.optionals isDarwin [
-            ]
-          )
 
           # Packages for only Linux
           (
@@ -161,9 +156,8 @@ in
             hms
           ])
           (lib.optionals isWork [
-          kubectx
-          awscli2
-          ssm-session-manager-plugin
+            awscli2
+            ssm-session-manager-plugin
           ])
           (lib.optionals isAirbook [
             (pkgs.writeShellScriptBin "mcp-osrs" ''
@@ -213,7 +207,6 @@ in
         export PATH="${homeDirectory}/.nix-profile/bin:$PATH"
       '' else "";
     initExtra = ''
-      HISTCONTROL=ignoreboth
       set +h
       export PATH="$PATH:$HOME/.bin/"
       export PATH="$PATH:$HOME/.npm/bin/"
@@ -329,17 +322,17 @@ in
           HostKeyAlgorithms ssh-ed25519,rsa-sha2-256,rsa-sha2-512
           ${optionalString isDarwin mac_meme}
 
-          Host gjallar
-            HostName 192.168.50.169
-            User jadfis
-            PasswordAuthentication no
-            IdentitiesOnly yes
-            # secure stuff
-            Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr
-            KexAlgorithms curve25519-sha256,curve25519-sha256@libssh.org,diffie-hellman-group16-sha512,diffie-hellman-group18-sha512,diffie-hellman-group-exchange-sha256
-            MACs hmac-sha2-256-etm@openssh.com,hmac-sha2-512-etm@openssh.com,umac-128-etm@openssh.com
-            HostKeyAlgorithms ssh-ed25519,rsa-sha2-256,rsa-sha2-512
-            ${optionalString isDarwin mac_meme}
+        Host gjallar
+          HostName 192.168.50.169
+          User jadfis
+          PasswordAuthentication no
+          IdentitiesOnly yes
+          # secure stuff
+          Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr
+          KexAlgorithms curve25519-sha256,curve25519-sha256@libssh.org,diffie-hellman-group16-sha512,diffie-hellman-group18-sha512,diffie-hellman-group-exchange-sha256
+          MACs hmac-sha2-256-etm@openssh.com,hmac-sha2-512-etm@openssh.com,umac-128-etm@openssh.com
+          HostKeyAlgorithms ssh-ed25519,rsa-sha2-256,rsa-sha2-512
+          ${optionalString isDarwin mac_meme}
       '';
   };
   programs.tmux = {
@@ -413,8 +406,6 @@ in
       bind-key -n Home send Escape "OH"
       bind-key -n End send Escape "OF"
 
-      setw -g monitor-activity off
-      setw -g monitor-activity on
       set-option -g bell-action none
     '';
   };
@@ -426,7 +417,6 @@ in
     curlrc = {
       target = ".curlrc";
       text = ''
-        --netrc-optional
         --netrc-optional
       '';
     };
@@ -447,10 +437,6 @@ in
       text = builtins.readFile ./.prettierrc.js;
     };
   };
-
-
-
-
 
   ${attrIf isLinux "services"}.vscode-server.enable = isLinux;
 }
