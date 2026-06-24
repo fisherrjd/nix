@@ -112,6 +112,8 @@ in
           awscli2
           ssm-session-manager-plugin
           opencode
+          pi-coding-agent
+          glab
         ])
       ];
 }

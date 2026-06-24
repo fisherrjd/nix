@@ -16,6 +16,8 @@ in
 
   documentation.enable = false;
   time.timeZone = common.timeZone;
+  environment.systemPath = [ "/opt/homebrew/bin" "/opt/homebrew/sbin" ];
+
   environment.variables = {
     NIX_HOST = hostname;
     NIXDARWIN_CONFIG = configPath;
