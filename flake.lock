@@ -968,8 +968,8 @@
         "nixpkgs": "nixpkgs_11"
       },
       "locked": {
-        "lastModified": 1782350502,
-        "narHash": "sha256-dU3eG4whYdgrIzCDiNXcdU0i/rVw+GE/sm4TO7ApjMQ=",
+        "lastModified": 1782391944,
+        "narHash": "sha256-1KEdRRK/HrodQKeFQ6i+hX25sjr2xCzl+QPQ280rq3o=",
         "path": "/Users/jadfis/Sinch/Meetings",
         "type": "path"
       },

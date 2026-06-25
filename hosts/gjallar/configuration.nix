@@ -54,7 +54,16 @@ in
 
   services.sinch-meetings = {
     enable = true;
-    user   = username;
+    user = username;
+  };
+
+  launchd.user.agents.caffeinate = {
+    serviceConfig = {
+      Label = "jade.caffeinate";
+      ProgramArguments = [ "/usr/bin/caffeinate" "-dims" ];
+      RunAtLoad = true;
+      KeepAlive = true; # Keeps caffeinate running even if it exits
+    };
   };
 
   homebrew = {
