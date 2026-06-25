@@ -52,6 +52,11 @@ in
   };
   services.openssh.enable = true;
 
+  services.sinch-meetings = {
+    enable = true;
+    user   = username;
+  };
+
   homebrew = {
     enable = true;
     taps = [
