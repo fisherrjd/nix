@@ -18,6 +18,10 @@ in
   time.timeZone = common.timeZone;
   environment.systemPath = [ "/opt/homebrew/bin" "/opt/homebrew/sbin" ];
 
+  environment.systemPackages = with pkgs; [
+    nodejs
+  ];
+
   environment.variables = {
     NIX_HOST = hostname;
     NIXDARWIN_CONFIG = configPath;
