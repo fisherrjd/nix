@@ -27,6 +27,13 @@ in
     NIXDARWIN_CONFIG = configPath;
   };
   environment.darwinConfig = configPath;
+
+  networking = {
+    hostName = hostname;
+    localHostName = hostname;
+    computerName = hostname;
+  };
+
   users.users.jadfis = {
     name = username;
     home = "/Users/${username}";
@@ -54,11 +61,13 @@ in
       extra-trusted-public-keys = fisherrjd.cachix.org-1:21bdYeKCoWN19OGUDTGU41o60gnEsLHY5+tIpEq7w+A=
     '';
   };
-  services.openssh.enable = true;
+  services = {
+    openssh.enable = true;
 
-  services.sinch-meetings = {
-    enable = true;
-    user = username;
+    sinch-meetings = {
+      enable = true;
+      user = username;
+    };
   };
 
   launchd.user.agents.caffeinate = {
