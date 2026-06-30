@@ -10,3 +10,5 @@ data/
 pynixify/
 styles/*
 !styles/Vocab
+
+SUGGESTIONS.md
