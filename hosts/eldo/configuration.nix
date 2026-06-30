@@ -94,6 +94,8 @@ in
     25566
     8069
     2026 # <--- DEV Postgres DB
+    5433
+    5432 # ge-data Postgres (TimescaleDB) — k3s ingester connects here; pg_hba is the real gate
   ];
 
   networking.hostName = "eldo";
@@ -178,7 +180,33 @@ in
       openssh.enable = true;
       postgresql = {
         enable = true;
-        ensureDatabases = [ "litellm" ];
+        # Pin to the major the existing data dir was initdb'd with. VERIFY before
+        # rebuild: `cat /var/lib/postgresql/*/PG_VERSION` on eldo. litellm shares
+        # this instance, so a major bump (e.g. unstable moving 16 -> 17) would
+        # refuse to start on the old data dir.
+        package = pkgs.postgresql_16;
+        enableTCPIP = true; # listen on TCP so the k3s ingester pod can reach it
+        # TimescaleDB: hypertables + compression for the price history. The lib is
+        # preloaded here; the per-database `CREATE EXTENSION` runs when the ge-data
+        # schema (init/01_schema.sql) is loaded, not from this config.
+        extensions = ps: [ ps.timescaledb ];
+        settings.shared_preload_libraries = "timescaledb";
+        ensureDatabases = [ "litellm" "ge-data" ];
+        ensureUsers = [
+          {
+            name = "ge-data";
+            ensureDBOwnership = true; # owns the like-named ge-data database
+          }
+        ];
+        # mkAfter so litellm's default local/peer rules are APPENDED to, not
+        # replaced: one pg_hba rule giving the ge-data role scram access to the
+        # ge-data db from the k3s pod network only. CONFIRM the CIDR matches your
+        # cluster (k3s/flannel default is 10.42.0.0/16). The role password is set
+        # once out-of-band (not in this config); its source of truth is the k3s
+        # Secret the ingester reads.
+        authentication = pkgs.lib.mkAfter ''
+          host  ge-data  ge-data  10.42.0.0/16  scram-sha-256
+        '';
       };
     };
 

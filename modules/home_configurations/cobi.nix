@@ -1,8 +1,7 @@
-{ pkgs, flake, ... }:
+{ pkgs, flake, lib, ... }:
 
 let
   jacobi = flake.inputs.jacobi.packages.${pkgs.stdenv.hostPlatform.system};
-  inherit (pkgs.hax) isDarwin isLinux;
 in
 {
   home.packages = with jacobi;
@@ -13,6 +12,7 @@ in
       aws_pog_scripts
       curl_pog_scripts
       aq
+      mica
       # zaddy
     ];
 

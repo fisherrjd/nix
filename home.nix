@@ -1,15 +1,8 @@
 { pkgs ? import ./default.nix { }, flake ? null, machine-name ? "void", home-manager ? null, username }:
 let
   inherit (pkgs.hax) isDarwin isLinux isM1;
-  inherit (pkgs.hax) attrIf optionalString words;
-  notBifrost = machine-name != "bifrost";
-  isWork = machine-name == "workbook";
-  isAirbook = machine-name == "airbook";
+  inherit (pkgs.hax) attrIf words;
   isEldo = machine-name == "eldo";
-
-  firstName = "jade";
-  lastName = "fisher";
-  promptChar = ">";
 
   homeDirectory =
     if isLinux then
@@ -29,166 +22,31 @@ let
 in
 {
   imports = [
+    ./modules/home_configurations/core.nix
     ./modules/home_configurations/starship.nix
     ./modules/home_configurations/cobi.nix
     ./modules/home_configurations/git.nix
+    ./modules/home_configurations/ssh.nix
+    ./modules/home_configurations/tmux.nix
+    ./modules/home_configurations/packages.nix
     # Look more into these ex: optionalAttrs
     (pkgs.lib.optionalAttrs isLinux "${flake.inputs.vscode-server}/modules/vscode-server/home.nix")
   ];
 
   _module.args = {
     inherit flake;
-    inherit machine-name;
+    inherit machine-name username home-manager;
+    # forward the overlaid `hax` helpers to sub-modules; home-manager's own
+    # pkgs doesn't carry the overlay, so `pkgs.hax` is unavailable there.
+    inherit (pkgs) hax;
+    # home.nix's `pkgs` is the overlaid set (hax, hms, jacobi pkgs, ...);
+    # forward it for modules that install those overlay-only packages.
+    opkgs = pkgs;
   };
-
-  programs.home-manager.enable = true;
-  programs.home-manager.path = "${home-manager}";
 
   programs.btop.enable = true;
   programs.htop.enable = true;
   programs.dircolors.enable = true;
-
-  # broken manpages upstream, see: https://github.com/nix-community/home-manager/issues/3342
-  manual.manpages.enable = false;
-
-  home = {
-    inherit username homeDirectory sessionVariables;
-    packages = with pkgs;
-      lib.flatten
-        [
-          (writeShellScriptBin "machine-name" ''
-            echo "${machine-name}"
-          '')
-          bash-completion
-          bashInteractive
-          bat
-          bzip2
-          cacert
-          caddy
-          coreutils-full
-          colmena
-          curl
-          diffutils
-          docker
-          doggo
-          duckdb
-          dyff
-          erdtree
-          fd
-          ffmpeg
-          figlet
-          file
-          fq
-          gawk
-          delta
-          gh
-          gnugrep
-          gnumake
-          gnupg
-          gnused
-          gron
-          gum # learn about this
-          gzip
-          htmlq
-          jq
-          kubectx
-          kubernetes-helm
-          lsof
-          man-pages
-          manix
-          moreutils # learn about this
-          nano
-          nanorc
-          netcat-gnu
-          nil
-          nix
-          nix-info
-          nix-output-monitor
-          nix-prefetch-github
-          nix-prefetch-scripts
-          nix-tree
-          nix-update
-          nixpkgs-fmt
-          nixpkgs-review
-          prettier
-          openssh
-          p7zip
-          patch
-          pigz
-          podman
-          podman-compose
-          procps
-          pssh
-          ranger
-          redis
-          re2c
-          rlwrap
-          ruff
-          scc
-          scrypt
-          shfmt
-          statix
-          tmux
-          unzip
-          uv
-          vale
-          watch
-          wget
-          which
-          xh
-          yank
-          yq-go
-          zip
-          # Packages for only Macs
-          (
-            lib.optionals isDarwin [
-            ]
-          )
-
-          # Packages for only Linux
-          (
-            lib.optionals isLinux [
-              gnutar
-              ntfy-sh
-              claude-code
-              codex-latest
-              hermes-agent
-            ]
-          )
-          # Secrets
-          flake.inputs.agenix.packages.${pkgs.stdenv.hostPlatform.system}.default
-
-          #Packages NOT on Bifrost
-          (lib.optionals notBifrost [
-            hms
-          ])
-          (lib.optionals isWork [
-            awscli2
-            k8s_pog_scripts
-            # amazon-q-cli
-            nodejs
-            glab
-            ssm-session-manager-plugin
-            pandoc
-            kubectl
-            kubectx
-            k9s
-          ])
-          (lib.optionals isAirbook [
-            (pkgs.writeShellScriptBin "mcp-osrs" ''
-              export PATH="${pkgs.nodejs}/bin:$PATH"
-              exec ${pkgs.nodejs}/bin/npx -y @jayarrowz/mcp-osrs "$@"
-            '')
-          ])
-          # Jade's Pog scripts
-          [
-            colmena_pog_scripts
-          ]
-        ];
-
-    stateVersion = "22.11";
-  };
-
 
   programs.less.enable = true;
   programs.lesspipe.enable = true;
@@ -225,7 +83,6 @@ in
         export PATH="${homeDirectory}/.nix-profile/bin:$PATH"
       '' else "";
     initExtra = ''
-      HISTCONTROL=ignoreboth
       set +h
       export PATH="$PATH:$HOME/.bin/"
       export PATH="$PATH:$HOME/.npm/bin/"
@@ -310,135 +167,10 @@ in
     defaultOptions = words "--ansi --reverse --multi --filepath-word";
   };
 
-  programs.ssh = {
-    enable = true;
-    enableDefaultConfig = false;
-    includes = [ "config.d/*" ];
-    settings."*".Compression = true;
-    extraConfig =
-      let
-        mac_meme = ''
-          XAuthLocation /opt/X11/bin/xauth
-        '';
-      in
-      ''
-        ${optionalString isWork ''
-        Host bastion
-          User p3175941
-          IdentityFile ~/.ssh/id_ed25519
-          PasswordAuthentication no
-          ProxyCommand sh -c 'export AWS_PROFILE="it-cloud-shared-services"; aws ssm start-session --target "$(aws ec2 describe-instances --filters "Name=tag:Name,Values=shared-bastion" "Name=instance-state-name,Values=running" --output text --query "Reservations[*].Instances[0].InstanceId")" --document-name AWS-StartSSHSession --parameters "portNumber=%p"'
-        ''}
-
-        Host airbook
-          User jade
-          PasswordAuthentication no
-          IdentitiesOnly yes
-          # secure stuff
-          Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr
-          KexAlgorithms curve25519-sha256,curve25519-sha256@libssh.org,diffie-hellman-group16-sha512,diffie-hellman-group18-sha512,diffie-hellman-group-exchange-sha256
-          MACs hmac-sha2-256-etm@openssh.com,hmac-sha2-512-etm@openssh.com,umac-128-etm@openssh.com
-          HostKeyAlgorithms ssh-ed25519,rsa-sha2-256,rsa-sha2-512
-          ${optionalString isDarwin mac_meme}
-
-        Host workbook
-          HostName 10.0.0.61
-          User P3175941
-          PasswordAuthentication no
-          IdentitiesOnly yes
-          # secure stuff
-          Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr
-          KexAlgorithms curve25519-sha256,curve25519-sha256@libssh.org,diffie-hellman-group16-sha512,diffie-hellman-group18-sha512,diffie-hellman-group-exchange-sha256
-          MACs hmac-sha2-256-etm@openssh.com,hmac-sha2-512-etm@openssh.com,umac-128-etm@openssh.com
-          HostKeyAlgorithms ssh-ed25519,rsa-sha2-256,rsa-sha2-512
-          ${optionalString isDarwin mac_meme}
-      '';
-  };
-  programs.tmux = {
-    enable = true;
-    tmuxp.enable = false;
-    historyLimit = 500000;
-    shortcut = "a";
-    extraConfig = ''
-      set -g base-index 1
-      set -g pane-base-index 1
-
-      set -g status-keys vi
-      setw -g mode-keys vi
-      setw -g mouse on
-      setw -g monitor-activity on
-
-      # Moving between windows.
-      unbind [
-      unbind ]
-      bind -r [ select-window -t :-
-      bind -r ] select-window -t :+
-
-      # Pane resizing.
-      bind -r H resize-pane -L 5
-      bind -r J resize-pane -D 5
-      bind -r K resize-pane -U 5
-      bind -r L resize-pane -R 5
-
-      # Maximize and restore a pane.
-      unbind Up
-      bind Up new-window -d -n tmp \; swap-pane -s tmp.1 \; select-window -t tmp
-      unbind Down
-      bind Down last-window \; swap-pane -s tmp.1 \; kill-window -t tmp
-
-      # Log output to a text file on demand.
-      bind P pipe-pane -o "cat >>~/#W.log" \; display "Toggled logging to ~/#W.log"
-
-      # -- display -------------------------------------------------------------------
-      # tabs
-      set -g window-status-current-format "#[fg=black]#[bg=red] #I #[bg=brightblack]#[fg=brightwhite] #W#[fg=brightblack]#[bg=black]"
-      set -g window-status-format "#[fg=black]#[bg=yellow] #I #[bg=brightblack]#[fg=brightwhite] #W#[fg=brightblack]#[bg=black]"
-
-      # status bar
-      set-option -g status-position bottom
-      set-option -g status-justify left
-      set -g status-fg colour1
-      set -g status-bg colour0
-      set -g status-left ' '
-      set -g status-right '#(date +"%_I:%M")'
-      set-option -g set-titles on
-      #256 colors
-      set -g default-terminal "xterm-256color"
-      set -ga terminal-overrides ",xterm-256color:Tc"
-      #Don't auto remane windows
-      set-option -g allow-rename off
-      # Source config
-      unbind r
-      bind r source-file ~/.tmux.conf \; display "Finished sourcing ~/.tmux.conf ."
-
-      # Use Alt-arrow keys without prefix key to switch panes
-      bind -n M-Left select-pane -L
-      bind -n M-Right select-pane -R
-      bind -n M-Up select-pane -U
-      bind -n M-Down select-pane -D
-
-      # Shift arrow to switch windows
-      bind -n S-Left  previous-window
-      bind -n S-Right next-window
-
-      # allow fn+left/right
-      bind-key -n Home send Escape "OH"
-      bind-key -n End send Escape "OF"
-
-      setw -g monitor-activity off
-      setw -g monitor-activity on
-      set-option -g bell-action none
-    '';
-  };
   home.file = {
-    ssh_config_github = {
-      target = ".ssh/config.d/github";
-      text = pkgs.hax.ssh.github;
-    };
     curlrc = {
       target = ".curlrc";
       text = ''
-        --netrc-optional
         --netrc-optional
       '';
     };
@@ -459,10 +191,6 @@ in
       text = builtins.readFile ./.prettierrc.js;
     };
   };
-
-
-
-
 
   ${attrIf isLinux "services"}.vscode-server.enable = isLinux;
 }
