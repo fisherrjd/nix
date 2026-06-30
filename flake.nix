@@ -11,7 +11,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
-    sinch-meetings.url = "path:/Users/jadfis/Sinch/Meetings";
+    skribbl.url = "github:fisherrjd/skribbl";
     vscode-server = {
       url = "github:msteen/nixos-vscode-server";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -69,7 +69,7 @@
                 "${self.inputs.jacobi}/hosts/modules/darwin/llama-server.nix"
                 ./hosts/${name}/configuration.nix
               ] ++ (lib.optionals (name == "gjallar") [
-                self.inputs.sinch-meetings.darwinModules.default
+                self.inputs.skribbl.darwinModules.default
               ]);
             };
           })

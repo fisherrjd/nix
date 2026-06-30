@@ -304,11 +304,11 @@
         "pog": "pog"
       },
       "locked": {
-        "lastModified": 1782260449,
-        "narHash": "sha256-XTHTosvUlEYTNVo8osP6JCvIf1hRcpTZO+Qnpyx0J0E=",
+        "lastModified": 1782519884,
+        "narHash": "sha256-mOHGrLK4CKrtnXBQbEAL5xnL7EoPKrBtywwqdsS7YZA=",
         "owner": "jpetrucciani",
         "repo": "hex",
-        "rev": "4ec9ec4e152f1d6140aaf8e551b4184adc926a5e",
+        "rev": "c03f714c0c09235e16254244a84f8e7b757c296d",
         "type": "github"
       },
       "original": {
@@ -387,11 +387,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1782233665,
-        "narHash": "sha256-h/xOtrByoA/Ak1lWHn0O1lVZz4qWYbwOSLQ8YSwQO0I=",
+        "lastModified": 1782423922,
+        "narHash": "sha256-qPNd6lUohHP5gcJhqQ7rLV87RwIx0xYR2A4Frb9Zjc4=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "062581938b4a378a82dfbb294b494808157153a1",
+        "rev": "5d320ab301cfaaca7d32514f13815d19d109f5f4",
         "type": "github"
       },
       "original": {
@@ -421,11 +421,11 @@
         "vscode-server": "vscode-server"
       },
       "locked": {
-        "lastModified": 1782261158,
-        "narHash": "sha256-2bb6lRDHKPun8kQwTx6/qSCqadZ6wBNZVehTwRQr6rY=",
+        "lastModified": 1782764953,
+        "narHash": "sha256-6jiUoG3s5iuj4St+9b9uaC/okYteHwyv5FtFz6lxSpc=",
         "owner": "jpetrucciani",
         "repo": "nix",
-        "rev": "5fe6257a76c8da51b242b7dea2796d316247f817",
+        "rev": "1a72fb44d33cc03840e39e55a684167e4749ab7a",
         "type": "github"
       },
       "original": {
@@ -567,11 +567,11 @@
         "nixpkgs": "nixpkgs_5"
       },
       "locked": {
-        "lastModified": 1782166108,
-        "narHash": "sha256-/EtnQBcKbsaCAGQ5VRcplrHRkR4ryqyLMpBfkVuG9Xw=",
+        "lastModified": 1782379505,
+        "narHash": "sha256-zPvPiU+a7pqtH47xrtZLNRABJKpOjfZQclDbcvNtH+I=",
         "owner": "NixOS",
         "repo": "nixos-hardware",
-        "rev": "875776f0252fcb8618bb948640a0d1f7a5b362be",
+        "rev": "603d3afd1b6145bd66e97ae38a34d91c95df70cf",
         "type": "github"
       },
       "original": {
@@ -730,11 +730,11 @@
     },
     "nixpkgs_6": {
       "locked": {
-        "lastModified": 1782231800,
-        "narHash": "sha256-AyPvq+cx3JFicSd687dhhIfUMryk9PUFmHnofBjalMg=",
+        "lastModified": 1782506974,
+        "narHash": "sha256-c458V2/NItAdXCscZVmnVMlIvyRNcFnZaE5wZ6PJWzg=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "6f5e2d2ea55618c5197ce40e346f205c35d2213e",
+        "rev": "228f7e313f802be81182cce48a3ddae66231e496",
         "type": "github"
       },
       "original": {
@@ -959,23 +959,26 @@
         "nixos-generators": "nixos-generators",
         "nixos-wsl": "nixos-wsl_2",
         "nixpkgs": "nixpkgs_10",
-        "sinch-meetings": "sinch-meetings",
+        "skribbl": "skribbl",
         "vscode-server": "vscode-server_2"
       }
     },
-    "sinch-meetings": {
+    "skribbl": {
       "inputs": {
         "nixpkgs": "nixpkgs_11"
       },
       "locked": {
-        "lastModified": 1782405262,
-        "narHash": "sha256-+bnkeD8ecwa8Ddp3yi5V1H/m9LkJQhMH4Nsut4/Qbuw=",
-        "path": "/Users/jadfis/Sinch/Meetings",
-        "type": "path"
+        "lastModified": 1782792664,
+        "narHash": "sha256-bRAIUbXVw0SVcFNPbnM6AQTrmjEcbK9xK9RY9kEYwwc=",
+        "owner": "fisherrjd",
+        "repo": "skribbl",
+        "rev": "a15706e8e305167a98c9588ec789a7af0e3275f0",
+        "type": "github"
       },
       "original": {
-        "path": "/Users/jadfis/Sinch/Meetings",
-        "type": "path"
+        "owner": "fisherrjd",
+        "repo": "skribbl",
+        "type": "github"
       }
     },
     "systems": {
