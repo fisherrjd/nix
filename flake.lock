@@ -959,23 +959,26 @@
         "nixos-generators": "nixos-generators",
         "nixos-wsl": "nixos-wsl_2",
         "nixpkgs": "nixpkgs_10",
-        "sinch-meetings": "sinch-meetings",
+        "skribbl": "skribbl",
         "vscode-server": "vscode-server_2"
       }
     },
-    "sinch-meetings": {
+    "skribbl": {
       "inputs": {
         "nixpkgs": "nixpkgs_11"
       },
       "locked": {
-        "lastModified": 1782405262,
-        "narHash": "sha256-+bnkeD8ecwa8Ddp3yi5V1H/m9LkJQhMH4Nsut4/Qbuw=",
-        "path": "/Users/jadfis/Sinch/Meetings",
-        "type": "path"
+        "lastModified": 1782792664,
+        "narHash": "sha256-bRAIUbXVw0SVcFNPbnM6AQTrmjEcbK9xK9RY9kEYwwc=",
+        "owner": "fisherrjd",
+        "repo": "skribbl",
+        "rev": "a15706e8e305167a98c9588ec789a7af0e3275f0",
+        "type": "github"
       },
       "original": {
-        "path": "/Users/jadfis/Sinch/Meetings",
-        "type": "path"
+        "owner": "fisherrjd",
+        "repo": "skribbl",
+        "type": "github"
       }
     },
     "systems": {

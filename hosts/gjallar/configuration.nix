@@ -64,9 +64,12 @@ in
   services = {
     openssh.enable = true;
 
-    sinch-meetings = {
+    skribbl = {
       enable = true;
       user = username;
+      secretsDir = "/Users/${username}/.config/sinch/meetings";
+      vaultPath = "/Users/${username}/vaults/meetings";
+      logDir = "/Users/${username}/Library/Logs/sinch-meetings";
     };
   };
 
