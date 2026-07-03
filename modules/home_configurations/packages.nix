@@ -8,10 +8,6 @@ let
   isWork = machine-name == "gjallar";
   isAirbook = machine-name == "airbook";
   jacobi = flake.inputs.jacobi.packages.${opkgs.stdenv.hostPlatform.system};
-  jixup = import ../../mods/pog/jixup.nix {
-    inherit (opkgs) pog lib;
-    inherit (jacobi) nixup;
-  };
 in
 {
   home.packages = with opkgs;
@@ -51,7 +47,6 @@ in
         hms
         htmlq
         jq
-        jixup
         kubectx
         kubernetes-helm
         lsof
