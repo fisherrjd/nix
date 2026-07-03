@@ -51,6 +51,7 @@ in
         hms
         htmlq
         jq
+        jixup
         kubectx
         kubernetes-helm
         lsof
@@ -108,7 +109,6 @@ in
             procps
             colmena
             colmena_pog_scripts
-            jixup
           ]
         )
         # Secrets
