@@ -81,6 +81,7 @@ in
   environment.systemPackages = with pkgs; [
     vim
     vscode
+    nodejs
   ];
   system.stateVersion = "24.05";
 
