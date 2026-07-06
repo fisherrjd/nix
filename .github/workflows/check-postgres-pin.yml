@@ -1,0 +1,37 @@
+name: check postgres timescaledb pin
+# Guards against the ge-data TimescaleDB version-mismatch incident:
+# hosts/eldo/configuration.nix pins postgres+timescaledb to the dedicated
+# `nixpkgs-postgresql` flake input (rev shipping timescaledb 2.27.2). The
+# rolling `nixpkgs` input keeps moving via update.yml. This job fails when
+# the two inputs disagree on the bundled timescaledb version, so a drift is
+# caught in review instead of silently bricking every ge-data connection.
+# See .hermes/plans/2026-07-05-fix-ge-data-timescaledb-mismatch.md Phase 2.
+on: {pull_request, workflow_dispatch}
+jobs:
+  check-postgres-pin:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7.0.0
+        with:
+          persist-credentials: false
+      - uses: cachix/install-nix-action@v31
+        with:
+          extra_nix_config: |
+            extra-substituters = https://cache.g7c.us
+            extra-trusted-public-keys = cache.g7c.us:dSWpE2B5zK/Fahd7npIQWM4izRnVL+a4LiCAnrjdoFY=
+      - name: compare timescaledb version between pinned and rolling nixpkgs
+        run: |
+          pinned=$(nix eval --raw --impure --expr \
+            '(import (builtins.getFlake (toString ./.)).inputs.nixpkgs-postgresql { system = builtins.currentSystem; }).postgresql16Packages.timescaledb.version')
+          rolling=$(nix eval --raw --impure --expr \
+            '(builtins.getFlake (toString ./.)).inputs.nixpkgs.legacyPackages.${builtins.currentSystem}.postgresql16Packages.timescaledb.version')
+          echo "pinned  nixpkgs-postgresql timescaledb: $pinned"
+          echo "rolling nixpkgs           timescaledb: $rolling"
+          if [ "$pinned" != "$rolling" ]; then
+            echo "::warning::TIMESCALEDB VERSION DRIFT: pinned=$pinned rolling=$rolling"
+            echo "The rolling nixpkgs input now ships a different timescaledb than the" >&2
+            echo "pinned nixpkgs-postgresql input. Merging is safe (eldo uses the pin)," >&2
+            echo "but before you unpin, migrate ge-data's extension from $pinned to $rolling." >&2
+            exit 1
+          fi
+          echo "ok: pinned and rolling agree on timescaledb $pinned"
