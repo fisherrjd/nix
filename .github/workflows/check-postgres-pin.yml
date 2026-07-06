@@ -1,15 +1,25 @@
 name: check postgres timescaledb pin
 # Guards against the ge-data TimescaleDB version-mismatch incident:
 # hosts/eldo/configuration.nix pins postgres+timescaledb to the dedicated
-# `nixpkgs-postgresql` flake input (rev shipping timescaledb 2.27.2). The
-# rolling `nixpkgs` input keeps moving via update.yml. This job fails when
-# the two inputs disagree on the bundled timescaledb version, so a drift is
-# caught in review instead of silently bricking every ge-data connection.
+# `nixpkgs-postgresql` flake input. ge-data's extension is recorded in
+# pg_extension at 2.27.2, so the pinned input MUST keep shipping 2.27.2 or
+# every ge-data connection breaks with
+#   ERROR: could not access file "$libdir/timescaledb-<v>": No such file...
+#
+# This job FAILS only if the pinned input drifts off 2.27.2 (the real hazard —
+# e.g. someone bumps the nixpkgs-postgresql rev). The rolling `nixpkgs` input
+# moving away from 2.27.2 is EXPECTED and benign (eldo uses the pin, not
+# rolling), so that is reported as a non-blocking warning.
 # See .hermes/plans/2026-07-05-fix-ge-data-timescaledb-mismatch.md Phase 2.
 on: {pull_request, workflow_dispatch}
 jobs:
   check-postgres-pin:
     runs-on: ubuntu-24.04
+    env:
+      # The timescaledb version ge-data was initdb'd against (pg_extension
+      # extversion on eldo). Bump this ONLY as part of a deliberate ge-data
+      # extension migration, in lockstep with the nixpkgs-postgresql rev.
+      EXPECTED_TIMESCALEDB: "2.27.2"
     steps:
       - uses: actions/checkout@v7.0.0
         with:
@@ -19,19 +29,23 @@ jobs:
           extra_nix_config: |
             extra-substituters = https://cache.g7c.us
             extra-trusted-public-keys = cache.g7c.us:dSWpE2B5zK/Fahd7npIQWM4izRnVL+a4LiCAnrjdoFY=
-      - name: compare timescaledb version between pinned and rolling nixpkgs
+      - name: verify pinned timescaledb matches ge-data, warn on rolling drift
         run: |
           pinned=$(nix eval --raw --impure --expr \
             '(import (builtins.getFlake (toString ./.)).inputs.nixpkgs-postgresql { system = builtins.currentSystem; }).postgresql16Packages.timescaledb.version')
           rolling=$(nix eval --raw --impure --expr \
             '(builtins.getFlake (toString ./.)).inputs.nixpkgs.legacyPackages.${builtins.currentSystem}.postgresql16Packages.timescaledb.version')
-          echo "pinned  nixpkgs-postgresql timescaledb: $pinned"
-          echo "rolling nixpkgs           timescaledb: $rolling"
-          if [ "$pinned" != "$rolling" ]; then
-            echo "::warning::TIMESCALEDB VERSION DRIFT: pinned=$pinned rolling=$rolling"
-            echo "The rolling nixpkgs input now ships a different timescaledb than the" >&2
-            echo "pinned nixpkgs-postgresql input. Merging is safe (eldo uses the pin)," >&2
-            echo "but before you unpin, migrate ge-data's extension from $pinned to $rolling." >&2
+          echo "expected (ge-data)                : $EXPECTED_TIMESCALEDB"
+          echo "pinned   nixpkgs-postgresql       : $pinned"
+          echo "rolling  nixpkgs                  : $rolling"
+
+          if [ "$pinned" != "$EXPECTED_TIMESCALEDB" ]; then
+            echo "::error::PINNED TIMESCALEDB MOVED: nixpkgs-postgresql now ships $pinned, but ge-data is on $EXPECTED_TIMESCALEDB. This would brick every ge-data connection. Revert the nixpkgs-postgresql rev, or migrate ge-data and bump EXPECTED_TIMESCALEDB together."
             exit 1
           fi
-          echo "ok: pinned and rolling agree on timescaledb $pinned"
+
+          if [ "$pinned" != "$rolling" ]; then
+            echo "::warning::timescaledb drift: rolling nixpkgs ships $rolling, pin holds $pinned. Benign — eldo uses the pin. When you eventually want to unpin, migrate ge-data from $pinned to $rolling first."
+          fi
+
+          echo "ok: pinned timescaledb $pinned matches ge-data's expected version"
