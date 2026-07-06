@@ -184,7 +184,14 @@ in
         # rebuild: `cat /var/lib/postgresql/*/PG_VERSION` on eldo. litellm shares
         # this instance, so a major bump (e.g. unstable moving 16 -> 17) would
         # refuse to start on the old data dir.
-        package = pkgs.postgresql_16;
+        # postgres + timescaledb come from a dedicated flake input
+        # (flake.nix#nixpkgs-postgresql) so the ge-data extension version
+        # (2.27.2) doesn't move when the unstable nixpkgs input bumps.
+        # See .hermes/plans/2026-07-05-fix-ge-data-timescaledb-mismatch.md Phase 2.
+        package = (import flake.inputs.nixpkgs-postgresql {
+          inherit (pkgs) system;
+          config = { allowUnfree = true; };
+        }).postgresql_16;
         enableTCPIP = true; # listen on TCP so the k3s ingester pod can reach it
         # TimescaleDB: hypertables + compression for the price history. The lib is
         # preloaded here; the per-database `CREATE EXTENSION` runs when the ge-data
