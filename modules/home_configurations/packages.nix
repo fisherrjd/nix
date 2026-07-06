@@ -96,14 +96,15 @@ in
         # Packages for only Linux
         (
           lib.optionals isLinux [
-            gnutar
-            ntfy-sh
             claude-code
             codex-latest
-            hermes-agent
-            procps
             colmena
             colmena_pog_scripts
+            gnutar
+            hermes-agent
+            ntfy-sh
+            pi-coding-agent
+            procps
           ]
         )
         # Secrets
