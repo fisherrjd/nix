@@ -49,6 +49,22 @@ Extend the common value instead of replacing it. The `common.nix` → module
 refactor in §4 fixes this for free (you'd append with normal option merging
 instead of `//`).
 
+### 1.4 Postgres+TimescaleDB bundled version drift on eldo
+
+`hosts/eldo/configuration.nix` resolved `pkgs.postgresql_16` through the
+unstable `nixpkgs` input. The bundled `timescaledb.so` inside that derivation
+moves whenever upstream nixpkgs bumps it (2.27.2 → 2.28.0 in 2026-07). Because
+the `ge-data` DB records its extension version in `pg_extension`, any silent
+bump bricks all connections to `ge-data` with
+`ERROR: could not access file "$libdir/timescaledb-<old>": No such file or directory`.
+
+Fixed in `flake.nix` by adding a dedicated `nixpkgs-postgresql` input pinned
+to the postgresql_16 commit that ships timescaledb 2.27.2
+(`567a49d1913ce81ac6e9582e3553dd90a955875f`), and using it exclusively in the
+eldo postgres service. CI check (`.github/workflows/check-postgres-pin.yml`)
+fails if the unstable input ever drifts from the pinned one. Full write-up:
+`.hermes/plans/2026-07-05-fix-ge-data-timescaledb-mismatch.md`.
+
 ---
 
 ## 2. Quick mechanical wins (zero/low risk)

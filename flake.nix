@@ -6,6 +6,14 @@
     # TODO maybe add Keiths / DigDugs things see if they have anything cobi didn't already steal
     jacobi.url = "github:jpetrucciani/nix";
     nixpkgs.url = "nixpkgs/nixos-unstable";
+    # Dedicated input for postgres + timescaledb so the ge-data extension
+    # version (2.27.2 as of 2026-07-05) doesn't move when the unstable
+    # nixpkgs input bumps. Update only via explicit
+    # `nix flake lock --update-input nixpkgs-postgresql`.
+    nixpkgs-postgresql = {
+      url = "github:NixOS/nixpkgs/567a49d1913ce81ac6e9582e3553dd90a955875f";
+      flake = false;
+    };
     nixos-wsl = {
       url = "github:nix-community/NixOS-WSL";
       inputs.nixpkgs.follows = "nixpkgs";
