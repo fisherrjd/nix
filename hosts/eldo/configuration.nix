@@ -189,6 +189,14 @@ in
         # TimescaleDB: hypertables + compression for the price history. The lib is
         # preloaded here; the per-database `CREATE EXTENSION` runs when the ge-data
         # schema (init/01_schema.sql) is loaded, not from this config.
+        #
+        # PIN: nixpkgs is locked to 567a49d1913ce81ac6e9582e3553dd90a955875f via
+        # flake.lock override (see
+        # .hermes/plans/2026-07-05-fix-ge-data-timescaledb-mismatch.md Phase 1).
+        # That revision ships timescaledb 2.27.2, the version ge-data was
+        # initdb'd against. When 2.27.2 is no longer loadable (e.g. nixpkgs GC's
+        # the old bundle), follow Phase 2 of the plan to migrate ge-data to
+        # 2.28.0 and unpin.
         extensions = ps: [ ps.timescaledb ];
         settings.shared_preload_libraries = "timescaledb";
         ensureDatabases = [ "litellm" "ge-data" ];
