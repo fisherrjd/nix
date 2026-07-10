@@ -15,11 +15,17 @@ in
   home-manager.users.jadfis = common.jade;
 
   documentation.enable = false;
+  # nix-darwin's uninstaller evaluates a separate default config with docs
+  # enabled. Current nixpkgs/nix-darwin pins disagree on nixos-render-docs
+  # flags, so building the uninstaller pulls in a broken darwin manual. We do
+  # not use the uninstaller from the system profile on gjallar, so skip it.
+  system.tools.darwin-uninstaller.enable = false;
   time.timeZone = common.timeZone;
   environment.systemPath = [ "/opt/homebrew/bin" "/opt/homebrew/sbin" ];
 
   environment.systemPackages = with pkgs; [
     nodejs
+    (callPackage ../../packages/sinch-cli.nix { })
   ];
 
   environment.variables = {
