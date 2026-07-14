@@ -97,6 +97,7 @@ in
     2026 # <--- DEV Postgres DB
     5433
     5432 # ge-data Postgres (TimescaleDB) — k3s ingester connects here; pg_hba is the real gate
+    8420 # ge-dashboard web UI (orchestrator API stays on 127.0.0.1:8410, proxied by the dashboard)
   ];
 
   networking.hostName = "eldo";
@@ -220,7 +221,9 @@ in
         # once out-of-band (not in this config); its source of truth is the k3s
         # Secret the ingester reads.
         authentication = pkgs.lib.mkAfter ''
-          host  ge-data  ge-data  10.42.0.0/16  scram-sha-256
+          host  ge-data  ge-data          10.42.0.0/16  scram-sha-256
+          host  ge-data  ge-mcp           10.42.0.0/16  scram-sha-256
+          host  ge-data  ge-orchestrator  10.42.0.0/16  scram-sha-256
         '';
       };
     };
