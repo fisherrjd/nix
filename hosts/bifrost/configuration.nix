@@ -17,7 +17,7 @@ in
     ];
 
   #defining nix tings
-  nix = common.nix;
+  inherit (common) nix;
 
   # age = {
   #   identityPaths = [ "/home/jade/.ssh/id_ed25519" ];
@@ -36,7 +36,11 @@ in
   environment.variables = {
     NIX_HOST = hostname;
   };
-  networking.hostName = hostname; # Define your hostname.
+  networking = {
+    hostName = hostname;
+    firewall.enable = true;
+    firewall.allowedTCPPorts = [ 80 443 ];
+  };
 
   boot.kernel.sysctl."net.ipv4.ip_forward" = 1;
 
@@ -52,9 +56,6 @@ in
     ];
     packages = with pkgs; [ ];
   };
-
-  networking.firewall.enable = true;
-  networking.firewall.allowedTCPPorts = [ 80 443 ];
 
   security.sudo.wheelNeedsPassword = false;
   environment.systemPackages = with pkgs; [

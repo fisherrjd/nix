@@ -14,15 +14,17 @@ in
       "${common.home-manager}/nixos"
       ./hardware-configuration.nix
       ../../modules/obsidian-autocommit.nix
-      { services = common.services; }
+      { inherit (common) services; }
     ];
   # Bootloader.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
-  boot.kernel.sysctl = {
-    "net.ipv4.ip_forward" = 1;
-    "net.ipv4.conf.all.forwarding" = 1;
-    "net.ipv4.conf.default.forwarding" = 1;
+  boot = {
+    loader.systemd-boot.enable = true;
+    loader.efi.canTouchEfiVariables = true;
+    kernel.sysctl = {
+      "net.ipv4.ip_forward" = 1;
+      "net.ipv4.conf.all.forwarding" = 1;
+      "net.ipv4.conf.default.forwarding" = 1;
+    };
   };
   age = {
     identityPaths = [ "/home/jade/.ssh/id_ed25519" ];
@@ -49,9 +51,21 @@ in
       };
     };
   };
-  networking.networkmanager.enable = true;
-  networking.interfaces.enp24s0.ipv6.addresses = [ ];
-  networking.enableIPv6 = false;
+  networking = {
+    hostName = hostname;
+    networkmanager.enable = true;
+    interfaces.enp24s0.ipv6.addresses = [ ];
+    enableIPv6 = false;
+    firewall.allowedTCPPorts = [
+      25565
+      25566
+      8069
+      2026 # <--- DEV Postgres DB
+      5433
+      5432 # ge-data Postgres (TimescaleDB) — k3s ingester connects here; pg_hba is the real gate
+      8420 # ge-dashboard web UI (orchestrator API stays on 127.0.0.1:8410, proxied by the dashboard)
+    ];
+  };
   time.timeZone = "America/Denver";
   i18n.defaultLocale = "en_US.UTF-8";
   i18n.extraLocaleSettings = {
@@ -89,24 +103,15 @@ in
     NIX_HOST = hostname;
   };
 
-  networking.firewall.allowedTCPPorts = [
-    25565
-    25566
-    8069
-    2026 # <--- DEV Postgres DB
-    5433
-    5432 # ge-data Postgres (TimescaleDB) — k3s ingester connects here; pg_hba is the real gate
-    8420 # ge-dashboard web UI (orchestrator API stays on 127.0.0.1:8410, proxied by the dashboard)
-  ];
-
-  networking.hostName = "eldo";
   home-manager.users.jade = common.jade;
 
-  nix = common.nix;
-  systemd.targets.sleep.enable = false;
-  systemd.targets.suspend.enable = false;
-  systemd.targets.hibernate.enable = false;
-  systemd.targets.hybrid-sleep.enable = false;
+  inherit (common) nix;
+  systemd.targets = {
+    sleep.enable = false;
+    suspend.enable = false;
+    hibernate.enable = false;
+    hybrid-sleep.enable = false;
+  };
 
   services.obsidian-autocommit = {
     enable = true;

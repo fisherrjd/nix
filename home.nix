@@ -44,127 +44,128 @@ in
     opkgs = pkgs;
   };
 
-  programs.btop.enable = true;
-  programs.htop.enable = true;
-  programs.dircolors.enable = true;
+  programs = {
+    btop.enable = true;
+    htop.enable = true;
+    dircolors.enable = true;
+    less.enable = true;
+    lesspipe.enable = true;
+    # lsd.enable = true;
 
-  programs.less.enable = true;
-  programs.lesspipe.enable = true;
-  # programs.lsd.enable = true;
+    bash = {
+      inherit sessionVariables;
+      enable = true;
+      historyFileSize = -1;
+      historySize = -1;
+      shellAliases = {
+        ls = "ls --color=auto";
+        k = "kubectl";
+        kctx = "kubectx";
+        kns = "kubens";
+        # l = "lsd -lA --permission octal";
+        ll = "ls -ahlFG";
+        mkdir = "mkdir -pv";
+        fzfp = "${pkgs.fzf}/bin/fzf --preview 'bat --style=numbers --color=always {}'";
+        strip = ''${pkgs.gnused}/bin/sed -E 's#^\s+|\s+$##g' '';
 
-  programs.bash = {
-    inherit sessionVariables;
-    enable = true;
-    historyFileSize = -1;
-    historySize = -1;
-    shellAliases = {
-      ls = "ls --color=auto";
-      k = "kubectl";
-      kctx = "kubectx";
-      kns = "kubens";
-      # l = "lsd -lA --permission octal";
-      ll = "ls -ahlFG";
-      mkdir = "mkdir -pv";
-      fzfp = "${pkgs.fzf}/bin/fzf --preview 'bat --style=numbers --color=always {}'";
-      strip = ''${pkgs.gnused}/bin/sed -E 's#^\s+|\s+$##g' '';
+        # git
+        g = "git";
+        ga = "git add -A .";
+        cm = "git commit -m ";
 
-      # git
-      g = "git";
-      ga = "git add -A .";
-      cm = "git commit -m ";
+        # misc
+        space = "du -Sh | sort -rh | head -10";
+        now = "date +%s";
+        uneek = "awk '!a[$0]++'";
+      };
+      bashrcExtra =
+        if isDarwin then ''
+          export PATH="${homeDirectory}/.nix-profile/bin:$PATH"
+        '' else "";
+      initExtra = ''
+        set +h
+        export PATH="$PATH:$HOME/.bin/"
+        export PATH="$PATH:$HOME/.npm/bin/"
 
-      # misc
-      space = "du -Sh | sort -rh | head -10";
-      now = "date +%s";
-      uneek = "awk '!a[$0]++'";
-    };
-    bashrcExtra =
-      if isDarwin then ''
-        export PATH="${homeDirectory}/.nix-profile/bin:$PATH"
-      '' else "";
-    initExtra = ''
-      set +h
-      export PATH="$PATH:$HOME/.bin/"
-      export PATH="$PATH:$HOME/.npm/bin/"
+        # base nix
+      '' + (if isM1 then ''
+        export CONFIGURE_OPTS="--build aarch64-apple-darwin20"
+      ''
+      else ""
+      ) + ''
+        # additional aliases
+        [[ -e ~/.aliases ]] && source ~/.aliases
 
-      # base nix
-    '' + (if isM1 then ''
-      export CONFIGURE_OPTS="--build aarch64-apple-darwin20"
-    ''
-    else ""
-    ) + ''
-      # additional aliases
-      [[ -e ~/.aliases ]] && source ~/.aliases
-
-      # bash completions
-      export XDG_DATA_DIRS="$HOME/.nix-profile/share:''${XDG_DATA_DIRS:-/usr/local/share:/usr/share}"
-      source ~/.nix-profile/etc/profile.d/bash_completion.sh
-      source ~/.nix-profile/share/bash-completion/completions/git
-      source ~/.nix-profile/share/bash-completion/completions/ssh
-      complete -o bashdefault -o default -o nospace -F __git_wrap__git_main g
-      # there are often duplicate path entries on non-nixos; remove them
-      NEWPATH=
-      OLDIFS=$IFS
-      IFS=:
-      for entry in $PATH;do
-        if [[ ! :$NEWPATH: == *:$entry:* ]];then
-          if [[ -z $NEWPATH ]];then
-            NEWPATH=$entry
-          else
-            NEWPATH=$NEWPATH:$entry
+        # bash completions
+        export XDG_DATA_DIRS="$HOME/.nix-profile/share:''${XDG_DATA_DIRS:-/usr/local/share:/usr/share}"
+        source ~/.nix-profile/etc/profile.d/bash_completion.sh
+        source ~/.nix-profile/share/bash-completion/completions/git
+        source ~/.nix-profile/share/bash-completion/completions/ssh
+        complete -o bashdefault -o default -o nospace -F __git_wrap__git_main g
+        # there are often duplicate path entries on non-nixos; remove them
+        NEWPATH=
+        OLDIFS=$IFS
+        IFS=:
+        for entry in $PATH;do
+          if [[ ! :$NEWPATH: == *:$entry:* ]];then
+            if [[ -z $NEWPATH ]];then
+              NEWPATH=$entry
+            else
+              NEWPATH=$NEWPATH:$entry
+            fi
           fi
-        fi
-      done
+        done
 
-      IFS=$OLDIFS
-      export PATH="$NEWPATH"
-      unset OLDIFS NEWPATH
-    '' + (if isLinux then ''
-      ${pkgs.figlet}/bin/figlet "$(hostname)" | ${pkgs.clolcat}/bin/clolcat
-      echo
-    '' else "");
-  };
-
-  # https://github.com/ajeetdsouza/zoxide
-  programs.zoxide = {
-    enable = true;
-  };
-
-  programs.direnv = {
-    enable = true;
-    nix-direnv.enable = true;
-  };
-
-  programs.readline = {
-    enable = true;
-    variables = {
-      show-all-if-ambiguous = true;
-      skip-completed-text = true;
-      completion-query-items = -1;
-      expand-tilde = false;
-      bell-style = false;
+        IFS=$OLDIFS
+        export PATH="$NEWPATH"
+        unset OLDIFS NEWPATH
+      '' + (if isLinux then ''
+        ${pkgs.figlet}/bin/figlet "$(hostname)" | ${pkgs.clolcat}/bin/clolcat
+        echo
+      '' else "");
     };
-    bindings = {
-      "\\e[1;5D" = "backward-word";
-      "\\e[1;5C" = "forward-word";
-      "\\e[5D" = "backward-word";
-      "\\e[5C" = "forward-word";
-      "\\e\\e[D" = "backward-word";
-      "\\e\\e[C" = "forward-word";
+
+    # https://github.com/ajeetdsouza/zoxide
+    zoxide = {
+      enable = true;
     };
-  };
 
-  # https://github.com/cantino/mcfly
-  programs.mcfly = {
-    enable = true;
-    enableBashIntegration = true;
-  };
+    direnv = {
+      enable = true;
+      nix-direnv.enable = true;
+    };
 
-  programs.fzf = {
-    enable = true;
-    enableBashIntegration = false;
-    defaultCommand = "fd -tf -c always -H --ignore-file ${./ignore} -E .git";
-    defaultOptions = words "--ansi --reverse --multi --filepath-word";
+    readline = {
+      enable = true;
+      variables = {
+        show-all-if-ambiguous = true;
+        skip-completed-text = true;
+        completion-query-items = -1;
+        expand-tilde = false;
+        bell-style = false;
+      };
+      bindings = {
+        "\\e[1;5D" = "backward-word";
+        "\\e[1;5C" = "forward-word";
+        "\\e[5D" = "backward-word";
+        "\\e[5C" = "forward-word";
+        "\\e\\e[D" = "backward-word";
+        "\\e\\e[C" = "forward-word";
+      };
+    };
+
+    # https://github.com/cantino/mcfly
+    mcfly = {
+      enable = true;
+      enableBashIntegration = true;
+    };
+
+    fzf = {
+      enable = true;
+      enableBashIntegration = false;
+      defaultCommand = "fd -tf -c always -H --ignore-file ${./ignore} -E .git";
+      defaultOptions = words "--ansi --reverse --multi --filepath-word";
+    };
   };
 
   home.file = {

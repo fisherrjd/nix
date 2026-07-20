@@ -61,7 +61,7 @@ in
 
   home-manager.users.jade = common.jade;
   networking.hostName = hostname;
-  nix = common.nix;
+  inherit (common) nix;
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   programs.command-not-found.enable = false;
 
