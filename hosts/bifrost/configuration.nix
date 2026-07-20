@@ -17,13 +17,7 @@ in
     ];
 
   #defining nix tings
-  nix = common.nix // {
-    nixPath = [
-      "nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixos"
-      "nixos-config=/home/fisherrjd/cfg/hosts/${hostname}/configuration.nix"
-      "/nix/var/nix/profiles/per-user/root/channels"
-    ];
-  };
+  nix = common.nix;
 
   # age = {
   #   identityPaths = [ "/home/jade/.ssh/id_ed25519" ];

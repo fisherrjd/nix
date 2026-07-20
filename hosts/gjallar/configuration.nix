@@ -59,13 +59,6 @@ in
       "darwin=${common.nix-darwin}"
       "darwin-config=${configPath}"
     ];
-    extraOptions = ''
-      max-jobs = auto
-      narinfo-cache-negative-ttl = 10
-      extra-experimental-features = nix-command flakes
-      extra-substituters = https://fisherrjd.cachix.org
-      extra-trusted-public-keys = fisherrjd.cachix.org-1:21bdYeKCoWN19OGUDTGU41o60gnEsLHY5+tIpEq7w+A=
-    '';
   };
   services = {
     openssh.enable = true;

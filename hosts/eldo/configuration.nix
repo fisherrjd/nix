@@ -103,13 +103,7 @@ in
   networking.hostName = "eldo";
   home-manager.users.jade = common.jade;
 
-  nix = common.nix // {
-    nixPath = [
-      "nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixos"
-      "nixos-config=/home/fisherrjd/cfg/hosts/${hostname}/configuration.nix"
-      "/nix/var/nix/profiles/per-user/root/channels"
-    ];
-  };
+  nix = common.nix;
   systemd.targets.sleep.enable = false;
   systemd.targets.suspend.enable = false;
   systemd.targets.hibernate.enable = false;
