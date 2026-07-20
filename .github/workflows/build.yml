@@ -10,7 +10,7 @@ jobs:
     name: lint (nixpkgs-fmt + statix)
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v7.0.0
+      - uses: actions/checkout@v7.0.1
       - uses: cachix/install-nix-action@v31
       - run: nix run nixpkgs#nixpkgs-fmt -- --check .
       - run: nix run nixpkgs#statix -- check .
@@ -30,7 +30,7 @@ jobs:
     name: nix (${{ matrix.attrs.config_name }} on ${{ matrix.attrs.os }}) # <-- Updated name format
     runs-on: ${{ matrix.attrs.os }}
     steps:
-      - uses: actions/checkout@v7.0.0
+      - uses: actions/checkout@v7.0.1
       - uses: cachix/install-nix-action@v31
       - uses: cachix/cachix-action@v17
         with:
