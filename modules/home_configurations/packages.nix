@@ -99,10 +99,6 @@ in
           lib.optionals isLinux [
             claude-code
             codex-latest
-<<<<<<< Updated upstream
-=======
-            procps
->>>>>>> Stashed changes
             colmena
             colmena_pog_scripts
             gnutar
