@@ -32,7 +32,6 @@ in
       atlantis
       neverland
       eldo
-      workbook
     ];
   };
   system.primaryUser = mkDefault username;

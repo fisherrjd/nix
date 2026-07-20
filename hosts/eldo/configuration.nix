@@ -73,7 +73,6 @@ in
       atlantis
       neverland
       airbook
-      workbook
     ];
     packages = with pkgs; [ ];
   };

@@ -34,7 +34,7 @@ in
       extra-trusted-public-keys = ${subs.g7c.key} ${subs.jade.key}
     '';
     settings = {
-      trusted-users = [ "root" "jade" "P3175941" "jadfis" ];
+      trusted-users = [ "root" "jade" "jadfis" ];
     };
 
     gc = {
@@ -86,7 +86,7 @@ in
   security.sudo = {
     extraRules = [
       {
-        users = [ "jade" "fisherrjd" "P3175941" "jadfis" ];
+        users = [ "jade" "jadfis" ];
         commands = [
           {
             command = "ALL";

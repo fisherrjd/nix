@@ -37,7 +37,6 @@ in
       atlantis
       neverland
       eldo
-      workbook
       airbook
     ];
   };

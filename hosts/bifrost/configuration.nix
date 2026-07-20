@@ -48,7 +48,6 @@ in
       atlantis
       neverland
       airbook
-      workbook
       eldo
     ];
     packages = with pkgs; [ ];
