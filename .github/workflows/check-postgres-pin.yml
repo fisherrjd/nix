@@ -21,7 +21,7 @@ jobs:
       # extension migration, in lockstep with the nixpkgs-postgresql rev.
       EXPECTED_TIMESCALEDB: "2.27.2"
     steps:
-      - uses: actions/checkout@v7.0.0
+      - uses: actions/checkout@v7.0.1
         with:
           persist-credentials: false
       - uses: cachix/install-nix-action@v31
