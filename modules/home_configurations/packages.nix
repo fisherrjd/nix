@@ -44,6 +44,7 @@ in
         gron
         gum # learn about this
         gzip
+        hermes-agent
         hms
         htmlq
         jq
@@ -98,6 +99,10 @@ in
           lib.optionals isLinux [
             claude-code
             codex-latest
+<<<<<<< Updated upstream
+=======
+            procps
+>>>>>>> Stashed changes
             colmena
             colmena_pog_scripts
             gnutar

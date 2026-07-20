@@ -39,7 +39,7 @@ in
         ${macXAuth}
 
       Host gjallar
-        HostName 192.168.50.169
+        HostName 192.168.50.197
         User jadfis
         PasswordAuthentication no
         IdentitiesOnly yes
