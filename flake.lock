@@ -999,11 +999,11 @@
         "nixpkgs": "nixpkgs_11"
       },
       "locked": {
-        "lastModified": 1784904447,
-        "narHash": "sha256-Cp586HisgzxZHG9RPh8gnWiS/3+RKpX+DBoGXaWy3jc=",
+        "lastModified": 1784907851,
+        "narHash": "sha256-wjtCosmSLVTba2RH+teWJUVUM8VjrIoKFmy3l4ser1s=",
         "owner": "fisherrjd",
         "repo": "skribbl",
-        "rev": "5eece48592dce469bdd83eb5a9d8e9ce36d16ef7",
+        "rev": "aad60ccb2ebbc5cda7fb87a0083b68cdb725aa78",
         "type": "github"
       },
       "original": {
