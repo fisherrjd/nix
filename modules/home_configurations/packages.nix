@@ -7,6 +7,7 @@ let
   inherit (opkgs.hax) isLinux;
   isWork = machine-name == "gjallar";
   isAirbook = machine-name == "airbook";
+  isEldo = machine-name == "eldo";
   jacobi = flake.inputs.jacobi.packages.${opkgs.stdenv.hostPlatform.system};
 in
 {
@@ -97,7 +98,10 @@ in
         # Packages for only Linux
         (
           lib.optionals isLinux [
-            claude-code
+            # both provide bin/claude, so eldo gets exactly one of them
+            (if isEldo
+            then (callPackage ../../packages/claude-code-latest.nix { })
+            else claude-code)
             codex-latest
             colmena
             colmena_pog_scripts
