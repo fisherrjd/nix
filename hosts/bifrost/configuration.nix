@@ -100,9 +100,14 @@ in
         "resume.jade.rip".extraConfig = ''
           redir https://github.com/fisherrjd/resume/blob/main/resume.pdf permanent
         '';
-        "chores.jade.rip".extraConfig = ''
+        "chores.jade.rip".extraConfig =
           reverse_proxy * {
             to eldo:3030
+          }
+        '';
+        "atlas.jade.rip".extraConfig = ''
+          reverse_proxy * {
+            to eldo:3040
           }
         '';
       };
