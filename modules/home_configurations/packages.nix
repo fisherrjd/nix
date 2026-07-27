@@ -97,7 +97,7 @@ in
         # Packages for only Linux
         (
           lib.optionals isLinux [
-            claude-code
+            claude-code-latest
             codex-latest
             colmena
             colmena_pog_scripts

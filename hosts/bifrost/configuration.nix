@@ -105,6 +105,11 @@ in
             to eldo:3030
           }
         '';
+        "atlas.jade.rip".extraConfig = ''
+          reverse_proxy * {
+            to eldo:3040
+          }
+        '';
       };
     };
   };
