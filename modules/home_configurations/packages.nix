@@ -113,6 +113,7 @@ in
 
         (lib.optionals isWork [
           awscli2
+          claude-code-latest
           ssm-session-manager-plugin
           opencode
           pi-coding-agent
