@@ -22,6 +22,7 @@ in
         bzip2
         cacert
         caddy
+        jacobi.ccusage
         coreutils-full
         curl
         diffutils

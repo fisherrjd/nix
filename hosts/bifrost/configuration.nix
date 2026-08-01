@@ -110,6 +110,11 @@ in
             to eldo:3040
           }
         '';
+        "ge.jade.rip".extraConfig = ''
+          reverse_proxy * {
+            to eldo:30420
+          }
+        '';
       };
     };
   };
