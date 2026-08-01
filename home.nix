@@ -100,7 +100,8 @@ in
         export XDG_DATA_DIRS="$HOME/.nix-profile/share:''${XDG_DATA_DIRS:-/usr/local/share:/usr/share}"
         source ~/.nix-profile/etc/profile.d/bash_completion.sh
         source ~/.nix-profile/share/bash-completion/completions/git
-        source ~/.nix-profile/share/bash-completion/completions/ssh
+        [[ -e ~/.nix-profile/share/bash-completion/completions/ssh ]] && \
+          source ~/.nix-profile/share/bash-completion/completions/ssh
         complete -o bashdefault -o default -o nospace -F __git_wrap__git_main g
         # there are often duplicate path entries on non-nixos; remove them
         NEWPATH=

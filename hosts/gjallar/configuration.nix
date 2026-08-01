@@ -84,6 +84,30 @@ in
     };
   };
 
+  # Daily GitLab status to Slack: `triage functions --slack` runs the full cycle
+  # (triage to files -> KB digest folding the verdicts in -> ONE Slack post).
+  # LM Studio server is started best-effort first; if it or the model is
+  # unavailable, triage records errors and the digest falls back to facts-only,
+  # so the post still goes out.
+  launchd.user.agents.gitlab-issue-agent = {
+    serviceConfig = {
+      Label = "com.sinch.gitlab-issue-agent";
+      ProgramArguments = [
+        "/bin/sh"
+        "-c"
+        (lib.concatStringsSep "; " [
+          "/Users/${username}/.lmstudio/bin/lms server start || true"
+          "/Users/${username}/.nix-profile/bin/direnv exec . triage functions --slack"
+        ])
+      ];
+      WorkingDirectory = "/Users/${username}/github/gitlab-issue-agent";
+      StartCalendarInterval = [{ Hour = 9; Minute = 15; }];
+      RunAtLoad = false; # no catch-up burst after wake
+      StandardOutPath = "/Users/${username}/github/gitlab-issue-agent/out/agent.log";
+      StandardErrorPath = "/Users/${username}/github/gitlab-issue-agent/out/agent.log";
+    };
+  };
+
   homebrew = {
     enable = true;
     taps = [
