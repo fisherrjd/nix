@@ -1,6 +1,6 @@
 [
   (import ./mods/hax.nix)
-  (import ./mods/mods.nix)
+  (import ./mods/hms.nix)
   (import ./packages)
 
   # Jade's Pogs

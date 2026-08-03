@@ -1,4 +1,16 @@
 let
+
+  machines = {
+    nixos = [
+      "eldo"
+      "neverland"
+    ];
+    darwin = [
+      "airbook"
+      "gjallar"
+    ];
+
+  };
   pubkeys = rec {
     atlantis = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIE4ng5nDLLCyQJ0QOHglRBZkBUI/3FV1c2FIAjwQgIK0 jade@Atlantis"; #home desktop
     neverland = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAX2/pWmcbFAPOSs1Vi4/xHRgFT+IDuWBUNGFyM0YlCh jade@neverland"; #home wsl on home desktop
@@ -22,5 +34,5 @@ let
   };
 in
 {
-  inherit pubkeys;
+  inherit pubkeys machines;
 }

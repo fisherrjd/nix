@@ -35,5 +35,19 @@ final: prev:
           ${optionalString isDarwin mac_meme}
       '';
     };
+    writeBashBinChecked = name: text:
+      stdenv.mkDerivation {
+        inherit name text;
+        dontUnpack = true;
+        passAsFile = "text";
+        nativeBuildInputs = [ shellcheck ];
+        installPhase = ''
+          mkdir -p $out/bin
+          echo '#!/bin/bash' > $out/bin/${name}
+          cat $textPath >> $out/bin/${name}
+          chmod +x $out/bin/${name}
+          shellcheck $out/bin/${name}
+        '';
+    };
   }
 )
