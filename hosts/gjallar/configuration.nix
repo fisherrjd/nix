@@ -84,6 +84,17 @@ in
     };
   };
 
+  # Wake the Mac at 9:13 daily (works with the lid closed, on AC power) so the
+  # 9:15 gitlab-issue-agent launchd job below actually fires. caffeinate cannot
+  # prevent lid-close sleep, and launchd skips a missed StartCalendarInterval if
+  # the machine was off. pmset stores one repeating wake event system-wide and
+  # re-running the command is idempotent, so an activation script is the
+  # declarative-enough home for it (nix-darwin has no native pmset repeat option).
+  system.activationScripts.postActivation.text = ''
+    echo "setting daily 07:13 wake for gitlab-issue-agent" >&2
+    pmset repeat wake MTWRFSU 07:13:00
+  '';
+
   # Daily GitLab status to Slack: `triage functions --slack` runs the full cycle
   # (triage to files -> KB digest folding the verdicts in -> ONE Slack post).
   # LM Studio server is started best-effort first; if it or the model is
@@ -101,7 +112,7 @@ in
         ])
       ];
       WorkingDirectory = "/Users/${username}/github/gitlab-issue-agent";
-      StartCalendarInterval = [{ Hour = 9; Minute = 15; }];
+      StartCalendarInterval = [{ Hour = 7; Minute = 15; }];
       RunAtLoad = false; # no catch-up burst after wake
       StandardOutPath = "/Users/${username}/github/gitlab-issue-agent/out/agent.log";
       StandardErrorPath = "/Users/${username}/github/gitlab-issue-agent/out/agent.log";
