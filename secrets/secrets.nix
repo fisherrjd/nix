@@ -6,7 +6,7 @@ in
 {
   "litellm.age".publicKeys = default;
   "openwebui.age".publicKeys = default;
-  "caddy.age".publicKeys = default;
+  "caddy.age".publicKeys = default ++ [ pubkeys.bifrost ];
   "github-runner-token.age".publicKeys = default;
   "github-runner-token-nix.age".publicKeys = default;
   "ntfy.age".publicKeys = default;
