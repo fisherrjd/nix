@@ -8,7 +8,7 @@ import nixpkgs {
   inherit system;
   overlays = [
     (_: _: { jacobi = import flake.inputs.jacobi { inherit system; }; })
-    (_: prev: { inherit (prev.jacobi) llama-cpp-latest hermes-agent codex-latest pog; })
+    (_: prev: { inherit (prev.jacobi) llama-cpp-latest hermes-agent sglang-omni codex-latest pog; })
   ] ++ (import ./overlays.nix) ++ overlays;
   config = {
     allowUnfree = true;

@@ -4,6 +4,9 @@ let
   hostname = "neverland";
   username = "jade";
   common = import ../common.nix { inherit config flake machine-name pkgs username; };
+  # .wsl wrapper points LD_LIBRARY_PATH/TRITON_LIBCUDA_PATH at /usr/lib/wsl/lib,
+  # where the Windows host exposes libcuda.
+  sglang = pkgs.jacobi.sglang-omni.wsl;
 in
 {
   imports = [
@@ -46,6 +49,25 @@ in
 
   virtualisation.docker = {
     enable = true;
+  };
+
+  systemd.tmpfiles.rules = [
+    "d /var/lib/sglang-omni 0755 jade users -"
+  ];
+
+  systemd.services.sglang-omni = {
+    description = "sglang-omni TTS server (voice cloning)";
+    after = [ "network.target" ];
+    wantedBy = [ "multi-user.target" ];
+    environment = {
+      HF_HOME = "/var/lib/sglang-omni";
+    };
+    serviceConfig = {
+      ExecStart = "${sglang}/bin/sgl-omni serve --model-path Qwen/Qwen3-TTS-12Hz-1.7B-Base --port 8000";
+      Restart = "on-failure";
+      User = "jade";
+      WorkingDirectory = "/var/lib/sglang-omni";
+    };
   };
 
   hardware = {
