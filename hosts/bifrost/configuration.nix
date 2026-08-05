@@ -69,7 +69,7 @@ in
         # Adding a friend = one line here (their Google login email).
         admins = [
           "fisherrjd@gmail.com"
-          "hannahlwolfinbarger@gmail.com"
+          "hlwolfinbarger@gmail.com"
         ];
         friends = [
           # "friend@gmail.com"
