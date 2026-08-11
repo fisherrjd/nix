@@ -48,6 +48,6 @@ final: prev:
           chmod +x $out/bin/${name}
           shellcheck $out/bin/${name}
         '';
-    };
+      };
   }
 )

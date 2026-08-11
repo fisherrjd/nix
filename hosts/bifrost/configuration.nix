@@ -132,57 +132,57 @@ in
           "auth.jade.rip".extraConfig = ''
             authenticate with auth_portal
           '';
-        # Push Notifications
-        "ntfy.jade.rip".extraConfig = ''
-          reverse_proxy * {
-            to eldo:8081
-          }
-        '';
-        "chat.jade.rip".extraConfig = ''
-          reverse_proxy * {
-            to eldo:3001
-          }
-        '';
-        "llama.jade.rip".extraConfig = ''
-          reverse_proxy * {
-            to airbook:6969
-          }
-        '';
-        "n8n.jade.rip".extraConfig = ''
-          reverse_proxy * {
-            to eldo:5678
-          }
-        '';
-        "litellm.jade.rip".extraConfig = ''
-          reverse_proxy * {
-            to eldo:4000
-          }
-        '';
-        "nix.jade.rip".extraConfig = ''
-          redir https://github.com/fisherrjd/nix permanent
-        '';
-        "resume.jade.rip".extraConfig = ''
-          redir https://github.com/fisherrjd/resume/blob/main/resume.pdf permanent
-        '';
-        "chores.jade.rip".extraConfig = ''
-          authorize with friends_only
-          reverse_proxy * {
-            to eldo:3030
-          }
-        '';
-        "atlas.jade.rip".extraConfig = ''
-          authorize with friends_only
-          reverse_proxy * {
-            to eldo:3040
-          }
-        '';
-        "ge.jade.rip".extraConfig = ''
-          reverse_proxy * {
-            to eldo:30420
-          }
-        '';
+          # Push Notifications
+          "ntfy.jade.rip".extraConfig = ''
+            reverse_proxy * {
+              to eldo:8081
+            }
+          '';
+          "chat.jade.rip".extraConfig = ''
+            reverse_proxy * {
+              to eldo:3001
+            }
+          '';
+          "llama.jade.rip".extraConfig = ''
+            reverse_proxy * {
+              to airbook:6969
+            }
+          '';
+          "n8n.jade.rip".extraConfig = ''
+            reverse_proxy * {
+              to eldo:5678
+            }
+          '';
+          "litellm.jade.rip".extraConfig = ''
+            reverse_proxy * {
+              to eldo:4000
+            }
+          '';
+          "nix.jade.rip".extraConfig = ''
+            redir https://github.com/fisherrjd/nix permanent
+          '';
+          "resume.jade.rip".extraConfig = ''
+            redir https://github.com/fisherrjd/resume/blob/main/resume.pdf permanent
+          '';
+          "chores.jade.rip".extraConfig = ''
+            authorize with friends_only
+            reverse_proxy * {
+              to eldo:3030
+            }
+          '';
+          "atlas.jade.rip".extraConfig = ''
+            authorize with friends_only
+            reverse_proxy * {
+              to eldo:3040
+            }
+          '';
+          "ge.jade.rip".extraConfig = ''
+            reverse_proxy * {
+              to eldo:30420
+            }
+          '';
+        };
       };
-    };
   };
 
   system.stateVersion = "24.05";
