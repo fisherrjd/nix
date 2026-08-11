@@ -28,9 +28,24 @@ in
           # grafana's DB; swap for an agenix secret if that changes.
           security.secret_key = "SW2YcwTIb9zpOOhoPsMm";
         };
-        provision.datasources = { };
+        provision.datasources.settings.datasources = [
+          {
+            name = "Prometheus";
+            type = "prometheus";
+            url = "http://127.0.0.1:9090";
+            isDefault = true;
+          }
+        ];
       };
       prometheus = {
+        enable = true;
+        listenAddress = "127.0.0.1"; # only Grafana on this box needs it
+        scrapeConfigs = [
+          {
+            job_name = "node";
+            static_configs = [{ targets = [ "127.0.0.1:9100" ]; }];
+          }
+        ];
         exporters = {
           node = {
             enable = true;
