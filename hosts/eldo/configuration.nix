@@ -50,6 +50,11 @@ in
         file = ../../secrets/ntfy.age;
         mode = "644";
       };
+      grafana-secret-key = {
+        file = ../../secrets/grafana-secret-key.age;
+        owner = "grafana";
+        mode = "400";
+      };
     };
   };
   networking = {
@@ -123,7 +128,10 @@ in
 
   services =
     {
-      monitoring.enable = true;
+      monitoring = {
+        enable = true;
+        secretKeyFile = config.age.secrets.grafana-secret-key.path;
+      };
 
       ntfy-sh = {
         enable = true;

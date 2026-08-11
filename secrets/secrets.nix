@@ -10,4 +10,5 @@ in
   "github-runner-token.age".publicKeys = default;
   "github-runner-token-nix.age".publicKeys = default;
   "ntfy.age".publicKeys = default;
+  "grafana-secret-key.age".publicKeys = default;
 }
