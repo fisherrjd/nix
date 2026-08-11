@@ -14,6 +14,7 @@ in
       "${common.home-manager}/nixos"
       ./hardware-configuration.nix
       ../../modules/obsidian-autocommit.nix
+      ../../modules/monitoring.nix
       { inherit (common) services; }
     ];
   # Bootloader.
@@ -122,6 +123,8 @@ in
 
   services =
     {
+      monitoring.enable = true;
+
       ntfy-sh = {
         enable = true;
         settings = {
