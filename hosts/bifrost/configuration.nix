@@ -181,6 +181,12 @@ in
               to eldo:30420
             }
           '';
+          "grafana.jade.rip".extraConfig = ''
+            authorize with friends_only
+            reverse_proxy * {
+              to eldo:3000
+            }
+          '';
         };
       };
   };
