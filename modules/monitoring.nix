@@ -29,31 +29,43 @@ in
           # secret so no key material lives in this public repo
           security.secret_key = "$__file{${cfg.secretKeyFile}}";
         };
-        provision.datasources.settings.datasources = [
-          {
-            name = "Prometheus";
-            type = "prometheus";
-            uid = "prometheus"; # stable uid so provisioned dashboards can reference it
-            url = "http://127.0.0.1:9090";
-            isDefault = true;
-          }
-          {
-            name = "Loki";
-            type = "loki";
-            uid = "loki";
-            url = "http://127.0.0.1:3100";
-          }
-        ];
-        provision.dashboards.settings = {
-          apiVersion = 1;
-          providers = [
-            {
-              name = "cfg";
-              # dashboards are JSON files versioned in this repo
-              options.path = "${./dashboards}";
-              allowUiUpdates = true; # UI tweaks stick until the file changes
-            }
-          ];
+        provision = {
+          datasources.settings = {
+            apiVersion = 1;
+            # the first deploy created these without explicit uids; drop those
+            # rows by name so they're recreated below with stable uids —
+            # updating a provisioned datasource's uid in place fails
+            deleteDatasources = [
+              { name = "Prometheus"; orgId = 1; }
+              { name = "Loki"; orgId = 1; }
+            ];
+            datasources = [
+              {
+                name = "Prometheus";
+                type = "prometheus";
+                uid = "prometheus"; # stable uid so provisioned dashboards can reference it
+                url = "http://127.0.0.1:9090";
+                isDefault = true;
+              }
+              {
+                name = "Loki";
+                type = "loki";
+                uid = "loki";
+                url = "http://127.0.0.1:3100";
+              }
+            ];
+          };
+          dashboards.settings = {
+            apiVersion = 1;
+            providers = [
+              {
+                name = "cfg";
+                # dashboards are JSON files versioned in this repo
+                options.path = "${./dashboards}";
+                allowUiUpdates = true; # UI tweaks stick until the file changes
+              }
+            ];
+          };
         };
       };
       prometheus = {
