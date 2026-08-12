@@ -86,10 +86,10 @@ in
           common = {
             path_prefix = "/var/lib/loki";
             replication_factor = 1;
-            ring = {
-              instance_addr = "127.0.0.1";
-              kvstore.store = "inmemory";
-            };
+            # advertise loopback — gRPC only listens there; the default would
+            # advertise the LAN IP and every internal query would hang
+            instance_addr = "127.0.0.1";
+            ring.kvstore.store = "inmemory";
             storage.filesystem = {
               chunks_directory = "/var/lib/loki/chunks";
               rules_directory = "/var/lib/loki/rules";
@@ -113,6 +113,8 @@ in
             retention_enabled = true;
             delete_request_store = "filesystem"; # mandatory in Loki 3.x with retention on
           };
+          # same loopback rule for the query-frontend the queriers dial back to
+          frontend.address = "127.0.0.1";
           limits_config.retention_period = "30d";
           analytics.reporting_enabled = false;
         };
