@@ -33,15 +33,28 @@ in
           {
             name = "Prometheus";
             type = "prometheus";
+            uid = "prometheus"; # stable uid so provisioned dashboards can reference it
             url = "http://127.0.0.1:9090";
             isDefault = true;
           }
           {
             name = "Loki";
             type = "loki";
+            uid = "loki";
             url = "http://127.0.0.1:3100";
           }
         ];
+        provision.dashboards.settings = {
+          apiVersion = 1;
+          providers = [
+            {
+              name = "cfg";
+              # dashboards are JSON files versioned in this repo
+              options.path = "${./dashboards}";
+              allowUiUpdates = true; # UI tweaks stick until the file changes
+            }
+          ];
+        };
       };
       prometheus = {
         enable = true;
