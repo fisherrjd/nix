@@ -49,6 +49,9 @@ in
     logScanInterval = lib.mkOption { type = lib.types.str; default = "*-*-* *:07:00"; };
     repoHealthInterval = lib.mkOption { type = lib.types.str; default = "*-*-* 03:45:00"; };
     staffedInterval = lib.mkOption { type = lib.types.str; default = "*:00/15"; };
+    # read-only display API for the atlas Heimdall tab; pods reach it via the
+    # flannel gateway (10.42.0.1), same pattern as postgres
+    apiPort = lib.mkOption { type = lib.types.int; default = 3050; };
   };
 
   config = lib.mkIf cfg.enable {
@@ -71,7 +74,24 @@ in
         startAt = cfg.staffedInterval;
         timeoutSec = 3900;
       };
+      orchestrator-api = {
+        path = [ pkgs.python313 pkgs.git ];
+        environment = {
+          HOME = "/home/${cfg.user}";
+          ORC_STATE_DIR = cfg.stateDir;
+          ORC_API_PORT = toString cfg.apiPort;
+        };
+        script = ''python -m orc serve'';
+        serviceConfig = {
+          User = cfg.user;
+          Restart = "on-failure";
+          WorkingDirectory = cfg.repoPath;
+        };
+        wantedBy = [ "multi-user.target" ];
+      };
     };
+    # GET-only display data; same unauthenticated-on-tailnet posture as atlas
+    networking.firewall.allowedTCPPorts = [ cfg.apiPort ];
   };
 
 }
