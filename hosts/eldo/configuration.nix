@@ -56,6 +56,11 @@ in
         owner = "grafana";
         mode = "400";
       };
+      orc-api-token = {
+        file = ../../secrets/orc-api-token.age;
+        owner = "jade";
+        mode = "400";
+      };
     };
   };
   networking = {
@@ -139,6 +144,7 @@ in
       orchestrator = {
         enable = true;
         dryRun = false;
+        apiTokenFile = config.age.secrets.orc-api-token.path;
       };
 
       ntfy-sh = {

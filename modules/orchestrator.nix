@@ -53,9 +53,12 @@ in
     # offset from repo-health so the two nightly model calls never overlap
     secScanInterval = lib.mkOption { type = lib.types.str; default = "*-*-* 04:30:00"; };
     staffedInterval = lib.mkOption { type = lib.types.str; default = "*:00/15"; };
-    # read-only display API for the atlas Heimdall tab; pods reach it via the
+    # display/editor API for the atlas Heimdall tab; pods reach it via the
     # flannel gateway (10.42.0.1), same pattern as postgres
     apiPort = lib.mkOption { type = lib.types.int; default = 3050; };
+    # env file with ORC_API_TOKEN=... enabling the persona write routes;
+    # null keeps the api read-only
+    apiTokenFile = lib.mkOption { type = lib.types.nullOr lib.types.str; default = null; };
   };
 
   config = lib.mkIf cfg.enable {
@@ -95,6 +98,8 @@ in
           User = cfg.user;
           Restart = "on-failure";
           WorkingDirectory = cfg.repoPath;
+        } // lib.optionalAttrs (cfg.apiTokenFile != null) {
+          EnvironmentFile = cfg.apiTokenFile;
         };
         wantedBy = [ "multi-user.target" ];
       };
