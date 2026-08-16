@@ -1,7 +1,7 @@
 # modules/orchestrator.nix
 #
 # Heimdall: the heartbeat agent-loop orchestrator (github.com/fisherrjd/orchestrator).
-# Three oneshot timers run `python -m orc pulse <type>` from the live checkout as
+# Oneshot timers run `python -m orc pulse <type>` from the live checkout as
 # jade — headless claude bills the subscription via ~/.claude OAuth, so HOME must
 # be set explicitly (systemd system services don't derive it from User=).
 { config, lib, pkgs, ... }:
@@ -48,6 +48,8 @@ in
     dryRun = lib.mkOption { type = lib.types.bool; default = true; };
     logScanInterval = lib.mkOption { type = lib.types.str; default = "*-*-* *:07:00"; };
     repoHealthInterval = lib.mkOption { type = lib.types.str; default = "*-*-* 03:45:00"; };
+    # offset from repo-health so the two nightly model calls never overlap
+    secScanInterval = lib.mkOption { type = lib.types.str; default = "*-*-* 04:30:00"; };
     staffedInterval = lib.mkOption { type = lib.types.str; default = "*:00/15"; };
     # read-only display API for the atlas Heimdall tab; pods reach it via the
     # flannel gateway (10.42.0.1), same pattern as postgres
@@ -68,6 +70,11 @@ in
         pulseType = "repo-health";
         startAt = cfg.repoHealthInterval;
         timeoutSec = 900;
+      };
+      orchestrator-sec-scan = mkPulse {
+        pulseType = "sec-scan";
+        startAt = cfg.secScanInterval;
+        timeoutSec = 1200;
       };
       orchestrator-staffed = mkPulse {
         pulseType = "staffed";
