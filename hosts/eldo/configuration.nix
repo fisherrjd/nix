@@ -15,6 +15,7 @@ in
       ./hardware-configuration.nix
       ../../modules/obsidian-autocommit.nix
       ../../modules/monitoring.nix
+      ../../modules/orchestrator.nix
       { inherit (common) services; }
     ];
   # Bootloader.
@@ -131,6 +132,12 @@ in
       monitoring = {
         enable = true;
         secretKeyFile = config.age.secrets.grafana-secret-key.path;
+      };
+
+      # Heimdall agent loop — dryRun stays true until a quiet observation day passes
+      orchestrator = {
+        enable = true;
+        dryRun = true;
       };
 
       ntfy-sh = {
