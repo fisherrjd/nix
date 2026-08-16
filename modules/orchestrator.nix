@@ -9,7 +9,9 @@ let
   cfg = config.services.orchestrator;
   claude-code = pkgs.callPackage ../packages/claude-code-latest.nix { };
   mkPulse = { pulseType, startAt, timeoutSec }: {
-    path = [ pkgs.git pkgs.gh pkgs.curl pkgs.jq pkgs.openssh pkgs.python313 pkgs.nix ];
+    # bash: bin/lokiq and bin/ghq are #!/usr/bin/env bash — without it every scan
+    # pulse spent the dry-run day reporting its own broken tools
+    path = [ pkgs.bash pkgs.git pkgs.gh pkgs.curl pkgs.jq pkgs.openssh pkgs.python313 pkgs.nix ];
     environment = {
       HOME = "/home/${cfg.user}";
       ORC_STATE_DIR = cfg.stateDir;
