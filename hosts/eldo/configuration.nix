@@ -56,6 +56,11 @@ in
         owner = "grafana";
         mode = "400";
       };
+      orc-api-token = {
+        file = ../../secrets/orc-api-token.age;
+        owner = "jade";
+        mode = "400";
+      };
     };
   };
   networking = {
@@ -134,10 +139,12 @@ in
         secretKeyFile = config.age.secrets.grafana-secret-key.path;
       };
 
-      # Heimdall agent loop — dryRun stays true until a quiet observation day passes
+      # Heimdall agent loop — live since 2026-08-16: dry-run day was quiet (63 clean
+      # staffed pulses, zero errors); scan wrappers were bash-less, fixed in the module
       orchestrator = {
         enable = true;
-        dryRun = true;
+        dryRun = false;
+        apiTokenFile = config.age.secrets.orc-api-token.path;
       };
 
       ntfy-sh = {

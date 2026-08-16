@@ -1,7 +1,7 @@
 # modules/orchestrator.nix
 #
 # Heimdall: the heartbeat agent-loop orchestrator (github.com/fisherrjd/orchestrator).
-# Three oneshot timers run `python -m orc pulse <type>` from the live checkout as
+# Oneshot timers run `python -m orc pulse <type>` from the live checkout as
 # jade — headless claude bills the subscription via ~/.claude OAuth, so HOME must
 # be set explicitly (systemd system services don't derive it from User=).
 { config, lib, pkgs, ... }:
@@ -9,7 +9,9 @@ let
   cfg = config.services.orchestrator;
   claude-code = pkgs.callPackage ../packages/claude-code-latest.nix { };
   mkPulse = { pulseType, startAt, timeoutSec }: {
-    path = [ pkgs.git pkgs.gh pkgs.curl pkgs.jq pkgs.openssh pkgs.python313 pkgs.nix ];
+    # bash: bin/lokiq and bin/ghq are #!/usr/bin/env bash — without it every scan
+    # pulse spent the dry-run day reporting its own broken tools
+    path = [ pkgs.bash pkgs.git pkgs.gh pkgs.curl pkgs.jq pkgs.openssh pkgs.python313 pkgs.nix ];
     environment = {
       HOME = "/home/${cfg.user}";
       ORC_STATE_DIR = cfg.stateDir;
@@ -48,7 +50,15 @@ in
     dryRun = lib.mkOption { type = lib.types.bool; default = true; };
     logScanInterval = lib.mkOption { type = lib.types.str; default = "*-*-* *:07:00"; };
     repoHealthInterval = lib.mkOption { type = lib.types.str; default = "*-*-* 03:45:00"; };
+    # offset from repo-health so the two nightly model calls never overlap
+    secScanInterval = lib.mkOption { type = lib.types.str; default = "*-*-* 04:30:00"; };
     staffedInterval = lib.mkOption { type = lib.types.str; default = "*:00/15"; };
+    # display/editor API for the atlas Heimdall tab; pods reach it via the
+    # flannel gateway (10.42.0.1), same pattern as postgres
+    apiPort = lib.mkOption { type = lib.types.int; default = 3050; };
+    # env file with ORC_API_TOKEN=... enabling the persona write routes;
+    # null keeps the api read-only
+    apiTokenFile = lib.mkOption { type = lib.types.nullOr lib.types.str; default = null; };
   };
 
   config = lib.mkIf cfg.enable {
@@ -66,12 +76,36 @@ in
         startAt = cfg.repoHealthInterval;
         timeoutSec = 900;
       };
+      orchestrator-sec-scan = mkPulse {
+        pulseType = "sec-scan";
+        startAt = cfg.secScanInterval;
+        timeoutSec = 1200;
+      };
       orchestrator-staffed = mkPulse {
         pulseType = "staffed";
         startAt = cfg.staffedInterval;
         timeoutSec = 3900;
       };
+      orchestrator-api = {
+        path = [ pkgs.python313 pkgs.git ];
+        environment = {
+          HOME = "/home/${cfg.user}";
+          ORC_STATE_DIR = cfg.stateDir;
+          ORC_API_PORT = toString cfg.apiPort;
+        };
+        script = ''python -m orc serve'';
+        serviceConfig = {
+          User = cfg.user;
+          Restart = "on-failure";
+          WorkingDirectory = cfg.repoPath;
+        } // lib.optionalAttrs (cfg.apiTokenFile != null) {
+          EnvironmentFile = cfg.apiTokenFile;
+        };
+        wantedBy = [ "multi-user.target" ];
+      };
     };
+    # GET-only display data; same unauthenticated-on-tailnet posture as atlas
+    networking.firewall.allowedTCPPorts = [ cfg.apiPort ];
   };
 
 }
