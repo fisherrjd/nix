@@ -134,10 +134,11 @@ in
         secretKeyFile = config.age.secrets.grafana-secret-key.path;
       };
 
-      # Heimdall agent loop — dryRun stays true until a quiet observation day passes
+      # Heimdall agent loop — live since 2026-08-16: dry-run day was quiet (63 clean
+      # staffed pulses, zero errors); scan wrappers were bash-less, fixed in the module
       orchestrator = {
         enable = true;
-        dryRun = true;
+        dryRun = false;
       };
 
       ntfy-sh = {
