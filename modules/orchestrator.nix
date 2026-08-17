@@ -21,6 +21,7 @@ let
       ORC_NTFY_TOPIC = cfg.ntfyTopic;
       ORC_CLAUDE_BIN = cfg.claudeBin;
       ORC_DRY_RUN = if cfg.dryRun then "1" else "0";
+      ORC_DIALOGUE_ENABLED = if cfg.dialogueEnabled then "1" else "0";
       DISABLE_AUTOUPDATER = "1";
     };
     script = ''python -m orc pulse ${pulseType}'';
@@ -53,6 +54,12 @@ in
     # offset from repo-health so the two nightly model calls never overlap
     secScanInterval = lib.mkOption { type = lib.types.str; default = "*-*-* 04:30:00"; };
     staffedInterval = lib.mkOption { type = lib.types.str; default = "*:00/15"; };
+    # ticket comment threads: answer jade's questions as the filing persona.
+    # config.toml defaults this off; the module flips it on where it deploys.
+    # No pending threads -> zero model calls, so the half-hour cadence is cheap.
+    dialogueEnabled = lib.mkOption { type = lib.types.bool; default = true; };
+    # :22/:52 — offset from staffed (:00/15) and log-scan (:07)
+    dialogueInterval = lib.mkOption { type = lib.types.str; default = "*:22/30"; };
     # display/editor API for the atlas Heimdall tab; pods reach it via the
     # flannel gateway (10.42.0.1), same pattern as postgres
     apiPort = lib.mkOption { type = lib.types.int; default = 3050; };
@@ -80,6 +87,11 @@ in
         pulseType = "sec-scan";
         startAt = cfg.secScanInterval;
         timeoutSec = 1200;
+      };
+      orchestrator-dialogue = mkPulse {
+        pulseType = "dialogue";
+        startAt = cfg.dialogueInterval;
+        timeoutSec = 3000; # worst case: max_replies (3) x security-review timeout (900s)
       };
       orchestrator-staffed = mkPulse {
         pulseType = "staffed";
