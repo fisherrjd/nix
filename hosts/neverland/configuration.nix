@@ -51,24 +51,24 @@ in
     enable = true;
   };
 
-  systemd.tmpfiles.rules = [
-    "d /var/lib/sglang-omni 0755 jade users -"
-  ];
+  # systemd.tmpfiles.rules = [
+  #   "d /var/lib/sglang-omni 0755 jade users -"
+  # ];
 
-  systemd.services.sglang-omni = {
-    description = "sglang-omni TTS server (voice cloning)";
-    after = [ "network.target" ];
-    wantedBy = [ "multi-user.target" ];
-    environment = {
-      HF_HOME = "/var/lib/sglang-omni";
-    };
-    serviceConfig = {
-      ExecStart = "${sglang}/bin/sgl-omni serve --model-path Qwen/Qwen3-TTS-12Hz-1.7B-Base --port 8000";
-      Restart = "on-failure";
-      User = "jade";
-      WorkingDirectory = "/var/lib/sglang-omni";
-    };
-  };
+  # systemd.services.sglang-omni = {
+  #   description = "sglang-omni TTS server (voice cloning)";
+  #   after = [ "network.target" ];
+  #   wantedBy = [ "multi-user.target" ];
+  #   environment = {
+  #     HF_HOME = "/var/lib/sglang-omni";
+  #   };
+  #   serviceConfig = {
+  #     ExecStart = "${sglang}/bin/sgl-omni serve --model-path Qwen/Qwen3-TTS-12Hz-1.7B-Base --port 8000";
+  #     Restart = "on-failure";
+  #     User = "jade";
+  #     WorkingDirectory = "/var/lib/sglang-omni";
+  #   };
+  # };
 
   hardware = {
     graphics = {
