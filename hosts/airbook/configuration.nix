@@ -93,7 +93,6 @@ in
       "firefox"
       "discord"
       "webex"
-      "claude-code"
     ];
 
   };

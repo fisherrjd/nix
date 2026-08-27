@@ -24,6 +24,7 @@ in
         caddy
         jacobi.ccusage
         coreutils-full
+        claude-code-latest
         curl
         diffutils
         doggo
@@ -98,7 +99,6 @@ in
         # Packages for only Linux
         (
           lib.optionals isLinux [
-            claude-code-latest
             codex-latest
             colmena
             colmena_pog_scripts
@@ -114,7 +114,6 @@ in
 
         (lib.optionals isWork [
           awscli2
-          claude-code-latest
           ssm-session-manager-plugin
           opencode
           pi-coding-agent
