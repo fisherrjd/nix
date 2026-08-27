@@ -187,6 +187,11 @@ in
               to eldo:3000
             }
           '';
+          "7out.jade.rip".extraConfig = ''
+            reverse_proxy * {
+              to eldo:30711
+            }
+          '';
         };
       };
   };
