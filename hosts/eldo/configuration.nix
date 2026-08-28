@@ -118,11 +118,47 @@ in
   home-manager.users.jade = common.jade;
 
   inherit (common) nix;
-  systemd.targets = {
-    sleep.enable = false;
-    suspend.enable = false;
-    hibernate.enable = false;
-    hybrid-sleep.enable = false;
+  systemd = {
+    targets = {
+      sleep.enable = false;
+      suspend.enable = false;
+      hibernate.enable = false;
+      hybrid-sleep.enable = false;
+    };
+    # litellm connects to postgres over TCP as the `postgres` role, using the
+    # DATABASE_URL baked into secrets/litellm.age. NixOS's postgresql module
+    # never assigns a password to the built-in `postgres` superuser
+    # (ensureUsers only manages roles it's explicitly told about), so that
+    # TCP login had no matching password and podman-litellm crash-looped on
+    # "P1000: Authentication failed ... credentials for `postgres` are not
+    # valid". This unit re-derives the password postgres should accept
+    # straight from the same secret litellm reads (connecting locally via
+    # the peer-authenticated postgres socket, so it needs no password
+    # itself), so the two can never drift out of sync.
+    services.litellm-postgres-password = {
+      description = "sync the postgres role password to litellm's DATABASE_URL secret";
+      after = [ "postgresql.service" ];
+      before = [ "podman-litellm.service" ];
+      serviceConfig = {
+        Type = "oneshot";
+        User = "postgres";
+      };
+      path = [ pkgs.gnugrep pkgs.gnused config.services.postgresql.package ];
+      script = ''
+        set -euo pipefail
+        password=$(grep -m1 '^DATABASE_URL=' ${config.age.secrets.litellm.path} \
+          | sed -E 's#^DATABASE_URL=[a-zA-Z]+://[^:]+:([^@]+)@.*#\1#')
+        if [ -z "$password" ]; then
+          echo "litellm-postgres-password: no password found in DATABASE_URL" >&2
+          exit 1
+        fi
+        psql -tAc "ALTER ROLE postgres WITH PASSWORD '$password'"
+      '';
+    };
+    services.podman-litellm = {
+      after = [ "litellm-postgres-password.service" ];
+      requires = [ "litellm-postgres-password.service" ];
+    };
   };
 
   services.obsidian-autocommit = {
