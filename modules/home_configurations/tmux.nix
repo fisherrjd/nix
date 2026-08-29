@@ -67,6 +67,11 @@ _:
       # back here. This replaced a display-popup, which drew the picker translucently over
       # whatever session you were in and made it a transient overlay rather than a place.
       bind -N "wisp home" v run-shell "wisp"
+      # Flip between item sessions without going via home. wisp's own next/prev rather than
+      # tmux's switch-client -n/-p, which would walk every session on the server; these walk
+      # only wisp_* ones, in a stable order, and skip home itself.
+      bind -N "wisp: previous item" Left run-shell "wisp prev"
+      bind -N "wisp: next item" Right run-shell "wisp next"
       # Kill the session you are currently in. The picker's ctrl-x kills the highlighted row
       # and now refuses to kill the one you are sitting in, since tmux tears the client down
       # with it; from wisp home that never arises, but this stays the direct way.
