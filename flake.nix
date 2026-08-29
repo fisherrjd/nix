@@ -20,6 +20,11 @@
     };
     nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
     skribbl.url = "github:fisherrjd/skribbl";
+    # Local path for now; switch to github:fisherrjd/wisp once it is pushed.
+    wisp = {
+      url = "git+file:///Users/jadfis/github/wisp";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     vscode-server = {
       url = "github:msteen/nixos-vscode-server";
       inputs.nixpkgs.follows = "nixpkgs";
