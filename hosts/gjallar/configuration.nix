@@ -128,11 +128,6 @@ in
     ];
     casks = [
       "font-caskaydia-cove-nerd-font"
-      # Glyph fallback. CaskaydiaCove covers 12829 codepoints but not U+23BF or
-      # U+23FA, which Claude Code uses for its tool-result and response markers.
-      # Nothing else installed covered them either, so WezTerm drew its last-resort
-      # glyph and every marker rendered as an underscore (verified 2026-08-28).
-      "font-noto-sans-symbols-2"
     ];
   };
 }
