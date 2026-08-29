@@ -1,7 +1,9 @@
 { pkgs, flake, lib, ... }:
 
 let
-  jacobi = flake.inputs.jacobi.packages.${pkgs.stdenv.hostPlatform.system};
+  # legacyPackages, not packages: the flake's `packages` output is the filtered
+  # `__j_packages` set, which excludes the pog script lists and nixup.
+  jacobi = flake.inputs.jacobi.legacyPackages.${pkgs.stdenv.hostPlatform.system};
 in
 {
   home.packages = with jacobi;

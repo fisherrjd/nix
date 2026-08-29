@@ -309,7 +309,12 @@ attach() {
     # By name, not index: base-index may be 1, so "$s:0" is not reliably the first window.
     tmux select-window -t "$s:agent" >/dev/null 2>&1 || true
   fi
-  if [ -n "${TMUX:-}" ]; then tmux switch-client -t "=$s"; else tmux attach-session -t "=$s"; fi
+  # -u forces UTF-8 output to the client. Without it tmux only writes UTF-8 when the first
+  # set variable of LC_ALL / LC_CTYPE / LANG contains "UTF-8", and on a bare SSH login none
+  # of them is set (sshd has no AcceptEnv, so the client's locale is not forwarded either).
+  # The symptom is specific and misleading: the pane buffer holds correct UTF-8, so
+  # capture-pane looks fine, but every multibyte glyph reaches the terminal mangled.
+  if [ -n "${TMUX:-}" ]; then tmux switch-client -t "=$s"; else tmux -u attach-session -t "=$s"; fi
 }
 
 # --- docs --------------------------------------------------------------------
