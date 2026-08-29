@@ -1248,11 +1248,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1788030903,
-        "narHash": "sha256-uhnC8v1szpniTsqmTFZszE2xscSc0vwvORcKB+wwzOU=",
+        "lastModified": 1788031854,
+        "narHash": "sha256-CN6j1J58OM5EFwRrg6/F9FfGTugFZ3j6RM3LMFYvHhU=",
         "ref": "refs/heads/main",
-        "rev": "ebd047ce69fafdf17748e20c5e2f57539e5296fe",
-        "revCount": 7,
+        "rev": "2d111524a5d34f4c96c4175524dac4087f9333a1",
+        "revCount": 8,
         "type": "git",
         "url": "file:///Users/jadfis/github/wisp"
       },
