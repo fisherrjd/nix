@@ -62,11 +62,11 @@ _:
       unbind r
       bind r source-file ~/.tmux.conf \; display "Finished sourcing ~/.tmux.conf ."
 
-      # vq session picker in a popup. Selecting an item runs switch-client (vq takes that
+      # wisp session picker in a popup. Selecting an item runs switch-client (wisp takes that
       # branch whenever $TMUX is set), so the popup closes and the client lands on the chosen
       # session. This is the in-place hop Claude Squad gets from wrapping a PTY, without
       # intercepting any keys: detach is still plain prefix-d.
-      bind -N "vq session picker" v display-popup -E -w 90% -h 85% vq
+      bind -N "wisp session picker" v display-popup -E -w 90% -h 85% wisp
       # Kill the session you are currently in. The picker's ctrl-x kills the highlighted
       # row, which is the wrong tool when the row you want is the one you are sitting in:
       # the popup runs inside that session, so it dies with it.

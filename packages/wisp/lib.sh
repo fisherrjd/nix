@@ -1,29 +1,29 @@
-# vq shared library. Sourced into every subcommand by vq.nix; not a standalone script.
+# wisp shared library. Sourced into every subcommand by wisp.nix; not a standalone script.
 #
-# WS is set by the nix prelude (VQ_WORKSPACE, falling back to the baked workspacePath).
+# WS is set by the nix prelude (WISP_WORKSPACE, falling back to the baked workspacePath).
 # PATH is pinned by pog's runtimeInputs, which is what keeps the GNU-vs-BSD assumptions
 # below honest — see the find -mmin note in gitlab_items.
 
 VAULT="$WS/working_items"
 WT_ROOT="$WS/.worktrees"
 PROVISION="$WS/.claude/scripts/provision-worktree.sh"
-PREFIX="vq_"
-PROGRAM="${VQ_PROGRAM:-claude}"
-CACHE="${TMPDIR:-/tmp}/vq-gitlab-cache.json"
+PREFIX="wisp_"
+PROGRAM="${WISP_PROGRAM:-claude}"
+CACHE="${TMPDIR:-/tmp}/wisp-gitlab-cache.json"
 CACHE_TTL_MIN=15
 
 GROUP="sinch/sinch-projects/voice/functions"
 USERNAME="jadfis"
 
-# fzf re-invokes vq for its preview and its ctrl-x / ctrl-r bindings, so the script needs
+# fzf re-invokes wisp for its preview and its ctrl-x / ctrl-r bindings, so the script needs
 # its own path. pog emits a single unwrapped file, so $0 is the real thing: absolute when
-# invoked via PATH, relative when invoked as ./vq. Normalise both.
+# invoked via PATH, relative when invoked as ./wisp. Normalise both.
 SELF="$(cd "$(dirname "$0")" && pwd)/$(basename "$0")"
 
 require_workspace() {
   [ -d "$VAULT" ] && return 0
-  echo "vq: workspace vault not found: $VAULT" >&2
-  echo "    set VQ_WORKSPACE, or rebuild with a different workspacePath" >&2
+  echo "wisp: workspace vault not found: $VAULT" >&2
+  echo "    set WISP_WORKSPACE, or rebuild with a different workspacePath" >&2
   exit 1
 }
 
@@ -35,7 +35,7 @@ slug_of() { printf '%s' "${1##*/}"; }
 # tmux target syntax is not uniform: the "=" exact-match prefix is accepted for session
 # targets (has-session, attach-session, kill-session) but rejected by set-option/show-option
 # and by capture-pane, whose -t is a target-PANE. Use "=" only where it is supported.
-item_for() { tmux show-option -qv -t "$1" @vq_item 2>/dev/null; }
+item_for() { tmux show-option -qv -t "$1" @wisp_item 2>/dev/null; }
 live_sessions() { tmux ls -F '#{session_name}' 2>/dev/null | grep "^$PREFIX" || true; }
 
 # --- sources -----------------------------------------------------------------
@@ -135,7 +135,7 @@ worktree_for() { printf '%s/%s--%s' "$WT_ROOT" "$1" "$(slug_of "$2")"; }
 
 # Reprovision anything the manifest declares but disk lacks. provision-worktree.sh already
 # handles branching from the remote default, copying default.nix/.envrc, direnv allow and
-# the dependency install, so vq does not duplicate any of that.
+# the dependency install, so wisp does not duplicate any of that.
 ensure_worktrees() {
   it="$1"
   manifest "$it" | while IFS=$'\t' read -r repo branch base; do
@@ -143,15 +143,15 @@ ensure_worktrees() {
     wt=$(worktree_for "$repo" "$it")
     [ -d "$wt" ] && continue
     [ -d "$WS/$repo" ] || {
-      echo "vq: no such repo: $repo" >&2
+      echo "wisp: no such repo: $repo" >&2
       continue
     }
     [ -x "$PROVISION" ] || {
-      echo "vq: provisioning script missing: $PROVISION" >&2
+      echo "wisp: provisioning script missing: $PROVISION" >&2
       return 1
     }
     echo "--- provisioning $repo ($branch)"
-    # --attach always: vq's contract is "give me a worktree for this branch", and an item
+    # --attach always: wisp's contract is "give me a worktree for this branch", and an item
     # reopened after cleanup has a live branch but no checkout. Without it, every
     # reconstitution fails on "branch already exists".
     #
@@ -160,10 +160,10 @@ ensure_worktrees() {
     #
     # No dependency install by default. nix/direnv still gives a working toolchain, and
     # node_modules for a monorepo like sinch-functions-runtime-node is 210M — too much to
-    # pay for opening an item to read it. Set VQ_INSTALL=1 when you intend to build.
+    # pay for opening an item to read it. Set WISP_INSTALL=1 when you intend to build.
     set -- "$WS/$repo" "$(slug_of "$it")" "$branch" --attach
     [ -n "$base" ] && set -- "$@" --base "$base"
-    [ -n "${VQ_INSTALL:-}" ] || set -- "$@" --no-install
+    [ -n "${WISP_INSTALL:-}" ] || set -- "$@" --no-install
     "$PROVISION" "$@" || true
   done
 }
@@ -172,7 +172,7 @@ ensure_worktrees() {
 
 # Per-item context: the repos in the manifest, and for each, its vault hub note and workspace
 # doc. An item touching two repos pulls two repo contexts, not one per repo in the workspace.
-context_file() { printf '%s/%s/.vq-context.md' "$VAULT" "$1"; }
+context_file() { printf '%s/%s/.wisp-context.md' "$VAULT" "$1"; }
 
 # The single-quoted printf formats below are markdown: every backtick is meant literally,
 # so SC2016 ("expressions don't expand in single quotes") is exactly the intent.
@@ -183,7 +183,7 @@ write_context() {
   [ -d "$VAULT/$it" ] || return 0
   {
     printf '# Session context: %s\n\n' "$it"
-    printf 'Generated by vq. cwd is the workspace root, so every path below is relative to it.\n\n'
+    printf 'Generated by wisp. cwd is the workspace root, so every path below is relative to it.\n\n'
     printf '## This item\n\n'
     for f in orchestration.md notes.md; do
       [ -f "$VAULT/$it/$f" ] && printf -- '- `working_items/%s/%s`\n' "$it" "$f"
@@ -308,7 +308,7 @@ attach() {
       tmux new-session -d -s "$s" -n agent -c "$WS" "$PROGRAM"
     fi
     tmux set-option -t "$s" history-limit 10000 >/dev/null
-    tmux set-option -t "$s" @vq_item "$it" >/dev/null
+    tmux set-option -t "$s" @wisp_item "$it" >/dev/null
 
     # One shell window per repo worktree, for builds and dev servers. Not agents.
     manifest "$it" | while IFS=$'\t' read -r repo branch base; do
@@ -333,7 +333,7 @@ attach() {
 docs() {
   repo="$1"
   [ -d "$WS/$repo" ] || {
-    echo "vq: no such repo: $repo" >&2
+    echo "wisp: no such repo: $repo" >&2
     exit 1
   }
   out="$WS/docs/$repo.md"
@@ -344,7 +344,7 @@ docs() {
   mkdir -p "$WS/docs"
   {
     printf '# %s\n\n' "$repo"
-    printf '> Stub generated by vq on request. Fill in from the repo itself.\n\n'
+    printf '> Stub generated by wisp on request. Fill in from the repo itself.\n\n'
     printf '**Remote:** %s\n\n' "$(git -C "$WS/$repo" remote get-url origin 2>/dev/null || echo 'none')"
     printf '**Default branch:** %s\n\n' \
       "$(git -C "$WS/$repo" symbolic-ref -q --short refs/remotes/origin/HEAD 2>/dev/null | sed 's|origin/||' || echo '?')"

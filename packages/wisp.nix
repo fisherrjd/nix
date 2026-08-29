@@ -12,13 +12,13 @@
 , jq
 , tmux
   # Absolute path to the SinchFunctions workspace root (the container: repos, docs,
-  # .worktrees and the working_items vault). Overridable at runtime with VQ_WORKSPACE;
+  # .worktrees and the working_items vault). Overridable at runtime with WISP_WORKSPACE;
   # this is only the default baked into the script.
 , workspacePath ? "/Users/jadfis/voice/functions"
 }:
 
 let
-  version = "0.2.0";
+  version = "0.1.0";
 
   runtimeInputs = [
     bash
@@ -34,28 +34,28 @@ let
     tmux
   ];
 
-  # pog does not set any shell options of its own, so vq's `set -euo pipefail` has to be
+  # pog does not set any shell options of its own, so wisp's `set -euo pipefail` has to be
   # stated here. WS is the one value that must come from Nix rather than the library file.
   prelude = ''
     set -euo pipefail
-    WS="''${VQ_WORKSPACE:-${workspacePath}}"
+    WS="''${WISP_WORKSPACE:-${workspacePath}}"
   '';
 
   # readFile, not an inline '' string: it keeps the ~300 lines of bash in a real .sh file
   # where shellcheck, shfmt and editor tooling still work, and it means the dense awk and
   # jq blocks need no Nix escaping. Verified against manifest()'s awk, the worst case.
-  library = builtins.readFile ./vq/lib.sh;
+  library = builtins.readFile ./wisp/lib.sh;
 
   # Every subcommand gets the whole library. It is one bash file either way, so there is
   # nothing to gain by slicing it, and shared helpers stay in one place.
   cmd = body: prelude + library + "\n" + body + "\n";
 
   # Items are <repo>/<iid>-<slug> vault folders. Completing them is the whole reason the
-  # picker exists, so `vq open <TAB>` should reach the same set without opening fzf.
+  # picker exists, so `wisp open <TAB>` should reach the same set without opening fzf.
   itemCompletion = pog.completions.dynamic {
     runtimeInputs = [ coreutils findutils gnugrep ];
     script = ''
-      vault="''${VQ_WORKSPACE:-${workspacePath}}/working_items"
+      vault="''${WISP_WORKSPACE:-${workspacePath}}/working_items"
       [ -d "$vault" ] || exit 0
       find "$vault" -mindepth 2 -maxdepth 2 -type d \
         -not -path '*/.git/*' -not -path '*/.claude/*' -not -path '*/.obsidian/*' \
@@ -71,7 +71,7 @@ let
   repoCompletion = pog.completions.dynamic {
     runtimeInputs = [ coreutils findutils ];
     script = ''
-      ws="''${VQ_WORKSPACE:-${workspacePath}}"
+      ws="''${WISP_WORKSPACE:-${workspacePath}}"
       find "$ws" -mindepth 2 -maxdepth 2 -name .git 2>/dev/null | while read -r g; do
         d=''${g%/.git}
         b=''${d##*/}
@@ -88,7 +88,7 @@ let
 in
 # pogFn accepts no `meta`, so it is layered on afterwards via overrideAttrs.
 (pog {
-  name = "vq";
+  name = "wisp";
   description = "item-centric tmux session picker for the SinchFunctions workspace";
   inherit version runtimeInputs;
 
@@ -97,13 +97,13 @@ in
       # pog has no built-in --version, and a stale activation has to stay diagnosable
       # (this is why the old derivation asserted --version in its installCheck).
       name = "version";
-      description = "print the vq version";
-      script = "printf 'vq %s\\n' '${version}'";
+      description = "print the wisp version";
+      script = "printf 'wisp %s\\n' '${version}'";
     }
     {
       name = "pick";
-      # Bare `vq` is the picker. pog dies on an unrecognised first positional, so unlike
-      # the old hand-rolled dispatch there is no `vq <item>` fallthrough — that is `vq open`.
+      # Bare `wisp` is the picker. pog dies on an unrecognised first positional, so unlike
+      # the old hand-rolled dispatch there is no `wisp <item>` fallthrough — that is `wisp open`.
       default = true;
       description = "fuzzy-pick an item: live sessions, vault folders, open GitLab items";
       script = cmd ''
@@ -118,7 +118,7 @@ in
       arguments = [ itemArgument ];
       script = cmd ''
         require_workspace
-        [ $# -ge 1 ] || die "usage: vq open <item>" 2
+        [ $# -ge 1 ] || die "usage: wisp open <item>" 2
         attach "$1"
       '';
     }
@@ -136,7 +136,7 @@ in
       arguments = [ itemArgument ];
       script = cmd ''
         require_workspace
-        [ $# -ge 1 ] || die "usage: vq kill <item>" 2
+        [ $# -ge 1 ] || die "usage: wisp kill <item>" 2
         kill_session "$1"
       '';
     }
@@ -150,7 +150,7 @@ in
       }];
       script = cmd ''
         require_workspace
-        [ $# -ge 1 ] || die "usage: vq docs <repo>" 2
+        [ $# -ge 1 ] || die "usage: wisp docs <repo>" 2
         docs "$1"
       '';
     }
@@ -188,7 +188,7 @@ in
   meta = {
     description = "Item-centric tmux session picker for the SinchFunctions workspace";
     license = lib.licenses.mit;
-    mainProgram = "vq";
+    mainProgram = "wisp";
     platforms = lib.platforms.unix;
   };
 })
