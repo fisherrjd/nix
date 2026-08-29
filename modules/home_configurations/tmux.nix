@@ -49,7 +49,12 @@ _:
       set -g status-right '#(date +"%_I:%M")'
       set-option -g set-titles on
       #256 colors
-      set -g default-terminal "xterm-256color"
+      # Inner TERM must describe tmux, not the outer terminal. Claiming xterm-256color
+      # inside tmux advertises capabilities tmux does not actually pass through, which is
+      # where mismatched colours, italics and underlines come from. terminfo for
+      # tmux-256color is present on this machine (checked 2026-08-28).
+      set -g default-terminal "tmux-256color"
+      # This override targets the OUTER terminal's TERM, so it stays xterm-256color.
       set -ga terminal-overrides ",xterm-256color:Tc"
       #Don't auto remane windows
       set-option -g allow-rename off
