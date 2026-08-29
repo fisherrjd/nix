@@ -1,33 +1,8 @@
-#!/usr/bin/env bash
-# vq - workspace sessions. An item-centric session picker for the SinchFunctions workspace.
+# vq shared library. Sourced into every subcommand by vq.nix; not a standalone script.
 #
-# Claude Squad's TUI without its git layer. The unit of work is an ITEM, not a branch:
-# one vault folder, a manifest declaring which repos it touches, and a worktree per repo.
-# Every agent session runs with cwd = workspace root so the vault, docs, all repos and
-# .worktrees are in one scope.
-#
-#   vq                     picker over live sessions + vault items + open GitLab items
-#   vq <item>              open it: reprovision missing worktrees, assemble context, attach
-#   vq ls                  list live sessions
-#   vq kill <item>         kill one session
-#   vq docs <repo>         stub or refresh docs/<repo>.md
-#
-# Opening an item provisions any missing worktree from its manifest, but does NOT install
-# node dependencies: nix/direnv gives a working toolchain, and node_modules is 210M for the
-# runtime monorepo. Set VQ_INSTALL=1 when you intend to build rather than read.
-#
-# Detach with tmux's own binding (default C-b d). Nothing here intercepts keys.
-# Override the workspace with VQ_WORKSPACE, the agent with VQ_PROGRAM.
-
-set -euo pipefail
-
-# Substituted at build time. Pinning PATH is the point of packaging this: the script is
-# sensitive to GNU-vs-BSD tool differences (see the find -mmin note below), so it must not
-# inherit whatever happens to be on the user's PATH.
-PATH="@runtimePath@:$PATH"
-SELF="@self@"
-VERSION="@version@"
-WS="${VQ_WORKSPACE:-@workspacePath@}"
+# WS is set by the nix prelude (VQ_WORKSPACE, falling back to the baked workspacePath).
+# PATH is pinned by pog's runtimeInputs, which is what keeps the GNU-vs-BSD assumptions
+# below honest — see the find -mmin note in gitlab_items.
 
 VAULT="$WS/working_items"
 WT_ROOT="$WS/.worktrees"
@@ -40,23 +15,22 @@ CACHE_TTL_MIN=15
 GROUP="sinch/sinch-projects/voice/functions"
 USERNAME="jadfis"
 
-# Before the workspace check: these must answer in a nix build sandbox, where no workspace
-# exists, so the installCheck can verify the version is actually reachable at runtime.
-case "${1:-}" in
-  -V|--version) printf 'vq %s\n' "$VERSION"; exit 0 ;;
-  -h|--help) printf 'vq %s\n\n' "$VERSION"; sed -n '2,21p' "$SELF" | sed 's/^# \{0,1\}//'; exit 0 ;;
-esac
+# fzf re-invokes vq for its preview and its ctrl-x / ctrl-r bindings, so the script needs
+# its own path. pog emits a single unwrapped file, so $0 is the real thing: absolute when
+# invoked via PATH, relative when invoked as ./vq. Normalise both.
+SELF="$(cd "$(dirname "$0")" && pwd)/$(basename "$0")"
 
-if [ ! -d "$VAULT" ]; then
+require_workspace() {
+  [ -d "$VAULT" ] && return 0
   echo "vq: workspace vault not found: $VAULT" >&2
   echo "    set VQ_WORKSPACE, or rebuild with a different workspacePath" >&2
   exit 1
-fi
+}
 
 # tmux session names cannot contain . or : - sinchfunctions.api would break.
 sanitize() { printf '%s' "$1" | tr -c 'a-zA-Z0-9_-' '-'; }
 sess_for() { printf '%s%s' "$PREFIX" "$(sanitize "$1")"; }
-slug_of()  { printf '%s' "${1##*/}"; }
+slug_of() { printf '%s' "${1##*/}"; }
 
 # tmux target syntax is not uniform: the "=" exact-match prefix is accepted for session
 # targets (has-session, attach-session, kill-session) but rejected by set-option/show-option
@@ -68,7 +42,8 @@ live_sessions() { tmux ls -F '#{session_name}' 2>/dev/null | grep "^$PREFIX" || 
 
 repos() {
   find "$WS" -mindepth 2 -maxdepth 2 -name .git 2>/dev/null | while read -r g; do
-    d=${g%/.git}; b=${d##*/}
+    d=${g%/.git}
+    b=${d##*/}
     [ "$b" = "working_items" ] || printf '%s\n' "$b"
   done | sort -u
 }
@@ -81,21 +56,25 @@ local_items() {
     rel="${d#"$VAULT"/}"
     case "$rel" in
       _adhoc/*) printf '%s\n' "$rel" ;;
-      [0-9]*|*/[0-9]*-*) printf '%s\n' "$rel" ;;
+      [0-9]* | */[0-9]*-*) printf '%s\n' "$rel" ;;
     esac
   done | sort -u
 }
 
 refresh_cache() {
   command -v glab >/dev/null || return 0
-  glab api graphql -f query="
+  if glab api graphql -f query="
   {
     group(fullPath: \"$GROUP\") {
       workItems(assigneeUsernames: [\"$USERNAME\"], state: opened, includeDescendants: true, first: 100) {
         nodes { iid title webUrl }
       }
     }
-  }" >"$CACHE.tmp" 2>/dev/null && mv "$CACHE.tmp" "$CACHE" || rm -f "$CACHE.tmp"
+  }" >"$CACHE.tmp" 2>/dev/null; then
+    mv "$CACHE.tmp" "$CACHE"
+  else
+    rm -f "$CACHE.tmp"
+  fi
 }
 
 gitlab_items() {
@@ -114,8 +93,8 @@ gitlab_items() {
          | [ (.webUrl | capture("/functions/(?:front-end/)?(?<r>[^/]+)/-/").r), .iid, .title ]
          | @tsv' "$CACHE" 2>/dev/null | while IFS=$'\t' read -r repo iid title; do
     [ -n "$repo" ] && [ -n "$iid" ] || continue
-    slug=$(printf '%s' "$title" | LC_ALL=C tr '[:upper:]' '[:lower:]' \
-      | LC_ALL=C tr -c 'a-z0-9' ' ' | awk '{for(i=1;i<=NF&&i<=4;i++)printf "%s%s",(i>1?"-":""),$i}')
+    slug=$(printf '%s' "$title" | LC_ALL=C tr '[:upper:]' '[:lower:]' |
+      LC_ALL=C tr -c 'a-z0-9' ' ' | awk '{for(i=1;i<=NF&&i<=4;i++)printf "%s%s",(i>1?"-":""),$i}')
     printf '%s/%s-%s\n' "$repo" "$iid" "$slug"
   done
 }
@@ -132,7 +111,8 @@ key_of() { printf '%s' "$1" | sed 's|^\([^/]*\)/\([0-9][0-9]*\)-.*|\1/\2|'; }
 #
 # Emits: <repo>\t<branch>\t<base>, one line per repo.
 manifest() {
-  it="$1"; f="$VAULT/$it/orchestration.md"
+  it="$1"
+  f="$VAULT/$it/orchestration.md"
   if [ -f "$f" ]; then
     awk '
       /^---[[:space:]]*$/ { n++; if (n==2) exit; next }
@@ -162,8 +142,14 @@ ensure_worktrees() {
     [ -n "$repo" ] || continue
     wt=$(worktree_for "$repo" "$it")
     [ -d "$wt" ] && continue
-    [ -d "$WS/$repo" ] || { echo "vq: no such repo: $repo" >&2; continue; }
-    [ -x "$PROVISION" ] || { echo "vq: provisioning script missing: $PROVISION" >&2; return 1; }
+    [ -d "$WS/$repo" ] || {
+      echo "vq: no such repo: $repo" >&2
+      continue
+    }
+    [ -x "$PROVISION" ] || {
+      echo "vq: provisioning script missing: $PROVISION" >&2
+      return 1
+    }
     echo "--- provisioning $repo ($branch)"
     # --attach always: vq's contract is "give me a worktree for this branch", and an item
     # reopened after cleanup has a live branch but no checkout. Without it, every
@@ -188,8 +174,12 @@ ensure_worktrees() {
 # doc. An item touching two repos pulls two repo contexts, not one per repo in the workspace.
 context_file() { printf '%s/%s/.vq-context.md' "$VAULT" "$1"; }
 
+# The single-quoted printf formats below are markdown: every backtick is meant literally,
+# so SC2016 ("expressions don't expand in single quotes") is exactly the intent.
+# shellcheck disable=SC2016
 write_context() {
-  it="$1"; out=$(context_file "$it")
+  it="$1"
+  out=$(context_file "$it")
   [ -d "$VAULT/$it" ] || return 0
   {
     printf '# Session context: %s\n\n' "$it"
@@ -221,23 +211,27 @@ write_context() {
 # string from Claude Code's permission dialog and will break silently if that copy changes;
 # the preview pane is the reliable signal.
 needs_input() {
-  tmux capture-pane -p -t "$1" 2>/dev/null \
-    | grep -qF "No, and tell Claude what to do differently"
+  tmux capture-pane -p -t "$1" 2>/dev/null |
+    grep -qF "No, and tell Claude what to do differently"
 }
 
 # --- picker ------------------------------------------------------------------
 
 candidates() {
-  seen=""   # keys already emitted, so an item never appears twice under two slugs
+  seen="" # keys already emitted, so an item never appears twice under two slugs
   while read -r s; do
     [ -n "$s" ] || continue
-    it=$(item_for "$s"); [ -n "$it" ] || it="$s"
+    it=$(item_for "$s")
+    [ -n "$it" ] || it="$s"
     if needs_input "$s"; then printf '? %s\n' "$it"; else printf '%s %s\n' '●' "$it"; fi
     seen="$seen$(key_of "$it")
 "
   done < <(live_sessions)
   # Local folders first: a hand-chosen slug always wins over the derived one.
-  { local_items; gitlab_items; } | while read -r it; do
+  {
+    local_items
+    gitlab_items
+  } | while read -r it; do
     [ -n "$it" ] || continue
     k=$(key_of "$it")
     printf '%s\n' "$seen" | grep -qxF "$k" && continue
@@ -248,7 +242,8 @@ candidates() {
 }
 
 preview() {
-  it="$1"; s=$(sess_for "$it")
+  it="$1"
+  s=$(sess_for "$it")
   if tmux has-session -t "=$s" 2>/dev/null; then
     tmux capture-pane -p -e -J -t "$s" 2>/dev/null | grep -v '^[[:space:]]*$' | tail -n 40
     return 0
@@ -271,8 +266,13 @@ preview() {
     strip_fm "$VAULT/$it/notes.md" | head -n 30
   elif [ -d "$VAULT/$it" ]; then
     alt=$(find "$VAULT/$it" -maxdepth 1 -name '*.md' | head -1)
-    if [ -n "$alt" ]; then printf '%s\n\n' "${alt##*/}"; strip_fm "$alt" | head -n 30
-    else printf 'folder exists, no markdown\n\n'; ls -la "$VAULT/$it"; fi
+    if [ -n "$alt" ]; then
+      printf '%s\n\n' "${alt##*/}"
+      strip_fm "$alt" | head -n 30
+    else
+      printf 'folder exists, no markdown\n\n'
+      ls -la "$VAULT/$it"
+    fi
   else
     printf 'no folder yet - open GitLab item\n\n'
     [ -f "$CACHE" ] && jq -r --arg iid "$(printf '%s' "$it" | sed 's|.*/\([0-9]*\)-.*|\1|')" \
@@ -280,10 +280,21 @@ preview() {
   fi
 }
 
+pick() {
+  sel=$(candidates | fzf --ansi --height 80% --reverse \
+    --header '● live  ? needs input  ○ folder  + gitlab   |   enter open  ctrl-x kill  ctrl-r refresh' \
+    --preview "'$SELF' preview {2}" --preview-window 'right:60%:wrap' \
+    --bind "ctrl-x:execute-silent('$SELF' kill {2})+reload('$SELF' candidates)" \
+    --bind "ctrl-r:execute-silent(rm -f '$CACHE')+reload('$SELF' candidates)") || exit 0
+  [ -n "$sel" ] || exit 0
+  attach "$(printf '%s' "$sel" | awk '{print $2}')"
+}
+
 # --- open --------------------------------------------------------------------
 
 attach() {
-  it="$1"; s=$(sess_for "$it")
+  it="$1"
+  s=$(sess_for "$it")
   if ! tmux has-session -t "=$s" 2>/dev/null; then
     ensure_worktrees "$it"
     ctx=$(write_context "$it")
@@ -321,9 +332,15 @@ attach() {
 
 docs() {
   repo="$1"
-  [ -d "$WS/$repo" ] || { echo "vq: no such repo: $repo" >&2; exit 1; }
+  [ -d "$WS/$repo" ] || {
+    echo "vq: no such repo: $repo" >&2
+    exit 1
+  }
   out="$WS/docs/$repo.md"
-  if [ -f "$out" ]; then echo "exists: ${out#"$WS"/}"; exit 0; fi
+  if [ -f "$out" ]; then
+    echo "exists: ${out#"$WS"/}"
+    exit 0
+  fi
   mkdir -p "$WS/docs"
   {
     printf '# %s\n\n' "$repo"
@@ -336,29 +353,17 @@ docs() {
   echo "created: ${out#"$WS"/}"
 }
 
-# --- entry -------------------------------------------------------------------
+list_sessions() {
+  while read -r s; do
+    [ -n "$s" ] || continue
+    printf '%-46s %s\n' "$(item_for "$s")" "$s"
+  done < <(live_sessions)
+}
 
-case "${1:-}" in
-  --preview) preview "$2"; exit 0 ;;
-  --candidates) candidates; exit 0 ;;
-  ls)
-    while read -r s; do [ -n "$s" ] || continue
-      printf '%-46s %s\n' "$(item_for "$s")" "$s"; done < <(live_sessions); exit 0 ;;
-  kill)
-    [ $# -ge 2 ] || { echo "usage: vq kill <item>" >&2; exit 2; }
-    if tmux kill-session -t "=$(sess_for "$2")" 2>/dev/null; then echo "killed $2"
-    else echo "no session for $2" >&2; fi
-    exit 0 ;;
-  docs)
-    [ $# -ge 2 ] || { echo "usage: vq docs <repo>" >&2; exit 2; }
-    docs "$2"; exit 0 ;;
-  repos) repos; exit 0 ;;
-  "")
-    sel=$(candidates | fzf --ansi --height 80% --reverse \
-      --header '● live  ? needs input  ○ folder  + gitlab   |   enter open  ctrl-x kill  ctrl-r refresh' \
-      --preview "'$SELF' --preview {2}" --preview-window 'right:60%:wrap' \
-      --bind "ctrl-x:execute-silent('$SELF' kill {2})+reload('$SELF' --candidates)" \
-      --bind "ctrl-r:execute-silent(rm -f '$CACHE')+reload('$SELF' --candidates)") || exit 0
-    attach "$(printf '%s' "$sel" | awk '{print $2}')" ;;
-  *) attach "$1" ;;
-esac
+kill_session() {
+  if tmux kill-session -t "=$(sess_for "$1")" 2>/dev/null; then
+    echo "killed $1"
+  else
+    echo "no session for $1" >&2
+  fi
+}

@@ -1,10 +1,11 @@
 { lib
-, stdenvNoCC
+, pog
 , bash
 , coreutils
 , findutils
 , fzf
 , gawk
+, git
 , glab
 , gnugrep
 , gnused
@@ -17,72 +18,177 @@
 }:
 
 let
-  version = "0.1.2";
-  runtimeDeps = [
+  version = "0.2.0";
+
+  runtimeInputs = [
     bash
     coreutils
     findutils
     fzf
     gawk
+    git
     glab
     gnugrep
     gnused
     jq
     tmux
   ];
+
+  # pog does not set any shell options of its own, so vq's `set -euo pipefail` has to be
+  # stated here. WS is the one value that must come from Nix rather than the library file.
+  prelude = ''
+    set -euo pipefail
+    WS="''${VQ_WORKSPACE:-${workspacePath}}"
+  '';
+
+  # readFile, not an inline '' string: it keeps the ~300 lines of bash in a real .sh file
+  # where shellcheck, shfmt and editor tooling still work, and it means the dense awk and
+  # jq blocks need no Nix escaping. Verified against manifest()'s awk, the worst case.
+  library = builtins.readFile ./vq/lib.sh;
+
+  # Every subcommand gets the whole library. It is one bash file either way, so there is
+  # nothing to gain by slicing it, and shared helpers stay in one place.
+  cmd = body: prelude + library + "\n" + body + "\n";
+
+  # Items are <repo>/<iid>-<slug> vault folders. Completing them is the whole reason the
+  # picker exists, so `vq open <TAB>` should reach the same set without opening fzf.
+  itemCompletion = pog.completions.dynamic {
+    runtimeInputs = [ coreutils findutils gnugrep ];
+    script = ''
+      vault="''${VQ_WORKSPACE:-${workspacePath}}/working_items"
+      [ -d "$vault" ] || exit 0
+      find "$vault" -mindepth 2 -maxdepth 2 -type d \
+        -not -path '*/.git/*' -not -path '*/.claude/*' -not -path '*/.obsidian/*' \
+        2>/dev/null | while read -r d; do
+        rel="''${d#"$vault"/}"
+        case "$rel" in
+          _adhoc/* | [0-9]* | */[0-9]*-*) printf '%s\n' "$rel" ;;
+        esac
+      done | sort -u
+    '';
+  };
+
+  repoCompletion = pog.completions.dynamic {
+    runtimeInputs = [ coreutils findutils ];
+    script = ''
+      ws="''${VQ_WORKSPACE:-${workspacePath}}"
+      find "$ws" -mindepth 2 -maxdepth 2 -name .git 2>/dev/null | while read -r g; do
+        d=''${g%/.git}
+        b=''${d##*/}
+        [ "$b" = "working_items" ] || printf '%s\n' "$b"
+      done | sort -u
+    '';
+  };
+
+  itemArgument = {
+    name = "item";
+    description = "vault item, as <repo>/<iid>-<slug> or _adhoc/<name>";
+    completion = itemCompletion;
+  };
 in
-stdenvNoCC.mkDerivation {
-  pname = "vq";
-  inherit version;
+# pogFn accepts no `meta`, so it is layered on afterwards via overrideAttrs.
+(pog {
+  name = "vq";
+  description = "item-centric tmux session picker for the SinchFunctions workspace";
+  inherit version runtimeInputs;
 
-  src = ./vq;
-
-  dontUnpack = true;
-  dontBuild = true;
-
-  # Deliberately not makeWrapper. vq re-invokes itself for the fzf --preview and
-  # --bind actions, and a wrapper leaves $out/bin/.vq-wrapped reachable without
-  # the wrapper's PATH; baking PATH and the self-path into the script keeps
-  # those re-entrant calls identical to the top-level one.
-  installPhase = ''
-    runHook preInstall
-
-    install -Dm755 $src/vq $out/bin/vq
-    substituteInPlace $out/bin/vq \
-      --replace-fail '@runtimePath@' '${lib.makeBinPath runtimeDeps}' \
-      --replace-fail '@self@' "$out/bin/vq" \
-      --replace-fail '@version@' '${version}' \
-      --replace-fail '@workspacePath@' '${workspacePath}'
-
-    runHook postInstall
-  '';
-
-  doInstallCheck = true;
-  nativeInstallCheckInputs = [ bash ];
-  installCheckPhase = ''
-    runHook preInstallCheck
-
-    bash -n $out/bin/vq
-    grep -q '@runtimePath@\|@self@\|@version@\|@workspacePath@' $out/bin/vq \
-      && { echo "unsubstituted placeholder left in vq"; exit 1; } || true
-    # The version must be reachable at runtime, so a stale activation is diagnosable.
-    [ "$($out/bin/vq --version)" = "vq ${version}" ] || { echo "vq --version mismatch"; exit 1; }
-
-    runHook postInstallCheck
-  '';
-
+  commands = [
+    {
+      # pog has no built-in --version, and a stale activation has to stay diagnosable
+      # (this is why the old derivation asserted --version in its installCheck).
+      name = "version";
+      description = "print the vq version";
+      script = "printf 'vq %s\\n' '${version}'";
+    }
+    {
+      name = "pick";
+      # Bare `vq` is the picker. pog dies on an unrecognised first positional, so unlike
+      # the old hand-rolled dispatch there is no `vq <item>` fallthrough — that is `vq open`.
+      default = true;
+      description = "fuzzy-pick an item: live sessions, vault folders, open GitLab items";
+      script = cmd ''
+        require_workspace
+        pick
+      '';
+    }
+    {
+      name = "open";
+      aliases = [ "o" ];
+      description = "open an item: reprovision missing worktrees, assemble context, attach";
+      arguments = [ itemArgument ];
+      script = cmd ''
+        require_workspace
+        [ $# -ge 1 ] || die "usage: vq open <item>" 2
+        attach "$1"
+      '';
+    }
+    {
+      name = "ls";
+      description = "list live sessions";
+      script = cmd ''
+        require_workspace
+        list_sessions
+      '';
+    }
+    {
+      name = "kill";
+      description = "kill the session for an item";
+      arguments = [ itemArgument ];
+      script = cmd ''
+        require_workspace
+        [ $# -ge 1 ] || die "usage: vq kill <item>" 2
+        kill_session "$1"
+      '';
+    }
+    {
+      name = "docs";
+      description = "stub docs/<repo>.md if it does not exist yet";
+      arguments = [{
+        name = "repo";
+        description = "repo directory in the workspace";
+        completion = repoCompletion;
+      }];
+      script = cmd ''
+        require_workspace
+        [ $# -ge 1 ] || die "usage: vq docs <repo>" 2
+        docs "$1"
+      '';
+    }
+    {
+      name = "repos";
+      description = "list workspace repos";
+      script = cmd ''
+        require_workspace
+        repos
+      '';
+    }
+    {
+      # Hidden: fzf calls these back, they are not for humans. pog keeps hidden commands
+      # invocable but omits them from help and completion.
+      name = "preview";
+      hidden = true;
+      description = "render the fzf preview pane for an item";
+      arguments = [ itemArgument ];
+      script = cmd ''
+        require_workspace
+        preview "''${1:-}"
+      '';
+    }
+    {
+      name = "candidates";
+      hidden = true;
+      description = "emit the fzf candidate list";
+      script = cmd ''
+        require_workspace
+        candidates
+      '';
+    }
+  ];
+}).overrideAttrs (_: {
   meta = {
     description = "Item-centric tmux session picker for the SinchFunctions workspace";
-    longDescription = ''
-      Claude Squad's session TUI without its git worktree layer. The unit of work
-      is an item, not a branch: one vault folder, a manifest declaring which repos
-      it touches, and a worktree per repo under .worktrees. Agent sessions run with
-      cwd at the workspace root so the vault, docs, every repo and every worktree
-      resolve in one scope. Sources the picker from local item folders plus open
-      GitLab items.
-    '';
     license = lib.licenses.mit;
     mainProgram = "vq";
     platforms = lib.platforms.unix;
   };
-}
+})

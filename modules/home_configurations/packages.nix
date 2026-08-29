@@ -118,7 +118,7 @@ in
           opencode
           pi-coding-agent
           glab
-          vq # vault session picker; needs the working_items vault + glab
+          vq # workspace item picker; needs the working_items vault + glab
         ])
       ];
 }
