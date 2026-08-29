@@ -20,7 +20,10 @@
     };
     nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
     skribbl.url = "github:fisherrjd/skribbl";
-    # Local path for now; switch to github:fisherrjd/wisp once it is pushed.
+    # Deliberately the local checkout, not github:fisherrjd/wisp, while wisp is under active
+    # development: this way a change is testable with `nix flake lock --update-input wisp` and
+    # no push. The remote exists but is private, so a github: input would also need a token.
+    # Switch it once wisp settles down.
     wisp = {
       url = "git+file:///Users/jadfis/github/wisp";
       inputs.nixpkgs.follows = "nixpkgs";
