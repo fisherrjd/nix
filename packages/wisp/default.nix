@@ -18,7 +18,7 @@
 }:
 
 let
-  version = "0.1.0";
+  version = "0.1.1";
 
   runtimeInputs = [
     bash
@@ -44,7 +44,7 @@ let
   # readFile, not an inline '' string: it keeps the ~300 lines of bash in a real .sh file
   # where shellcheck, shfmt and editor tooling still work, and it means the dense awk and
   # jq blocks need no Nix escaping. Verified against manifest()'s awk, the worst case.
-  library = builtins.readFile ./wisp/lib.sh;
+  library = builtins.readFile ./lib.sh;
 
   # Every subcommand gets the whole library. It is one bash file either way, so there is
   # nothing to gain by slicing it, and shared helpers stay in one place.
