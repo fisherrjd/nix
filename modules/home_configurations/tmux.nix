@@ -60,7 +60,10 @@ _:
       set-option -g allow-rename off
       # Source config
       unbind r
-      bind r source-file ~/.tmux.conf \; display "Finished sourcing ~/.tmux.conf ."
+      # ~/.config/tmux/tmux.conf, not ~/.tmux.conf: home-manager writes the XDG path, and the
+      # old binding pointed at a file that has never existed here, so reloading silently did
+      # nothing. The path is a symlink into the store, so it stays correct across rebuilds.
+      bind r source-file ~/.config/tmux/tmux.conf \; display "sourced ~/.config/tmux/tmux.conf"
 
       # wisp home: switch to the picker's own session, creating it on first use. Selecting an
       # item runs switch-client, so the client lands on that session and prefix-v brings it
