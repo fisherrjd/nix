@@ -17,6 +17,7 @@
 }:
 
 let
+  version = "0.1.1";
   runtimeDeps = [
     bash
     coreutils
@@ -32,7 +33,7 @@ let
 in
 stdenvNoCC.mkDerivation {
   pname = "vq";
-  version = "0.1.0";
+  inherit version;
 
   src = ./vq;
 
@@ -50,6 +51,7 @@ stdenvNoCC.mkDerivation {
     substituteInPlace $out/bin/vq \
       --replace-fail '@runtimePath@' '${lib.makeBinPath runtimeDeps}' \
       --replace-fail '@self@' "$out/bin/vq" \
+      --replace-fail '@version@' '${version}' \
       --replace-fail '@workspacePath@' '${workspacePath}'
 
     runHook postInstall
@@ -61,8 +63,10 @@ stdenvNoCC.mkDerivation {
     runHook preInstallCheck
 
     bash -n $out/bin/vq
-    grep -q '@runtimePath@\|@self@\|@workspacePath@' $out/bin/vq \
+    grep -q '@runtimePath@\|@self@\|@version@\|@workspacePath@' $out/bin/vq \
       && { echo "unsubstituted placeholder left in vq"; exit 1; } || true
+    # The version must be reachable at runtime, so a stale activation is diagnosable.
+    [ "$($out/bin/vq --version)" = "vq ${version}" ] || { echo "vq --version mismatch"; exit 1; }
 
     runHook postInstallCheck
   '';

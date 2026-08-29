@@ -26,6 +26,7 @@ set -euo pipefail
 # inherit whatever happens to be on the user's PATH.
 PATH="@runtimePath@:$PATH"
 SELF="@self@"
+VERSION="@version@"
 WS="${VQ_WORKSPACE:-@workspacePath@}"
 
 VAULT="$WS/working_items"
@@ -38,6 +39,13 @@ CACHE_TTL_MIN=15
 
 GROUP="sinch/sinch-projects/voice/functions"
 USERNAME="jadfis"
+
+# Before the workspace check: these must answer in a nix build sandbox, where no workspace
+# exists, so the installCheck can verify the version is actually reachable at runtime.
+case "${1:-}" in
+  -V|--version) printf 'vq %s\n' "$VERSION"; exit 0 ;;
+  -h|--help) printf 'vq %s\n\n' "$VERSION"; sed -n '2,21p' "$SELF" | sed 's/^# \{0,1\}//'; exit 0 ;;
+esac
 
 if [ ! -d "$VAULT" ]; then
   echo "vq: workspace vault not found: $VAULT" >&2
@@ -340,7 +348,6 @@ case "${1:-}" in
     [ $# -ge 2 ] || { echo "usage: vq docs <repo>" >&2; exit 2; }
     docs "$2"; exit 0 ;;
   repos) repos; exit 0 ;;
-  -h|--help) sed -n '2,21p' "$SELF" | sed 's/^# \{0,1\}//'; exit 0 ;;
   "")
     sel=$(candidates | fzf --ansi --height 80% --reverse \
       --header '● live  ? needs input  ○ folder  + gitlab   |   enter open  ctrl-x kill  ctrl-r refresh' \
