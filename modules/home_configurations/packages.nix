@@ -7,7 +7,7 @@ let
   inherit (opkgs.hax) isLinux;
   isWork = machine-name == "gjallar";
   isAirbook = machine-name == "airbook";
-  jacobi = flake.inputs.jacobi.packages.${opkgs.stdenv.hostPlatform.system};
+  jacobi = flake.inputs.jacobi.legacyPackages.${opkgs.stdenv.hostPlatform.system};
 in
 {
   home.packages = with opkgs;
@@ -118,6 +118,7 @@ in
           opencode
           pi-coding-agent
           glab
+          vq # vault session picker; needs the working_items vault + glab
         ])
       ];
 }
