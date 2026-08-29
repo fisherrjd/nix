@@ -66,7 +66,7 @@ _:
       # item runs switch-client, so the client lands on that session and prefix-v brings it
       # back here. This replaced a display-popup, which drew the picker translucently over
       # whatever session you were in and made it a transient overlay rather than a place.
-      bind -N "wisp home" v run-shell "wisp home"
+      bind -N "wisp home" v run-shell "wisp"
       # Kill the session you are currently in. The picker's ctrl-x kills the highlighted row
       # and now refuses to kill the one you are sitting in, since tmux tears the client down
       # with it; from wisp home that never arises, but this stays the direct way.
