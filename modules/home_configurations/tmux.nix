@@ -67,6 +67,10 @@ _:
       # session. This is the in-place hop Claude Squad gets from wrapping a PTY, without
       # intercepting any keys: detach is still plain prefix-d.
       bind -N "vq session picker" v display-popup -E -w 90% -h 85% vq
+      # Kill the session you are currently in. The picker's ctrl-x kills the highlighted
+      # row, which is the wrong tool when the row you want is the one you are sitting in:
+      # the popup runs inside that session, so it dies with it.
+      bind -N "kill this session" X confirm-before -p "kill session #S? (y/n)" kill-session
 
       # Use Alt-arrow keys without prefix key to switch panes
       bind -n M-Left select-pane -L
