@@ -57,6 +57,12 @@ _:
       unbind r
       bind r source-file ~/.tmux.conf \; display "Finished sourcing ~/.tmux.conf ."
 
+      # vq session picker in a popup. Selecting an item runs switch-client (vq takes that
+      # branch whenever $TMUX is set), so the popup closes and the client lands on the chosen
+      # session. This is the in-place hop Claude Squad gets from wrapping a PTY, without
+      # intercepting any keys: detach is still plain prefix-d.
+      bind -N "vq session picker" v display-popup -E -w 90% -h 85% vq
+
       # Use Alt-arrow keys without prefix key to switch panes
       bind -n M-Left select-pane -L
       bind -n M-Right select-pane -R
