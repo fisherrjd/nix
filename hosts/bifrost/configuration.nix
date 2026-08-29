@@ -161,6 +161,12 @@ in
           "nix.jade.rip".extraConfig = ''
             redir https://github.com/fisherrjd/nix permanent
           '';
+          # Static docs, served straight from the store. No reverse_proxy and no service to
+          # keep alive: deploying a docs change is just a rebuild of this host.
+          "wisp.jade.rip".extraConfig = ''
+            root * ${pkgs.wisp-docs}
+            file_server
+          '';
           "resume.jade.rip".extraConfig = ''
             redir https://github.com/fisherrjd/resume/blob/main/resume.pdf permanent
           '';

@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>wisp — one work item, one tmux session</title>
+<meta name="description" content="wisp turns a unit of work into a running tmux session: finds the item, reprovisions its git worktrees, writes the agent's context, and drops you in.">
+<style>
+  /* Palette lifted from the tool's own internal/ui/styles.go, so the site and the terminal it
+     documents are literally the same system. The four status colours carry meaning and are the
+     only saturated things on the page. */
+  :root {
+    --ground: #FAF9FB;
+    --surface: #FFFFFF;
+    --sunk: #F2F0F6;
+    --ink: #1B1926;
+    --ink-soft: #5A5670;
+    --ink-faint: #86829B;
+    --rule: #E2DFEA;
+    --rule-strong: #CFCADD;
+    --accent: #554CB8;
+    --accent-soft: #EDEBF9;
+    --live: #2F7D52;
+    --attn: #91650E;
+    --folder: #7C7891;
+    --remote: #41648F;
+    --term-bg: #F5F3F8;
+    --term-fg: #35323F;
+    --term-dim: #9995A8;
+    --term-sel: #E5E1F2;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --ground: #131219; --surface: #1A1922; --sunk: #201F2A;
+      --ink: #E6E3EF; --ink-soft: #9D99B0; --ink-faint: #736F87;
+      --rule: #2B2937; --rule-strong: #3A3849;
+      --accent: #A79EF5; --accent-soft: #232037;
+      --live: #62BE8A; --attn: #DCA845; --folder: #8A86A0; --remote: #7FA3D6;
+      --term-bg: #0F0E14; --term-fg: #C9C5D6; --term-dim: #625E73; --term-sel: #262238;
+    }
+  }
+  :root[data-theme="light"] {
+    --ground: #FAF9FB; --surface: #FFFFFF; --sunk: #F2F0F6;
+    --ink: #1B1926; --ink-soft: #5A5670; --ink-faint: #86829B;
+    --rule: #E2DFEA; --rule-strong: #CFCADD;
+    --accent: #554CB8; --accent-soft: #EDEBF9;
+    --live: #2F7D52; --attn: #91650E; --folder: #7C7891; --remote: #41648F;
+    --term-bg: #F5F3F8; --term-fg: #35323F; --term-dim: #9995A8; --term-sel: #E5E1F2;
+  }
+  :root[data-theme="dark"] {
+    --ground: #131219; --surface: #1A1922; --sunk: #201F2A;
+    --ink: #E6E3EF; --ink-soft: #9D99B0; --ink-faint: #736F87;
+    --rule: #2B2937; --rule-strong: #3A3849;
+    --accent: #A79EF5; --accent-soft: #232037;
+    --live: #62BE8A; --attn: #DCA845; --folder: #8A86A0; --remote: #7FA3D6;
+    --term-bg: #0F0E14; --term-fg: #C9C5D6; --term-dim: #625E73; --term-sel: #262238;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+    font-size: 16px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+  .mono, code, pre, h1, h2, h3, .eyebrow, .k {
+    font-family: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
+  }
+
+  .page {
+    display: grid;
+    grid-template-columns: 1fr;
+    max-width: 76rem;
+    margin: 0 auto;
+    padding: 3rem 1.5rem 6rem;
+    gap: 0;
+  }
+  @media (min-width: 62rem) {
+    .page { grid-template-columns: 12rem minmax(0, 46rem); gap: 0 4rem; padding: 4.5rem 2.5rem 8rem; }
+  }
+
+  header.masthead {
+    grid-column: 1 / -1;
+    display: flex; flex-direction: column; gap: 1.75rem;
+    border-bottom: 1px solid var(--rule-strong);
+    padding-bottom: 2.75rem; margin-bottom: 3rem;
+  }
+  .eyebrow {
+    font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.14em;
+    color: var(--ink-faint); margin: 0;
+  }
+  h1 {
+    margin: 0;
+    font-size: clamp(2.2rem, 6vw, 3.2rem);
+    font-weight: 500; letter-spacing: -0.035em; line-height: 1.04;
+    text-wrap: balance;
+  }
+  h1 .dim { color: var(--ink-faint); font-weight: 400; }
+  .standfirst { margin: 0; font-size: 1.075rem; color: var(--ink-soft); max-width: 58ch; text-wrap: pretty; }
+
+  nav.rail { display: none; }
+  @media (min-width: 62rem) {
+    nav.rail { display: block; grid-row: 2; position: sticky; top: 4.5rem; align-self: start; }
+  }
+  nav.rail ol { list-style: none; margin: 0; padding: 0 0 0 1rem; border-left: 1px solid var(--rule);
+    display: flex; flex-direction: column; gap: 0.55rem; }
+  nav.rail a {
+    font-family: ui-monospace, "SF Mono", SFMono-Regular, Menlo, monospace;
+    font-size: 0.75rem; color: var(--ink-faint); text-decoration: none; display: block;
+  }
+  nav.rail a:hover, nav.rail a:focus-visible { color: var(--accent); }
+
+  main { grid-column: 1 / -1; }
+  @media (min-width: 62rem) { main { grid-column: 2; grid-row: 2; } }
+
+  section { border-bottom: 1px solid var(--rule); padding-bottom: 3rem; margin-bottom: 3rem;
+    display: flex; flex-direction: column; gap: 1.1rem; }
+  section:last-of-type { border-bottom: none; margin-bottom: 0; }
+  h2 { margin: 0; font-size: 1.3rem; font-weight: 500; letter-spacing: -0.015em; }
+  h3 { margin: 0.5rem 0 0; font-size: 0.95rem; font-weight: 500; }
+  p { margin: 0; max-width: 66ch; text-wrap: pretty; }
+  a { color: var(--accent); }
+  a:focus-visible, nav.rail a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  code { background: var(--sunk); padding: 0.1em 0.35em; border-radius: 2px; font-size: 0.86em; }
+  pre {
+    margin: 0; background: var(--surface); border: 1px solid var(--rule);
+    padding: 1.05rem 1.2rem; overflow-x: auto; font-size: 0.79rem; line-height: 1.7;
+  }
+  pre code { background: none; padding: 0; font-size: inherit; }
+  pre .c { color: var(--ink-faint); }
+
+  /* The hero: the picker itself, which is the most characteristic thing wisp has. */
+  .term { background: var(--term-bg); border: 1px solid var(--rule-strong); padding: 1rem 1.1rem; overflow-x: auto; }
+  .term pre { background: none; border: none; padding: 0; color: var(--term-fg); font-size: 0.72rem; line-height: 1.5; min-width: 40rem; }
+  .term .box { color: var(--term-dim); }
+  .term .cur { background: var(--term-sel); }
+  .term .bar { color: var(--accent); }
+  .g-live { color: var(--live); }
+  .g-attn { color: var(--attn); }
+  .g-folder { color: var(--folder); }
+  .g-remote { color: var(--remote); }
+  .term-bar {
+    display: flex; flex-wrap: wrap; gap: 0.3rem 1.15rem; align-items: center;
+    margin-top: 0.85rem; padding-top: 0.8rem; border-top: 1px solid var(--rule-strong);
+    font-family: ui-monospace, "SF Mono", SFMono-Regular, Menlo, monospace;
+    font-size: 0.7rem; color: var(--term-dim);
+  }
+  .term-bar b { font-weight: 500; color: var(--term-fg); }
+  .term-bar .sep { flex: 1 1 0; min-width: 0; }
+
+  dl.nouns { margin: 0; display: grid; grid-template-columns: 1fr; gap: 1px;
+    background: var(--rule); border: 1px solid var(--rule); }
+  @media (min-width: 34rem) { dl.nouns { grid-template-columns: 1fr 1fr; } }
+  .noun { background: var(--surface); padding: 1.1rem 1.2rem; display: flex; flex-direction: column; gap: 0.35rem; }
+  .noun dt { font-family: ui-monospace, "SF Mono", SFMono-Regular, Menlo, monospace; font-size: 0.9rem; }
+  .noun .shape { font-family: ui-monospace, "SF Mono", SFMono-Regular, Menlo, monospace;
+    font-size: 0.72rem; color: var(--accent); word-break: break-all; }
+  .noun dd { margin: 0; font-size: 0.88rem; color: var(--ink-soft); line-height: 1.55; }
+
+  .scroll { overflow-x: auto; border: 1px solid var(--rule); }
+  table { border-collapse: collapse; width: 100%; min-width: 30rem; font-size: 0.86rem; background: var(--surface); }
+  th { text-align: left; font-family: ui-monospace, "SF Mono", SFMono-Regular, Menlo, monospace;
+    font-size: 0.67rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink-faint);
+    font-weight: 500; padding: 0.65rem 1rem; border-bottom: 1px solid var(--rule-strong); white-space: nowrap; }
+  td { padding: 0.65rem 1rem; border-bottom: 1px solid var(--rule); vertical-align: top; color: var(--ink-soft); }
+  tr:last-child td { border-bottom: none; }
+  td.k { color: var(--ink); white-space: nowrap; font-size: 0.8rem; }
+
+  ul.plain { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.6rem; max-width: 66ch; }
+  ul.plain > li { position: relative; padding-left: 1.05rem; }
+  ul.plain > li::before { content: ""; position: absolute; left: 0; top: 0.72em; width: 0.45rem; height: 1px; background: var(--rule-strong); }
+
+  .note { background: var(--accent-soft); border: 1px solid var(--rule-strong); padding: 0.9rem 1.1rem;
+    font-size: 0.88rem; color: var(--ink-soft); }
+  .note b { color: var(--ink); font-weight: 500; }
+
+  footer { grid-column: 1 / -1; margin-top: 3.5rem; padding-top: 1.5rem; border-top: 1px solid var(--rule);
+    font-family: ui-monospace, "SF Mono", SFMono-Regular, Menlo, monospace;
+    font-size: 0.72rem; color: var(--ink-faint); display: flex; flex-wrap: wrap; gap: 0.4rem 1.5rem; }
+
+  @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="masthead">
+    <p class="eyebrow">wisp &nbsp;/&nbsp; a tmux session picker for work items</p>
+    <h1>One work item,<br><span class="dim">one tmux session.</span></h1>
+    <p class="standfirst">wisp turns a unit of work into a running workspace. It finds the item, locally or on GitLab, reprovisions the git worktrees it needs, writes the agent's context, and drops you into a session named after it.</p>
+
+    <div class="term">
+      <pre><code>› ledger                                                          2/8
+<span class="bar">▌</span> <span class="cur"><span class="g-attn">?</span> ledger-service/318-double-entry-audit   </span> <span class="box">│</span> Edit file src/reconcile.ts
+  <span class="g-remote">+</span> ledger-service/327-backfill-entries      <span class="box">│</span>
+                                           <span class="box">│</span> Do you want to make this edit?
+                                           <span class="box">│</span>   1. Yes
+                                           <span class="box">│</span>   2. Yes, allow all edits this session
+                                           <span class="box">│</span>   3. No, and tell Claude what to do differently</code></pre>
+      <div class="term-bar">
+        <span><b class="g-live">&#9679;</b> live</span>
+        <span><b class="g-attn">?</b> needs input</span>
+        <span><b class="g-folder">&#9675;</b> folder</span>
+        <span><b class="g-remote">+</b> gitlab</span>
+        <span class="sep"></span>
+        <span><b>enter</b> open</span>
+        <span><b>ctrl-n</b> new</span>
+        <span><b>esc</b> quit</span>
+      </div>
+    </div>
+  </header>
+
+  <nav class="rail" aria-label="Sections">
+    <ol>
+      <li><a href="#model">the model</a></li>
+      <li><a href="#usage">usage</a></li>
+      <li><a href="#layout">on disk</a></li>
+      <li><a href="#config">configuration</a></li>
+      <li><a href="#manifest">the manifest</a></li>
+    </ol>
+  </nav>
+
+  <main>
+
+    <section id="model">
+      <h2>The model</h2>
+      <p>Four nouns. Everything else follows from them.</p>
+      <dl class="nouns">
+        <div class="noun">
+          <dt>Workspace</dt>
+          <div class="shape">$WS</div>
+          <dd>The container. Repo checkouts, <code>docs/</code>, <code>.worktrees/</code> and the vault sit side by side inside it. Agents start here, so one working directory sees all of them.</dd>
+        </div>
+        <div class="noun">
+          <dt>Item</dt>
+          <div class="shape">&lt;repo&gt;/&lt;iid&gt;-&lt;slug&gt;</div>
+          <dd>A folder in the vault, or <code>_adhoc/&lt;name&gt;</code> for work with no ticket. Its identity is only <code>&lt;repo&gt;/&lt;iid&gt;</code>, because slugs drift between what you typed and what the tracker derives from the title.</dd>
+        </div>
+        <div class="noun">
+          <dt>Worktree</dt>
+          <div class="shape">.worktrees/&lt;repo&gt;--&lt;slug&gt;</div>
+          <dd>A cache, deliberately. Branches are the real state. Delete a worktree and reopening the item rebuilds it.</dd>
+        </div>
+        <div class="noun">
+          <dt>Session</dt>
+          <div class="shape">wisp_&lt;item&gt;</div>
+          <dd>A tmux session tagged <code>@wisp_item</code>. Window 1 is the agent at the workspace root; one further window per worktree, for builds and dev servers.</dd>
+        </div>
+      </dl>
+      <p>Nothing wisp does destroys work. Killing a session leaves the worktrees and branches; deleting a worktree leaves the branch.</p>
+    </section>
+
+    <section id="usage">
+      <h2>Usage</h2>
+      <div class="scroll">
+        <table>
+          <tbody>
+            <tr><td class="k">wisp</td><td>Go to the picker session, creating it if needed.</td></tr>
+            <tr><td class="k">wisp pick</td><td>Run the picker once, here, without a session.</td></tr>
+            <tr><td class="k">wisp open &lt;item&gt;</td><td>Open an item directly, no picker.</td></tr>
+            <tr><td class="k">wisp next / prev</td><td>Cycle to the next or previous item session.</td></tr>
+            <tr><td class="k">wisp ls</td><td>List live sessions.</td></tr>
+            <tr><td class="k">wisp kill &lt;item&gt;</td><td>Kill an item's session. Worktrees survive.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <h3>In the picker</h3>
+      <ul class="plain">
+        <li>Type to filter. <code>enter</code> opens the highlighted item.</li>
+        <li><code>ctrl-n</code> creates one: type a name, or paste a GitLab link and wisp derives the repo, number and slug from it.</li>
+        <li><code>ctrl-x</code> kills the highlighted session. It refuses to kill the one you are sitting in, since tmux would take the client down with it.</li>
+        <li><code>ctrl-r</code> refreshes the remote items. They are otherwise cached for fifteen minutes.</li>
+        <li><code>esc</code> quits and leaves everything running, agents included.</li>
+      </ul>
+    </section>
+
+    <section id="layout">
+      <h2>What sits on disk</h2>
+      <p>wisp reads and writes exactly these paths. Nothing else in the workspace is load-bearing.</p>
+      <pre><code>$WS/
+├── &lt;repo&gt;/                        <span class="c">any directory with a .git</span>
+├── docs/&lt;repo&gt;.md                  <span class="c">workspace doc</span>
+├── .worktrees/&lt;repo&gt;--&lt;slug&gt;/      <span class="c">the cache, safe to delete</span>
+├── .claude/scripts/provision-worktree.sh
+└── working_items/                  <span class="c">the vault</span>
+    ├── &lt;repo&gt;/&lt;iid&gt;-&lt;slug&gt;/
+    │   ├── orchestration.md        <span class="c">manifest, for multi-repo items</span>
+    │   ├── notes.md                <span class="c">shown in the preview pane</span>
+    │   └── .wisp-context.md        <span class="c">generated on open, safe to delete</span>
+    └── _adhoc/&lt;name&gt;/              <span class="c">work with no ticket behind it</span></code></pre>
+      <p>Two of these regenerate themselves and never need backing up: <code>.worktrees/</code> and every <code>.wisp-context.md</code>. Everything else is yours.</p>
+    </section>
+
+    <section id="config">
+      <h2>Configuration</h2>
+      <p><code>&lt;workspace&gt;/.wisp.yaml</code> is read first, then <code>~/.config/wisp/config.yaml</code>, then the environment. The workspace file wins because a workspace owns its own vault, repos and tracker group.</p>
+      <pre><code>program: claude --permission-mode auto   <span class="c"># runs in window 1</span>
+install: false                          <span class="c"># install deps when provisioning</span>
+gitlab:
+  group: your-group/subgroup
+  username: you
+  <span class="c"># Recovers the repo directory from a work item URL. Exactly one</span>
+  <span class="c"># capturing group, which must be the repo. GitLab nests projects</span>
+  <span class="c"># arbitrarily, so there is no generic form for this.</span>
+  repo_pattern: '/subgroup/([^/]+)/-/'
+  cache_ttl_min: 15</code></pre>
+      <h3>Finding the workspace</h3>
+      <p>In order: <code>WISP_WORKSPACE</code>; then the nearest ancestor holding a <code>.wisp.yaml</code> or a vault directory, so wisp works from inside a repo or a worktree; then a <code>workspace:</code> key in the user config, so it works from anywhere at all. Failing all three it reports what it searched for and names all three fixes.</p>
+    </section>
+
+    <section id="manifest">
+      <h2>The manifest</h2>
+      <p>An item can span several repos. YAML frontmatter in <code>orchestration.md</code> is what says so.</p>
+      <pre><code><span class="c">---</span>
+repos:
+  - repo: payments-api
+    branch: feature/1042-retry-backoff
+    base: main
+  - repo: webhooks-worker
+    branch: feature/1042-retry-backoff
+<span class="c">---</span></code></pre>
+      <p>It records intent, and deliberately not worktree paths: a path would be a cache pretending to be state, and a deleted worktree should read as a cache miss rather than as lost work.</p>
+      <p>Without an <code>orchestration.md</code>, a single-repo item is inferred from the folder's parent with branch <code>feature/&lt;slug&gt;</code>. An <code>_adhoc</code> item gets no repos at all, which is correct: none can be inferred, and the session is notes-only.</p>
+      <div class="note"><b>Requirements.</b> tmux and git. <code>glab</code> is optional; without it the remote source is simply empty. Provisioning shells out to a <code>provision-worktree.sh</code> in the workspace, which owns branching, environment file copying and dependency installation. wisp does not duplicate that.</div>
+    </section>
+
+  </main>
+
+  <footer>
+    <span>wisp</span>
+    <span>MIT</span>
+    <span>github.com/fisherrjd/wisp</span>
+  </footer>
+
+</div>
+</body>
+</html>
