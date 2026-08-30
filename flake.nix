@@ -20,12 +20,11 @@
     };
     nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
     skribbl.url = "github:fisherrjd/skribbl";
-    # Deliberately the local checkout, not github:fisherrjd/wisp, while wisp is under active
-    # development: this way a change is testable with `nix flake lock --update-input wisp` and
-    # no push. The remote exists but is private, so a github: input would also need a token.
-    # Switch it once wisp settles down.
+    # git+ssh rather than github: because the repo is private — ssh uses the local key,
+    # github: would need an access token in nix.conf. To test unpushed wisp changes, point
+    # this at a checkout (git+file:///path/to/wisp) and `nix flake lock --update-input wisp`.
     wisp = {
-      url = "git+file:///Users/jadfis/github/wisp";
+      url = "git+ssh://git@github.com/fisherrjd/wisp.git";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     vscode-server = {

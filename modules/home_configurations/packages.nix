@@ -90,6 +90,7 @@ in
         vale
         watch
         wget
+        wisp
         which
         xh
         yank
@@ -118,7 +119,6 @@ in
           opencode
           pi-coding-agent
           glab
-          wisp # workspace item picker; needs the working_items vault + glab
         ])
       ];
 }
