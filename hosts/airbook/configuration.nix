@@ -28,11 +28,7 @@ in
     name = username;
     home = "/Users/${username}";
     shell = pkgs.bashInteractive;
-    openssh.authorizedKeys.keys = with common.pubkeys; [
-      atlantis
-      neverland
-      eldo
-    ];
+    openssh.authorizedKeys.keys = common.pubkeys.all;
   };
   system.primaryUser = mkDefault username;
 

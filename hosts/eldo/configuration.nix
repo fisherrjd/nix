@@ -95,11 +95,7 @@ in
     isNormalUser = true;
     description = "Jade Fisher";
     extraGroups = [ "networkmanager" "wheel" ];
-    openssh.authorizedKeys.keys = with common.pubkeys; [
-      atlantis
-      neverland
-      airbook
-    ];
+    openssh.authorizedKeys.keys = common.pubkeys.all;
     packages = with pkgs; [ ];
   };
   programs.nix-ld.enable = true;

@@ -33,12 +33,7 @@ in
     group = "users";
     extraGroups = [ "wheel" ];
     useDefaultShell = true;
-    openssh.authorizedKeys.keys = with pubkeys; [
-      atlantis
-      neverland
-      eldo
-      airbook
-    ];
+    openssh.authorizedKeys.keys = pubkeys.all;
   };
 
   networking.firewall.enable = false;

@@ -20,6 +20,7 @@ let
     gjallar = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDB35NyHnCwlbLTP+KHILJhv3yjvJgRYNCf1/+fFmfTi jade@sinch";
 
     dev = [
+      atlantis
       neverland
       eldo
       airbook
@@ -30,6 +31,7 @@ let
       gjallar
     ];
 
+    # every machine trusts every other machine, so hosts just use `all`
     all = dev ++ work;
   };
 in
