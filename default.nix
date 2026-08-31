@@ -8,7 +8,10 @@ import nixpkgs {
   inherit system;
   overlays = [
     (_: _: { jacobi = import flake.inputs.jacobi { inherit system; }; })
-    (_: _: { wisp = flake.inputs.wisp.packages.${system}.wisp; })
+    # Both from the wisp flake, so the page and the binary it documents are always the same
+    # revision. The docs used to be a hand-written copy under packages/wisp-docs here, and it
+    # drifted until it described a wisp with no workspaces, no hosts and no close-out.
+    (_: _: { inherit (flake.inputs.wisp.packages.${system}) wisp wisp-docs; })
     (_: prev: { inherit (prev.jacobi) llama-cpp-latest hermes-agent sglang-omni codex-latest pog; })
   ] ++ (import ./overlays.nix) ++ overlays;
   config = {
