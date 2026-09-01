@@ -1,5 +1,5 @@
 # Uses `opkgs` (home.nix's overlaid pkgs) rather than the module's plain
-# `pkgs`, because several entries below (hms, hermes-agent, codex-latest,
+# `pkgs`, because several entries below (hms, hermes-agent,
 # colmena_pog_scripts, ...) are provided by overlays not present on
 # home-manager's default pkgs.
 { opkgs, flake, machine-name, ... }:
@@ -100,7 +100,6 @@ in
         # Packages for only Linux
         (
           lib.optionals isLinux [
-            codex-latest
             colmena
             colmena_pog_scripts
             gnutar
