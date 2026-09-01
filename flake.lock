@@ -322,11 +322,11 @@
         "pog": "pog"
       },
       "locked": {
-        "lastModified": 1787961904,
-        "narHash": "sha256-JBka7xSDxkVMXOKZ6aWcSn6vb8gDerWh9QzoOjfya6I=",
+        "lastModified": 1788134715,
+        "narHash": "sha256-upXrcVcGQj9lRjLpIEG9hCbXr+MrElYPmtiAZhCp8MQ=",
         "owner": "jpetrucciani",
         "repo": "hex",
-        "rev": "d2feaf5de167c2625940056afebe41fe03695e65",
+        "rev": "cd372cecdab00ddb9c05228e81c367db9d707014",
         "type": "github"
       },
       "original": {
@@ -363,11 +363,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1787797243,
-        "narHash": "sha256-8+Q7NOB7RPajRjA4pbCDLzqH+MTjnG9x6LUPLfL2joA=",
+        "lastModified": 1788199093,
+        "narHash": "sha256-gh09zTgEsbnoWwrNPzIDajc/HoE446Sc3yKDCPFa7Xs=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "99c9ec63390f1d8c14d95d9e8b17cc29cfbd4e11",
+        "rev": "f772b7f968365e7b2b70a860c509d214639556fe",
         "type": "github"
       },
       "original": {
@@ -439,11 +439,11 @@
         "vscode-server": "vscode-server"
       },
       "locked": {
-        "lastModified": 1788050593,
-        "narHash": "sha256-0OiaGz2jYhJ5RvYuK/Ugt475t8CldvhiXo4KRsMa0CY=",
+        "lastModified": 1788228752,
+        "narHash": "sha256-/MeVaBttSLQldXjvxwthUnjD6qvM7bnvGRb4AIbVBRw=",
         "owner": "jpetrucciani",
         "repo": "nix",
-        "rev": "131377731f54d2437ddd99cf65f5a1233af05de1",
+        "rev": "dbe774dcfeeb1d63934427e007d1a6e7e96412e8",
         "type": "github"
       },
       "original": {
@@ -585,11 +585,11 @@
         "nixpkgs": "nixpkgs_5"
       },
       "locked": {
-        "lastModified": 1787144466,
-        "narHash": "sha256-HHfv2/HkNSKbbSyU9iD/g8lbP6r4tl33sSw1W4rXCk0=",
+        "lastModified": 1788044418,
+        "narHash": "sha256-cmOd3iGoE140M2GidgQMQbyxHZ4dT7C0QZq2+CrXQyA=",
         "owner": "NixOS",
         "repo": "nixos-hardware",
-        "rev": "0471accf8d0a8210b31d947497d179ecc99e0021",
+        "rev": "dc3f0cfde2050172abf6c3cdb684f735c15a57c5",
         "type": "github"
       },
       "original": {
@@ -690,11 +690,11 @@
     },
     "nixpkgs_10": {
       "locked": {
-        "lastModified": 1787900134,
-        "narHash": "sha256-5GWj0FI2uOwKNpXkmpWrSFDe1rCaNBCUQ8d+HDtFQPI=",
-        "rev": "83199d0d373dd3ac2b9a1996b1d0263f76ab7a4c",
+        "lastModified": 1788179007,
+        "narHash": "sha256-maQBa7XmWJ+a6te4QwF++R1FIXUrjvki0AtGOOhyZn0=",
+        "rev": "34ab99075ac4f7e40cf037eef32cb1c360bb85e9",
         "type": "tarball",
-        "url": "https://releases.nixos.org/nixos/unstable/nixos-26.11pre1063296.83199d0d373d/nixexprs.tar.xz"
+        "url": "https://releases.nixos.org/nixos/unstable/nixos-26.11pre1064949.34ab99075ac4/nixexprs.tar.xz"
       },
       "original": {
         "id": "nixpkgs",
@@ -779,11 +779,11 @@
     },
     "nixpkgs_6": {
       "locked": {
-        "lastModified": 1787948808,
-        "narHash": "sha256-Jt089snQub8rO083nmL6UTjcB6PvegjOUsRL/ysZ+e8=",
-        "rev": "66b643c7d4e3f50124081b60845fd07a8455d263",
+        "lastModified": 1788127064,
+        "narHash": "sha256-LqBAT4oAibSxWhh08wgfVUgCxenug+vn08e4TLMMPRA=",
+        "rev": "3633f4ab859cd646d244802286d916f107ffeda7",
         "type": "tarball",
-        "url": "https://releases.nixos.org/nixos/unstable-small/nixos-26.11pre1063614.66b643c7d4e3/nixexprs.tar.xz"
+        "url": "https://releases.nixos.org/nixos/unstable-small/nixos-26.11pre1064712.3633f4ab859c/nixexprs.tar.xz"
       },
       "original": {
         "id": "nixpkgs",
@@ -1193,11 +1193,11 @@
         "pyproject-nix": "pyproject-nix_2"
       },
       "locked": {
-        "lastModified": 1786615403,
-        "narHash": "sha256-U++y7nM/6xiEcWI7q4fQoPZjPvRaTwkSqzBOVoEBjUE=",
+        "lastModified": 1788001239,
+        "narHash": "sha256-AELmsXPI546MhbC/ZXC7WRUkCz7d4rqKTHUmliIgPpI=",
         "owner": "adisbladis",
         "repo": "uv2nix",
-        "rev": "4b59abb2ae1896d2a0e1abfc47fbc9bf985ea730",
+        "rev": "7f9c6b613d2e749e54854b1d60ab6a2192db889e",
         "type": "github"
       },
       "original": {
@@ -1248,11 +1248,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1788211435,
-        "narHash": "sha256-1mB8azHit1mJOtZqeuH2Yv0xEnH7LcZFmDZRLAxwEgo=",
+        "lastModified": 1788229340,
+        "narHash": "sha256-mZH13z9bKPMaKE+PmB2CMZ2VrTZGoCbBGZHIsMPq2ck=",
         "ref": "refs/heads/main",
-        "rev": "15c6c0f49871543612bbd15f8f73bc28ec297f9a",
-        "revCount": 39,
+        "rev": "a55ad8302142c2d59066872e260687f09841ea32",
+        "revCount": 42,
         "type": "git",
         "url": "ssh://git@github.com/fisherrjd/wisp.git"
       },
