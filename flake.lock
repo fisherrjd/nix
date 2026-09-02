@@ -1248,11 +1248,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1788229340,
-        "narHash": "sha256-mZH13z9bKPMaKE+PmB2CMZ2VrTZGoCbBGZHIsMPq2ck=",
+        "lastModified": 1788307892,
+        "narHash": "sha256-5tlJGqLYWQ7G0NN5WbBhPTWfdElR+Kq7Orydknjlb+o=",
         "ref": "refs/heads/main",
-        "rev": "a55ad8302142c2d59066872e260687f09841ea32",
-        "revCount": 42,
+        "rev": "2128465f27692f53603f4a4faf11744abc462091",
+        "revCount": 45,
         "type": "git",
         "url": "ssh://git@github.com/fisherrjd/wisp.git"
       },
