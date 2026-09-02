@@ -53,6 +53,7 @@ in
 
   security.sudo.wheelNeedsPassword = false;
   environment.systemPackages = with pkgs; [
+    claude-code-latest
     git
     vim
   ];

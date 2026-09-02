@@ -5,7 +5,7 @@
 }:
 
 let
-  version = "2.1.219";
+  version = "2.1.258";
 
   # Native bun-compiled binary from the per-platform npm package; the main
   # @anthropic-ai/claude-code package is just a JS launcher around these.
@@ -14,19 +14,19 @@ let
   platformMap = {
     "aarch64-darwin" = {
       npmPlatform = "darwin-arm64";
-      sha256 = "1nlbk5sizc728kgmv6zbbjbkkld9d5pq7z485h9g70n9dbjs381n";
+      sha256 = "11kn12237jvz333axwmm0v1d5dx1h70d8h1bcpcnxpvfg79798zb";
     };
     "x86_64-darwin" = {
       npmPlatform = "darwin-x64";
-      sha256 = "1j2dih38md11pcagi720ci3p0b2fq5v7izj2gsp0sgq6g4y8y3wp";
+      sha256 = "1hll09fmczxiwab64lq0jbd1m9pmyg7vil5y06gzwafyqzcxqfx0";
     };
     "x86_64-linux" = {
       npmPlatform = "linux-x64";
-      sha256 = "19vs17hal26nafjx1gnajwjkkc65z7w0hqlw12kf2kcdkks8iajg";
+      sha256 = "0lyp7wzjxp4qmf6pm5agn7y002zvrs33kk827xhrp8klmqhqlzq3";
     };
     "aarch64-linux" = {
       npmPlatform = "linux-arm64";
-      sha256 = "05gbw122s5nyyazq63rbaazbvqzlgxz4kj33x9ssr4cby1qycjng";
+      sha256 = "15miyf0kb9y54mnw3pscwx2w1jy54apl72zl4drp1mggsc6da2ig";
     };
   };
 
