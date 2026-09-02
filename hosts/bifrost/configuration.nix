@@ -2,7 +2,7 @@
 let
   hostname = "bifrost";
   username = "jade";
-  common = import ../common.nix { inherit config flake machine-name pkgs username; };
+  common = import ../common.nix { inherit flake machine-name pkgs username; };
   modulesDir = ../../modules/home_configurations;
 
 in
@@ -48,7 +48,6 @@ in
     description = "Jade Fisher";
     extraGroups = [ "networkmanager" "wheel" ];
     openssh.authorizedKeys.keys = common.pubkeys.all;
-    packages = with pkgs; [ ];
   };
 
   security.sudo.wheelNeedsPassword = false;

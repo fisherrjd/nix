@@ -1,9 +1,8 @@
-{ lib, config, flake, machine-name, pkgs, ... }:
+{ lib, flake, machine-name, pkgs, ... }:
 let
-  # inherit (lib.attrsets) mapAttrs' nameValuePair;
   inherit (lib) mkDefault;
   hostname = "gjallar";
-  common = import ../common.nix { inherit config flake machine-name pkgs username; };
+  common = import ../common.nix { inherit flake machine-name pkgs username; };
   username = "jadfis";
   configPath = "/Users/${username}/cfg/hosts/${hostname}/configuration.nix";
 in
@@ -21,7 +20,7 @@ in
     systemPath = [ "/opt/homebrew/bin" "/opt/homebrew/sbin" ];
     systemPackages = with pkgs; [
       nodejs
-      (callPackage ../../packages/sinch-cli.nix { })
+      sinch-cli
     ];
     variables = {
       NIX_HOST = hostname;

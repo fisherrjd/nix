@@ -9,22 +9,6 @@ let
       "/home/${username}"
     else
       "/Users/${username}";
-
-  sessionVariables = {
-    BASH_SILENCE_DEPRECATION_WARNING = "1";
-    EDITOR = "nano";
-    GIT_SSH_COMMAND = "${pkgs.openssh}/bin/ssh";
-    HISTCONTROL = "ignoreboth";
-    # LC_CTYPE was falling back to "C" here: WezTerm sets no locale, and only the
-    # eldo (NixOS) host had i18n configured. Hygiene, not a bug fix — tmux 3.7 was
-    # verified to decode UTF-8 correctly either way, so this is not what caused the
-    # mangled glyphs (that was missing font coverage for U+23BF / U+23FA).
-    LANG = "en_US.UTF-8";
-    LC_ALL = "en_US.UTF-8";
-    LESS = "-iR";
-    PAGER = "less";
-  };
-
 in
 {
   imports = [
@@ -35,9 +19,7 @@ in
     ./modules/home_configurations/ssh.nix
     ./modules/home_configurations/tmux.nix
     ./modules/home_configurations/packages.nix
-    # Look more into these ex: optionalAttrs
-    (pkgs.lib.optionalAttrs isLinux "${flake.inputs.vscode-server}/modules/vscode-server/home.nix")
-  ];
+  ] ++ pkgs.lib.optional isLinux "${flake.inputs.vscode-server}/modules/vscode-server/home.nix";
 
   _module.args = {
     inherit flake;
@@ -59,7 +41,6 @@ in
     # lsd.enable = true;
 
     bash = {
-      inherit sessionVariables;
       enable = true;
       historyFileSize = -1;
       historySize = -1;

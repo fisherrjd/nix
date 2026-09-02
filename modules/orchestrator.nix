@@ -7,7 +7,6 @@
 { config, lib, pkgs, ... }:
 let
   cfg = config.services.orchestrator;
-  claude-code = pkgs.callPackage ../packages/claude-code-latest.nix { };
   mkPulse = { pulseType, startAt, timeoutSec }: {
     # bash: bin/lokiq and bin/ghq are #!/usr/bin/env bash — without it every scan
     # pulse spent the dry-run day reporting its own broken tools
@@ -37,12 +36,12 @@ let
 in
 {
   options.services.orchestrator = {
-    enable = lib.mkOption { type = lib.types.bool; default = false; };
+    enable = lib.mkEnableOption "orchestrator";
     user = lib.mkOption { type = lib.types.str; default = "jade"; };
     repoPath = lib.mkOption { type = lib.types.str; default = "/home/jade/github/projects/orchestrator"; };
     stateDir = lib.mkOption { type = lib.types.str; default = "/var/lib/orchestrator"; };
     # explicit pin: immune to PATH drift between nix-profile and the self-updater
-    claudeBin = lib.mkOption { type = lib.types.str; default = "${claude-code}/bin/claude"; };
+    claudeBin = lib.mkOption { type = lib.types.str; default = lib.getExe pkgs.claude-code-latest; };
     atlasUrl = lib.mkOption { type = lib.types.str; default = "http://10.0.0.71:3040"; };
     lokiUrl = lib.mkOption { type = lib.types.str; default = "http://127.0.0.1:3100"; };
     ntfyUrl = lib.mkOption { type = lib.types.str; default = "http://127.0.0.1:8081"; };

@@ -1,4 +1,4 @@
-{ pkgs, flake, machine-name, username, isDarwin ? false, ... }:
+{ pkgs, flake, machine-name, username }:
 let
   inherit (flake.inputs) home-manager nix-darwin;
 
@@ -51,15 +51,6 @@ in
     else { dates = [ "Sun *-*-* 04:00:00" ]; });
   };
 
-  extraGroups = [ "wheel" "networkmanager" "docker" "podman" ];
-
-  sysctl_opts = {
-    "fs.inotify.max_user_watches" = 1048576;
-    "fs.inotify.max_queued_events" = 1048576;
-    "fs.inotify.max_user_instances" = 1048576;
-    "net.core.rmem_max" = 2500000;
-  };
-
   defaultLocale = "en_US.UTF-8";
   extraLocaleSettings = let utf8 = "en_US.UTF-8"; in
     {
@@ -74,13 +65,6 @@ in
       LC_TIME = utf8;
     };
 
-  env = { };
-
-  name = rec {
-    first = "jade";
-    last = "fisher";
-    full = "${first} ${last}";
-  };
   timeZone = "America/Denver";
 
   security.sudo = {

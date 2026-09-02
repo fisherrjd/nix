@@ -1,12 +1,10 @@
-{ lib, config, flake, machine-name, pkgs, ... }:
+{ lib, flake, machine-name, pkgs, ... }:
 let
-  # inherit (lib.attrsets) mapAttrs' nameValuePair;
   inherit (lib) mkDefault;
   hostname = "airbook";
-  common = import ../common.nix { inherit config flake machine-name pkgs username; };
-  configPath = "/Users/jade/cfg/hosts/${hostname}/configuration.nix";
   username = "jade";
-
+  common = import ../common.nix { inherit flake machine-name pkgs username; };
+  configPath = "/Users/${username}/cfg/hosts/${hostname}/configuration.nix";
 in
 {
   imports = [
@@ -40,26 +38,7 @@ in
       "darwin-config=${configPath}"
     ];
   };
-  services =
-    let
-      unsloth = name: "/opt/box/models/unsloth/${name}";
-      hunyuan = name: "/opt/box/models/hunyuan/${name}";
-      bartowski = name: "/opt/box/models/bartowski/${name}";
-    in
-    {
-      openssh.enable = true;
-      # llama-server.servers = {
-      #   Qwen3_5-9B-Uncensored-HauhauCS-Aggressive-Q8_0 = {
-      #     enable = true;
-      #     package = pkgs.llama-cpp;
-      #     port = 6969;
-      #     model = unsloth "Qwen3.5-9B-Uncensored-HauhauCS-Aggressive-Q8_0.gguf";
-      #     ngl = 0;
-      #     extraFlags = "--ctx-size 8192 --seed 420 --prio 2 --temp 0.6 --min-p 0.0 --top-k 20 --top-p 0.95";
-      #   };
-      # };
-
-    };
+  services.openssh.enable = true;
   launchd.user.agents.caffeinate = {
     serviceConfig = {
       Label = "jade.caffeinate";

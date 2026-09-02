@@ -3,9 +3,7 @@ let
   hostname = "eldo";
   username = "jade";
   ts_ip = "100.66.184.28";
-  common = import ../common.nix {
-    inherit config flake machine-name pkgs username;
-  };
+  common = import ../common.nix { inherit flake machine-name pkgs username; };
 in
 {
   imports =
@@ -78,25 +76,13 @@ in
       8420 # ge-dashboard web UI (orchestrator API stays on 127.0.0.1:8410, proxied by the dashboard)
     ];
   };
-  time.timeZone = "America/Denver";
-  i18n.defaultLocale = "en_US.UTF-8";
-  i18n.extraLocaleSettings = {
-    LC_ADDRESS = "en_US.UTF-8";
-    LC_IDENTIFICATION = "en_US.UTF-8";
-    LC_MEASUREMENT = "en_US.UTF-8";
-    LC_MONETARY = "en_US.UTF-8";
-    LC_NAME = "en_US.UTF-8";
-    LC_NUMERIC = "en_US.UTF-8";
-    LC_PAPER = "en_US.UTF-8";
-    LC_TELEPHONE = "en_US.UTF-8";
-    LC_TIME = "en_US.UTF-8";
-  };
+  time.timeZone = common.timeZone;
+  i18n = { inherit (common) defaultLocale extraLocaleSettings; };
   users.users.jade = {
     isNormalUser = true;
     description = "Jade Fisher";
     extraGroups = [ "networkmanager" "wheel" ];
     openssh.authorizedKeys.keys = common.pubkeys.all;
-    packages = with pkgs; [ ];
   };
   programs.nix-ld.enable = true;
   environment.systemPackages = with pkgs; [

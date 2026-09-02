@@ -6,7 +6,7 @@ let
 in
 {
   options.services.monitoring = {
-    enable = lib.mkOption { type = lib.types.bool; default = false; };
+    enable = lib.mkEnableOption "monitoring";
     port = lib.mkOption { type = lib.types.port; default = 3000; };
     domain = lib.mkOption { type = lib.types.str; default = "grafana.jade.rip"; };
     # string, not path — must stay a runtime path (/run/agenix/...), never copied to store

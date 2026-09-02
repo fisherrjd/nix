@@ -62,7 +62,7 @@ stdenv.mkDerivation {
     homepage = "https://github.com/anthropics/claude-code";
     license = lib.licenses.unfree;
     mainProgram = "claude";
-    platforms = [ "aarch64-darwin" "x86_64-darwin" "x86_64-linux" "aarch64-linux" ];
+    platforms = lib.attrNames platformMap;
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
   };
 }

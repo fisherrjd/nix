@@ -43,6 +43,8 @@
   outputs = { self, ... }:
     let
       inherit (self.inputs.nixpkgs) lib;
+      # single source of truth for host names; hms.nix builds `hmx.<host>` from the same list
+      inherit (import ./hosts/constants.nix) machines;
       forAllSystems = lib.genAttrs lib.systems.flakeExposed;
       packages = forAllSystems
         (system: import ./. { flake = self; inherit system; });
@@ -52,46 +54,28 @@
       inherit (self.inputs) jacobi agenix;
       pins = self.inputs;
 
-      nixosConfigurations = builtins.listToAttrs
-        (map
-          (name: {
-            inherit name;
-            value = self.inputs.nixpkgs.lib.nixosSystem {
-              pkgs = self.packages.x86_64-linux;
-              specialArgs = { flake = self; machine-name = name; };
-              modules = [
-                self.inputs.agenix.nixosModules.default
-                ./hosts/${name}/configuration.nix
-              ];
-            };
-          })
-          [
-            "neverland"
-            "eldo"
-            "bifrost"
-          ]);
+      nixosConfigurations = lib.genAttrs machines.nixos (name:
+        lib.nixosSystem {
+          pkgs = self.packages.x86_64-linux;
+          specialArgs = { flake = self; machine-name = name; };
+          modules = [
+            self.inputs.agenix.nixosModules.default
+            ./hosts/${name}/configuration.nix
+          ];
+        });
 
-      darwinConfigurations = builtins.listToAttrs
-        (map
-          (name: {
-            inherit name;
-            value = self.inputs.nix-darwin.lib.darwinSystem {
-              pkgs = self.packages.aarch64-darwin;
-              specialArgs = { flake = self; machine-name = name; };
-              modules = [
-                ./hosts/common_darwin.nix
-                "${self.inputs.jacobi}/hosts/modules/darwin/llama-server.nix"
-                ./hosts/${name}/configuration.nix
-              ] ++ (lib.optionals (name == "gjallar") [
-                self.inputs.skribbl.darwinModules.default
-              ]);
-            };
-          })
-          [
-            "airbook"
-            "gjallar"
-          ]
-        );
+      darwinConfigurations = lib.genAttrs machines.darwin (name:
+        self.inputs.nix-darwin.lib.darwinSystem {
+          pkgs = self.packages.aarch64-darwin;
+          specialArgs = { flake = self; machine-name = name; };
+          modules = [
+            ./hosts/common_darwin.nix
+            "${self.inputs.jacobi}/hosts/modules/darwin/llama-server.nix"
+            ./hosts/${name}/configuration.nix
+          ] ++ lib.optionals (name == "gjallar") [
+            self.inputs.skribbl.darwinModules.default
+          ];
+        });
       do-builder = self.inputs.nixos-generators.nixosGenerate {
         system = "x86_64-linux";
         format = "do";

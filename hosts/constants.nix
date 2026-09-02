@@ -2,6 +2,7 @@ let
 
   machines = {
     nixos = [
+      "bifrost"
       "eldo"
       "neverland"
     ];

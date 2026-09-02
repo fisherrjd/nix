@@ -6,7 +6,7 @@ let
 in
 {
   options.services.obsidian-autocommit = {
-    enable = lib.mkOption { type = lib.types.bool; default = false; };
+    enable = lib.mkEnableOption "obsidian-autocommit";
     user = lib.mkOption { type = lib.types.str; default = "jade"; };
     repoPath = lib.mkOption { type = lib.types.path; default = "/home/jade/syncthing/obsidian"; };
     interval = lib.mkOption { type = lib.types.str; default = "hourly"; };

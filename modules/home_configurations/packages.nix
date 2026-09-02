@@ -103,7 +103,6 @@ in
             colmena
             colmena_pog_scripts
             gnutar
-            hermes-agent
             ntfy-sh
             pi-coding-agent
             procps
