@@ -5,7 +5,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sinch-cli";
-  version = "0.5.3";
+  version = "0.6.0";
 
   # @sinch/cli on npm is only a Node launcher shim; the actual bun-compiled
   # executable ships in the per-platform package, so fetch that directly.
