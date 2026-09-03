@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
   #   curl -s https://registry.npmjs.org/@sinch%2fcli-darwin-arm64 | jq -r '.versions["<version>"].dist.integrity'
   src = fetchurl {
     url = "https://registry.npmjs.org/@sinch/cli-darwin-arm64/-/cli-darwin-arm64-${finalAttrs.version}.tgz";
-    hash = "sha512-PoPeaqwG9yh7byzZgcdl+zqgfeKXREFx42EaGYCYQ7xXlyTWUivQ4q5RDkqqdb8HM4c07ic8FL20QYq/wVSAaQ==";
+    hash = "sha512-Zlc7wviXD47EknqKkiI6DUglTY953gmz8ugyvpR8u3i8uyJIEeuSCNzINpO3CdNlQKepzOG5TLIVhomo53mbcg==";
   };
 
   dontBuild = true;
