@@ -24,6 +24,7 @@ in
         caddy
         jacobi.ccusage
         coreutils-full
+        codex-latest
         claude-code-latest
         curl
         diffutils

@@ -5,7 +5,7 @@
 }:
 
 let
-  version = "2.1.258";
+  version = "2.1.267";
 
   # Native bun-compiled binary from the per-platform npm package; the main
   # @anthropic-ai/claude-code package is just a JS launcher around these.
@@ -22,7 +22,7 @@ let
     };
     "x86_64-linux" = {
       npmPlatform = "linux-x64";
-      sha256 = "0lyp7wzjxp4qmf6pm5agn7y002zvrs33kk827xhrp8klmqhqlzq3";
+      sha256 = "sha256-AQJYZYq3oKoJ6pkssqMUaJ4lzkKFTFfWmT4xNglwOdU=";
     };
     "aarch64-linux" = {
       npmPlatform = "linux-arm64";
