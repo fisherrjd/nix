@@ -103,7 +103,12 @@ in
         "-c"
         (lib.concatStringsSep "; " [
           "/Users/${username}/.lmstudio/bin/lms server start || true"
-          "/Users/${username}/.nix-profile/bin/direnv exec . triage functions --slack"
+          # Hard wall-clock cap. launchd will NOT start a run while the previous
+          # instance is still alive, so one hung run silently kills the schedule
+          # until someone notices: on 2026-09-05 a GitLab read with no timeout
+          # hung and no daily cycle ran for six days. A normal run is ~10 min;
+          # 2h is generous and still leaves 22h of slack before the next fire.
+          "${pkgs.coreutils}/bin/timeout -k 30 7200 /Users/${username}/.nix-profile/bin/direnv exec . triage functions --slack"
         ])
       ];
       WorkingDirectory = "/Users/${username}/github/gitlab-issue-agent";
