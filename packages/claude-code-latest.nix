@@ -14,7 +14,7 @@ let
   platformMap = {
     "aarch64-darwin" = {
       npmPlatform = "darwin-arm64";
-      sha256 = "11kn12237jvz333axwmm0v1d5dx1h70d8h1bcpcnxpvfg79798zb";
+      sha256 = "sha256-pslz00dPnk54rbMdagNalnRqQnh/UxZbdjLlZWeai6A=";
     };
     "x86_64-darwin" = {
       npmPlatform = "darwin-x64";
@@ -22,7 +22,7 @@ let
     };
     "x86_64-linux" = {
       npmPlatform = "linux-x64";
-      sha256 = "sha256-AQJYZYq3oKoJ6pkssqMUaJ4lzkKFTFfWmT4xNglwOdU=";
+      sha256 = "sha256-VW3iN1cvBSxFl6xqRmVz4mxg0jAaJ+PHm3OdBQs6Yqc=";
     };
     "aarch64-linux" = {
       npmPlatform = "linux-arm64";
