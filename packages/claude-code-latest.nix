@@ -5,7 +5,7 @@
 }:
 
 let
-  version = "2.1.267";
+  version = "2.1.269";
 
   # Native bun-compiled binary from the per-platform npm package; the main
   # @anthropic-ai/claude-code package is just a JS launcher around these.
