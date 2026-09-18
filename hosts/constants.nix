@@ -11,6 +11,10 @@ let
       "gjallar"
     ];
 
+    phone = [
+      "jphone"
+    ];
+
   };
   pubkeys = rec {
     atlantis = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIE4ng5nDLLCyQJ0QOHglRBZkBUI/3FV1c2FIAjwQgIK0 jade@Atlantis"; #home desktop
@@ -19,13 +23,15 @@ let
     bifrost = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIK7/kejaKkGIi6l4i3Nff80DlKQipUOJop4atrdrIN1t jade@bifrost"; #DO droplet
     airbook = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJ8MkkKNzgkqXP0cX0GkvAWET0ko06bDD738ePbQAyUA jade@airbook";
     gjallar = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDB35NyHnCwlbLTP+KHILJhv3yjvJgRYNCf1/+fFmfTi jade@sinch";
+    iphone = "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBFhH4XWzFrQjLJfMYmZFiHHIfTSvHAt9wwyXiuoZXEj1fEhLEOqaQohj02SIW9zkR39hc16dE/CGOPkrwGY4KX8= #SSH ID - @fisherrd";
 
-    dev = [
+    jade = [
       atlantis
       neverland
       eldo
       airbook
       bifrost
+      iphone
     ];
 
     work = [
@@ -33,7 +39,7 @@ let
     ];
 
     # every machine trusts every other machine, so hosts just use `all`
-    all = dev ++ work;
+    all = jade ++ work;
   };
 in
 {
