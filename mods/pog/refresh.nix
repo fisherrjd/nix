@@ -1,20 +1,23 @@
 final: _:
 let
-  # Refresh script for a package driven by a *.lock.json (see update-lock.sh):
-  # bump the lock, build the package, run `verify` against the output, and put
-  # the old lock back if any of that fails. Wire the result into the package as
+  # Refresh script for a package whose version and hashes live inline in its
+  # .nix file: `script` rewrites $target_file using the helpers below, then the
+  # package is built and `verify` runs against the output. The old file is put
+  # back if any of that fails. Wire the result into the package as
   # passthru.updateScript and list the attr in .github/workflows/update_pkgs.yml.
-  mkLockRefresh =
+  mkCfgPackageRefresh =
     { name
     , attr
-    , lock
+    , target
+      # bash that sets $new_version and rewrites $target_file
+    , script
       # bash run after the build, with $output and $new_version in scope
     , verify ? ""
     }:
     final.pog {
       inherit name;
       description = "update ${attr} to the latest (or given) version, build it, and verify it";
-      runtimeInputs = with final; [ coreutils curl gnused jq nix ];
+      runtimeInputs = with final; [ coreutils curl gnugrep jq nix nixpkgs-fmt perl ];
       flags = [
         {
           name = "version";
@@ -29,27 +32,44 @@ let
       ];
       script = ''
         set -euo pipefail
-        ${builtins.readFile ./update-lock.sh}
         repo="$(realpath -e -- "''${repo:-$HOME/cfg}")"
-        lock_file="$repo/${lock}"
+        target_file="$repo/${target}"
         backup="$(mktemp)"
-        cp -- "$lock_file" "$backup"
+        cp -- "$target_file" "$backup"
         restore() {
           status=$?
           if [ "$status" -ne 0 ]; then
-            cp -- "$backup" "$lock_file"
-            echo "${name}: failed, restored ${lock}" >&2
+            cp -- "$backup" "$target_file"
+            echo "${name}: failed, restored ${target}" >&2
           fi
-          rm -f -- "$backup" "$lock_file.tmp"
+          rm -f -- "$backup"
         }
         trap restore EXIT
 
-        update_lock "$lock_file" "$version"
-        if cmp --silent -- "$backup" "$lock_file"; then
+        # set_version <version>: rewrite the one `version = "..."` assignment
+        set_version() {
+          NEW="$1" perl -0pi -e '
+            (s/^(\s*version = ")[^"]+(";)/$1 . $ENV{NEW} . $2/me) == 1
+              or die "expected one version assignment\n";
+          ' "$target_file"
+        }
+
+        # set_hash <attr name> <hash>: rewrite the first `hash = "..."` inside `<attr name> = {`
+        set_hash() {
+          KEY="$1" NEW="$2" perl -0pi -e '
+            (s/(\b\Q$ENV{KEY}\E = \{.*?hash = ")[^"]+(";)/$1 . $ENV{NEW} . $2/se) == 1
+              or die "expected a hash under $ENV{KEY}\n";
+          ' "$target_file"
+        }
+
+        ${script}
+
+        nixpkgs-fmt "$target_file" >/dev/null 2>&1
+        if cmp --silent -- "$backup" "$target_file"; then
+          echo "${name}: $new_version (up to date)"
           exit 0
         fi
 
-        new_version="$(jq -er .version "$lock_file")"
         output="$(nix build "path:$repo#${attr}" --no-link --print-build-logs --print-out-paths)"
         ${verify}
         echo "${name}: verified ${attr} $new_version"
@@ -57,10 +77,24 @@ let
     };
 in
 rec {
-  refresh_claude_code_latest = mkLockRefresh {
+  refresh_claude_code_latest = mkCfgPackageRefresh {
     name = "refresh_claude_code_latest";
     attr = "claude-code-latest";
-    lock = "packages/claude-code-latest.lock.json";
+    target = "packages/claude-code-latest.nix";
+    # npm publishes an SRI sha512 per tarball, so nothing is downloaded to hash
+    script = ''
+      registry="https://registry.npmjs.org/@anthropic-ai"
+      new_version="''${version:-$(curl -fsSL "$registry/claude-code/latest" | jq -er .version)}"
+      set_version "$new_version"
+      while IFS=$'\t' read -r system npm_platform; do
+        hash="$(curl -fsSL "$registry/claude-code-$npm_platform/$new_version" | jq -er .dist.integrity)"
+        if ! printf '%s\n' "$hash" | grep -Eq '^sha512-[A-Za-z0-9+/]{86}==$'; then
+          echo "invalid hash for $system: $hash" >&2
+          exit 1
+        fi
+        set_hash "$system" "$hash"
+      done < <(nix eval --json "path:$repo#claude-code-latest.npmPlatforms" | jq -r 'to_entries[] | [.key, .value] | @tsv')
+    '';
     verify = ''
       reported="$("$output/bin/claude" --version)"
       case "$reported" in

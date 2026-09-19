@@ -78,6 +78,7 @@ in
         pssh
         ranger
         redis
+        refresh_pog_scripts
         re2c
         rlwrap
         ruff

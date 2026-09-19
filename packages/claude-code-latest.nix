@@ -6,17 +6,31 @@
 }:
 
 let
-  # version + per-system {url, hash}, generated from the npm registry.
-  # To bump: refresh_claude_code_latest [--version X] (CI runs it nightly)
-  lock = lib.importJSON ./claude-code-latest.lock.json;
-  inherit (lock) version;
+  # version and hashes are rewritten in place by refresh_claude_code_latest
+  # (mods/pog/refresh.nix); CI runs it nightly. To pin: --version X
+  version = "2.1.278";
 
   # Native bun-compiled binary from the per-platform npm package; the main
   # @anthropic-ai/claude-code package is just a JS launcher around these.
-  src = fetchurl (
-    lock.sources.${stdenv.hostPlatform.system}
-      or (throw "Unsupported system: ${stdenv.hostPlatform.system}")
-  );
+  # Hashes are the registry's own dist.integrity values.
+  platformMap = {
+    aarch64-darwin = {
+      npmPlatform = "darwin-arm64";
+      hash = "sha512-Jgl//CpT1KR1N8uxAN0CmkFu3eESU7GYzPOwdGH1pCENysJqYgo2LwsIrTol+EequNMrTG3kkrNW9mIoS8eWLg==";
+    };
+    x86_64-linux = {
+      npmPlatform = "linux-x64";
+      hash = "sha512-q3r+5aLGAet1MGMkCH2xPsuIW9A40ws4zftURxhYwDenheCKvXc7Gr1jBwvEhYG8uQwgY3YsfNwnvIsh1Bjmeg==";
+    };
+  };
+
+  platform = platformMap.${stdenv.hostPlatform.system}
+    or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+
+  src = fetchurl {
+    url = "https://registry.npmjs.org/@anthropic-ai/claude-code-${platform.npmPlatform}/-/claude-code-${platform.npmPlatform}-${version}.tgz";
+    inherit (platform) hash;
+  };
 in
 stdenv.mkDerivation {
   pname = "claude-code-latest";
@@ -37,14 +51,18 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  passthru.updateScript = refresh_claude_code_latest;
+  passthru = {
+    updateScript = refresh_claude_code_latest;
+    # read by the update script, so the platform list lives in one place
+    npmPlatforms = lib.mapAttrs (_: p: p.npmPlatform) platformMap;
+  };
 
   meta = {
     description = "Claude Code CLI - AI-powered coding assistant by Anthropic";
     homepage = "https://github.com/anthropics/claude-code";
     license = lib.licenses.unfree;
     mainProgram = "claude";
-    platforms = lib.attrNames lock.sources;
+    platforms = lib.attrNames platformMap;
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
   };
 }
