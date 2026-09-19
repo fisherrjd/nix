@@ -2,41 +2,21 @@
 , stdenv
 , fetchurl
 , autoPatchelfHook
+, refresh_claude_code_latest
 }:
 
 let
-  version = "2.1.269";
+  # version + per-system {url, hash}, generated from the npm registry.
+  # To bump: refresh_claude_code_latest [--version X] (CI runs it nightly)
+  lock = lib.importJSON ./claude-code-latest.lock.json;
+  inherit (lock) version;
 
   # Native bun-compiled binary from the per-platform npm package; the main
   # @anthropic-ai/claude-code package is just a JS launcher around these.
-  # To bump: update version, then refresh each hash with
-  #   nix-prefetch-url https://registry.npmjs.org/@anthropic-ai/claude-code-<platform>/-/claude-code-<platform>-<version>.tgz
-  platformMap = {
-    "aarch64-darwin" = {
-      npmPlatform = "darwin-arm64";
-      sha256 = "sha256-pslz00dPnk54rbMdagNalnRqQnh/UxZbdjLlZWeai6A=";
-    };
-    "x86_64-darwin" = {
-      npmPlatform = "darwin-x64";
-      sha256 = "1hll09fmczxiwab64lq0jbd1m9pmyg7vil5y06gzwafyqzcxqfx0";
-    };
-    "x86_64-linux" = {
-      npmPlatform = "linux-x64";
-      sha256 = "sha256-VW3iN1cvBSxFl6xqRmVz4mxg0jAaJ+PHm3OdBQs6Yqc=";
-    };
-    "aarch64-linux" = {
-      npmPlatform = "linux-arm64";
-      sha256 = "15miyf0kb9y54mnw3pscwx2w1jy54apl72zl4drp1mggsc6da2ig";
-    };
-  };
-
-  platform = platformMap.${stdenv.hostPlatform.system}
-    or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
-
-  src = fetchurl {
-    url = "https://registry.npmjs.org/@anthropic-ai/claude-code-${platform.npmPlatform}/-/claude-code-${platform.npmPlatform}-${version}.tgz";
-    inherit (platform) sha256;
-  };
+  src = fetchurl (
+    lock.sources.${stdenv.hostPlatform.system}
+      or (throw "Unsupported system: ${stdenv.hostPlatform.system}")
+  );
 in
 stdenv.mkDerivation {
   pname = "claude-code-latest";
@@ -57,12 +37,14 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+  passthru.updateScript = refresh_claude_code_latest;
+
   meta = {
     description = "Claude Code CLI - AI-powered coding assistant by Anthropic";
     homepage = "https://github.com/anthropics/claude-code";
     license = lib.licenses.unfree;
     mainProgram = "claude";
-    platforms = lib.attrNames platformMap;
+    platforms = lib.attrNames lock.sources;
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
   };
 }

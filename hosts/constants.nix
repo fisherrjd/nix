@@ -23,7 +23,7 @@ let
     bifrost = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIK7/kejaKkGIi6l4i3Nff80DlKQipUOJop4atrdrIN1t jade@bifrost"; #DO droplet
     airbook = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJ8MkkKNzgkqXP0cX0GkvAWET0ko06bDD738ePbQAyUA jade@airbook";
     gjallar = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDB35NyHnCwlbLTP+KHILJhv3yjvJgRYNCf1/+fFmfTi jade@sinch";
-    iphone = "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBFhH4XWzFrQjLJfMYmZFiHHIfTSvHAt9wwyXiuoZXEj1fEhLEOqaQohj02SIW9zkR39hc16dE/CGOPkrwGY4KX8= #SSH ID - @fisherrd";
+    iphone = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMTS+RbHMA/W8PNpNFoLKVFpSjVmSoF+IYn51SDL9t5W";
 
     jade = [
       atlantis

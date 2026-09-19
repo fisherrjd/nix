@@ -1,0 +1,38 @@
+name: check for package updates
+on: {workflow_dispatch, schedule: [cron: '0 0 * * *']}
+concurrency:
+  group: package-updates
+  cancel-in-progress: false
+jobs:
+  update:
+    strategy:
+      fail-fast: false
+      matrix:
+        # packages with a passthru.updateScript (see mods/pog/refresh.nix)
+        attr:
+          - claude-code-latest
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      GITHUB_TOKEN: ${{ secrets.NIX_TOKEN }}
+    steps:
+      - uses: actions/checkout@v7.0.1
+        with:
+          persist-credentials: false
+      - uses: cachix/install-nix-action@v31
+        with:
+          extra_nix_config: |
+            extra-substituters = https://cache.g7c.us
+            extra-trusted-public-keys = cache.g7c.us:dSWpE2B5zK/Fahd7npIQWM4izRnVL+a4LiCAnrjdoFY=
+      - run: nix run .#${{ matrix.attr }}.updateScript -- --repo "$GITHUB_WORKSPACE"
+      - uses: peter-evans/create-pull-request@v8.1.0
+        id: pr
+        with:
+          delete-branch: true
+          author: Jade Fisher <dev@Jade.rip>
+          title: automatic update (${{ matrix.attr }})
+          commit-message: automatic update (${{ matrix.attr }})
+          branch: automatic-update-${{ matrix.attr }}
+          token: ${{ secrets.NIX_TOKEN }}
+      - if: ${{ steps.pr.outputs.pull-request-number }}
+        run: gh pr merge --auto --squash ${{ steps.pr.outputs.pull-request-url }}
