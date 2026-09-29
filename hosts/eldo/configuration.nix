@@ -107,12 +107,13 @@ in
     hybrid-sleep.enable = false;
   };
 
-  # Vanilla Tweaks datapacks (MC 26.1), synced into the world on every start.
+  # Vanilla Tweaks datapacks (MC 26.2), synced into the world on every start.
   # Replaces all zips in datapacks/, so anything dropped in by hand gets removed.
   systemd.services.minecraft-server.preStart = ''
     mkdir -p community_server/datapacks
     rm -f community_server/datapacks/*.zip
-    cp ${./minecraft-datapacks}/*.zip community_server/datapacks/
+    # store files are read-only; the world upgrader needs write access to everything
+    cp --no-preserve=mode ${./minecraft-datapacks}/*.zip community_server/datapacks/
   '';
 
   services.obsidian-autocommit = {
@@ -197,14 +198,8 @@ in
         eula = true;
         openFirewall = true;
         declarative = true;
-        # pinned to the world's version; nixpkgs only ships 26.1 / 26.2 / 26.3
-        package = pkgs.minecraftServers.vanilla-26-1.overrideAttrs {
-          version = "26.1.2";
-          src = pkgs.fetchurl {
-            url = "https://piston-data.mojang.com/v1/objects/97ccd4c0ed3f81bbb7bfacddd1090b0c56f9bc51/server.jar";
-            sha1 = "a6ygjmhc1c4x3pdcpyvvp09zxp0d9k4p";
-          };
-        };
+        # 26.2 = newest version Vanilla Tweaks datapacks support (bump both together)
+        package = pkgs.minecraftServers.vanilla-26-2;
         serverProperties = {
           enable-rcon = true;
           "rcon.password" = "fart";
@@ -212,7 +207,7 @@ in
           server-port = 25566;
           motd = "Not Artistic SMP";
           level-name = "community_server";
-          level-seed = "rex_is_stupid";
+          level-seed = "dan_is_a_nerd";
           server-name = "NotArtistic";
           gamemode = 0;
           difficulty = 3;
