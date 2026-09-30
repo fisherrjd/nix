@@ -9,6 +9,7 @@ in
 {
   imports = [
     "${common.home-manager}/nix-darwin"
+    ../../modules/buzz-selfhost.nix
   ];
 
   home-manager.users.jadfis = common.jade;
@@ -60,6 +61,15 @@ in
   };
   services = {
     openssh.enable = true;
+
+    # Self-hosted Buzz community on the tailnet. Every client (this Mac, its
+    # agents, phone, other hosts) joins with exactly publicUrl.
+    buzz-selfhost = {
+      enable = true;
+      dataDir = "/Users/${username}/.local/share/buzz-selfhost";
+      publicUrl = "wss://gjallar.taile165.ts.net";
+      tailscaleServe = true;
+    };
 
     skribbl = {
       enable = true;

@@ -25,7 +25,9 @@ in
         jacobi.ccusage
         coreutils-full
         codex-latest
+        codex-acp
         claude-code-latest
+        claude-agent-acp
         curl
         diffutils
         doggo
