@@ -107,7 +107,7 @@ in
     hybrid-sleep.enable = false;
   };
 
-  # Vanilla Tweaks datapacks (MC 26.2), synced into the world on every start.
+  # Vanilla Tweaks datapacks (MC 26.3), synced into the world on every start.
   # Replaces all zips in datapacks/, so anything dropped in by hand gets removed.
   systemd.services.minecraft-server.preStart = ''
     mkdir -p community_server/datapacks
@@ -198,8 +198,8 @@ in
         eula = true;
         openFirewall = true;
         declarative = true;
-        # 26.2 = newest version Vanilla Tweaks datapacks support (bump both together)
-        package = pkgs.minecraftServers.vanilla-26-2;
+        # keep in sync with Vanilla Tweaks datapack versions in ./minecraft-datapacks
+        package = pkgs.minecraftServers.vanilla-26-3;
         serverProperties = {
           enable-rcon = true;
           "rcon.password" = "fart";
