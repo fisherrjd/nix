@@ -205,6 +205,7 @@ in
           "rcon.password" = "fart";
           "rcon.port" = 25576;
           server-port = 25566;
+          white-list = false;
           motd = "Not Artistic SMP";
           level-name = "community_server";
           level-seed = "dan_is_a_nerd";
