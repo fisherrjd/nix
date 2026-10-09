@@ -22,6 +22,7 @@ in
     systemPackages = with pkgs; [
       nodejs
       sinch-cli
+      splash
     ];
     variables = {
       NIX_HOST = hostname;
@@ -61,6 +62,16 @@ in
   };
   services = {
     openssh.enable = true;
+
+    # Splash: Qwen3.8 with DFlash2 speculative decoding on Metal, loopback only.
+    # Models download on first start into /private/var/lib/splash; logs in its log/.
+    # Saluki ships only an F16 vision projector, which Splash rejects: text only.
+    splash.servers.saluki = {
+      enable = true;
+      model = "ConwayResearch/Underdog-Saluki-27B-1.0:IQ2-mix";
+      port = 8000;
+      extraFlags = [ "--language-only" "--idle-release" "off" ];
+    };
 
     # Self-hosted Buzz community on the tailnet. Every client (this Mac, its
     # agents, phone, other hosts) joins with exactly publicUrl.

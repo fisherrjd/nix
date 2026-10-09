@@ -70,6 +70,7 @@
           modules = [
             ./hosts/common_darwin.nix
             "${self.inputs.jacobi}/hosts/modules/darwin/llama-server.nix"
+            ./modules/darwin/splash.nix
             ./hosts/${name}/configuration.nix
           ] ++ lib.optionals (name == "gjallar") [
             self.inputs.skribbl.darwinModules.default
