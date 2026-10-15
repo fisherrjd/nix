@@ -8,7 +8,7 @@
 let
   # version and hashes are rewritten in place by refresh_claude_code_latest
   # (mods/pog/refresh.nix); CI runs it nightly. To pin: --version X
-  version = "2.1.299";
+  version = "2.1.300";
 
   # Native bun-compiled binary from the per-platform npm package; the main
   # @anthropic-ai/claude-code package is just a JS launcher around these.
@@ -16,11 +16,11 @@ let
   platformMap = {
     aarch64-darwin = {
       npmPlatform = "darwin-arm64";
-      hash = "sha512-BYtS0vwnPcAr0nL7vpFhxs7cb4p+3sDv87xHbxtK+C5C7pa+LExNWP97taK/d0UHg2F3EfPJHqVcFSddtl2J4Q==";
+      hash = "sha512-voMU27sitARLTfblwmsPZvqVLkuhnJknwVJpAcYq9iSioC42Sxff4jv/QkjDThsx9p/NoF+T1XaKrWa4Qtn7Xg==";
     };
     x86_64-linux = {
       npmPlatform = "linux-x64";
-      hash = "sha512-FnUWMvkaML+gSH7tK7KuWjCQfgbXX0kzEIzZabb3b73jeQESlNXEgmEgR1mvZRsyCb5O6hYUUTVqVQFY24wzhA==";
+      hash = "sha512-oW4/i4gBd0Y7vqKToK+RaO/fZm4oZWAA81CJ1s0afg+bP+OH9QJdOXKDDwQ9eizcV78a44mQAbce5WYsN18CAw==";
     };
   };
 
