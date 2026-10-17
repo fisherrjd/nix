@@ -48,11 +48,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1792249967,
-        "narHash": "sha256-X2gVldzS38vZv8XmHn503HRboWukaQP4rR5o2byT5mw=",
+        "lastModified": 1792251029,
+        "narHash": "sha256-BotM/NOHCaGPSbSHJZZeE41dfK1t/3rP+/EL7uPjGn4=",
         "ref": "refs/heads/main",
-        "rev": "4099a31ebce85bb17b4c6f45b4f94ee042a243e1",
-        "revCount": 3,
+        "rev": "7065966ef1e3c4a350bcf9a5e70c4357f4de0db5",
+        "revCount": 4,
         "type": "git",
         "url": "file:///home/jade/github/projects/factory"
       },
