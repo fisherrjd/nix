@@ -51,28 +51,6 @@ let
     }
   '';
 
-  # Paths the Atlas worker daemon calls. Each carries its own bearer token, and
-  # a daemon cannot complete a browser login, so they skip Google. Everything
-  # else on the host stays behind it -- including enroll/revoke/reset, which
-  # live under the same /workers/ prefix. That is why this is an exact list and
-  # must never become a /api/v1/workers/* wildcard.
-  #
-  # They cannot simply pass through `authorize` either: friends_only sets
-  # `validate bearer header`, so a worker's bearer would be parsed as a login
-  # JWT and refused.
-  atlasWorkerPaths = map (p: "/api/v1/workers/${p}") [
-    "refresh"
-    "events"
-    "claim"
-    "renew"
-    "fetch-credential"
-    "complete"
-    "unlaunchable"
-    "control/poll"
-    "control/receipt"
-    "control/confirm"
-  ];
-
   # ---- sites ---------------------------------------------------------------
 
   sites = {
@@ -88,14 +66,10 @@ let
     "litellm.jade.rip" = proxy "eldo:4000";
     "ge.jade.rip" = proxy "eldo:30420";
     "7out.jade.rip" = proxy "eldo:30711";
+    "news.jade.rip" = proxy "eldo:3060";
 
     "chores.jade.rip" = private "eldo:3030";
     "grafana.jade.rip" = private "eldo:3000";
-    "atlas.jade.rip" = privateExcept {
-      to = "eldo:3040";
-      method = "POST";
-      paths = atlasWorkerPaths;
-    };
 
     "nix.jade.rip" = ''
       redir https://github.com/fisherrjd/nix permanent

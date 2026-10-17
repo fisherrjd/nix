@@ -130,10 +130,10 @@ in
         secretKeyFile = config.age.secrets.grafana-secret-key.path;
       };
 
-      # Heimdall agent loop — live since 2026-08-16: dry-run day was quiet (63 clean
-      # staffed pulses, zero errors); scan wrappers were bash-less, fixed in the module
+      # Heimdall agent loop — live 2026-08-16 to 2026-10-16, then retired: it ran
+      # too freely and is being replaced by a new software factory design
       orchestrator = {
-        enable = true;
+        enable = false;
         dryRun = false;
         apiTokenFile = config.age.secrets.orc-api-token.path;
       };
