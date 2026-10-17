@@ -13,7 +13,7 @@ in
       ./hardware-configuration.nix
       ../../modules/obsidian-autocommit.nix
       ../../modules/monitoring.nix
-      ../../modules/orchestrator.nix
+      flake.inputs.factory.nixosModules.default
       { inherit (common) services; }
     ];
   # Bootloader.
@@ -123,19 +123,17 @@ in
     gitName = hostname;
   };
 
+  # Software factory (M0 sandbox only)
+  services.factory = {
+    enable = true;
+    claudePackage = pkgs.claude-code-latest;
+  };
+
   services =
     {
       monitoring = {
         enable = true;
         secretKeyFile = config.age.secrets.grafana-secret-key.path;
-      };
-
-      # Heimdall agent loop — live 2026-08-16 to 2026-10-16, then retired: it ran
-      # too freely and is being replaced by a new software factory design
-      orchestrator = {
-        enable = false;
-        dryRun = false;
-        apiTokenFile = config.age.secrets.orc-api-token.path;
       };
 
       ntfy-sh = {
