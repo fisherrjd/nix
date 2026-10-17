@@ -12,4 +12,5 @@ in
   "ntfy.age".publicKeys = default;
   "grafana-secret-key.age".publicKeys = default;
   "orc-api-token.age".publicKeys = default;
+  "factory-github-app-key.age".publicKeys = default;
 }

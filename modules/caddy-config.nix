@@ -70,6 +70,7 @@ let
 
     "chores.jade.rip" = private "eldo:3030";
     "grafana.jade.rip" = private "eldo:3000";
+    "factory.jade.rip" = private "eldo:3070";
 
     "nix.jade.rip" = ''
       redir https://github.com/fisherrjd/nix permanent

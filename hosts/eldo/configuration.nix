@@ -1,5 +1,7 @@
-{ config, flake, pkgs, machine-name, ... }:
+{ config, flake, pkgs, lib, machine-name, ... }:
 let
+  factoryKeyFile = ../../secrets/factory-github-app-key.age;
+  factoryKeyExists = builtins.pathExists factoryKeyFile;
   hostname = "eldo";
   username = "jade";
   ts_ip = "100.66.184.28";
@@ -28,7 +30,13 @@ in
   };
   age = {
     identityPaths = [ "/home/jade/.ssh/id_ed25519" ];
-    secrets = {
+    secrets = lib.optionalAttrs factoryKeyExists {
+      factory-github-app-key = {
+        file = factoryKeyFile;
+        owner = "factory-runner";
+        mode = "0400";
+      };
+    } // {
       litellm = {
         file = ../../secrets/litellm.age;
         mode = "644";
@@ -123,10 +131,13 @@ in
     gitName = hostname;
   };
 
-  # Software factory (M0 sandbox only)
+  # Software factory: sandbox, runner and web app (github.com/fisherrjd/factory)
   services.factory = {
     enable = true;
     claudePackage = pkgs.claude-code-latest;
+    githubAppId = "5358946"; # GitHub App "fisherrjd-factory" (not a secret)
+    githubAppKeyFile =
+      if factoryKeyExists then config.age.secrets.factory-github-app-key.path else null;
   };
 
   services =
