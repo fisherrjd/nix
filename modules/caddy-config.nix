@@ -71,6 +71,13 @@ let
     "chores.jade.rip" = private "eldo:3030";
     "grafana.jade.rip" = private "eldo:3000";
     "factory.jade.rip" = private "eldo:3070";
+    # factory previews: <run-id>.preview.jade.rip → the factory's preview router.
+    # Certs per preview host on first visit, only for hosts the router says exist.
+    "*.preview.jade.rip" = ''
+      tls {
+        on_demand
+      }
+    '' + private "eldo:3075";
 
     "nix.jade.rip" = ''
       redir https://github.com/fisherrjd/nix permanent
@@ -108,6 +115,11 @@ in
     globalConfig = ''
       order authenticate before respond
       order authorize before basic_auth
+
+      # on-demand certs (factory previews): only for hosts the router knows
+      on_demand_tls {
+        ask http://eldo:3075/allowed
+      }
 
       security {
         oauth identity provider google {

@@ -138,6 +138,8 @@ in
     githubAppId = "5358946"; # GitHub App "fisherrjd-factory" (not a secret)
     githubAppKeyFile =
       if factoryKeyExists then config.age.secrets.factory-github-app-key.path else null;
+    # run previews at <run-id>.preview.jade.rip (router on the tailnet, port 3075)
+    previews.enable = true;
   };
 
   services =
