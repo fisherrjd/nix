@@ -51,6 +51,21 @@ let
     }
   '';
 
+  # Behind Google login, but the app's /api/* answers 401 instead of redirecting
+  # to the login portal: a background fetch (e.g. factory's /api/client-log) after
+  # the session expires would otherwise become the portal's remembered redirect
+  # target, and the next login lands on the API instead of the page.
+  privateApp = to: ''
+    handle /api/* {
+      authorize with friends_only_api
+      ${proxy to}
+    }
+    handle {
+      authorize with friends_only
+      ${proxy to}
+    }
+  '';
+
   # ---- sites ---------------------------------------------------------------
 
   sites = {
@@ -70,14 +85,14 @@ let
 
     "chores.jade.rip" = private "eldo:3030";
     "grafana.jade.rip" = private "eldo:3000";
-    "factory.jade.rip" = private "eldo:3070";
+    "factory.jade.rip" = privateApp "eldo:3070";
     # factory previews: <run-id>.preview.jade.rip → the factory's preview router.
     # Certs per preview host on first visit, only for hosts the router says exist.
     "*.preview.jade.rip" = ''
       tls {
         on_demand
       }
-    '' + private "eldo:3075";
+    '' + privateApp "eldo:3075";
 
     "nix.jade.rip" = ''
       redir https://github.com/fisherrjd/nix permanent
@@ -151,6 +166,16 @@ in
           allow roles friends
           validate bearer header
           inject headers with claims
+        }
+
+        # friends_only for /api/* (see privateApp): 401, never a login redirect
+        authorization policy friends_only_api {
+          set auth url https://auth.jade.rip/oauth2/google
+          crypto key verify {env.JWT_SHARED_KEY}
+          allow roles friends
+          validate bearer header
+          inject headers with claims
+          disable auth redirect
         }
       }
     '';
