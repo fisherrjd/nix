@@ -124,6 +124,37 @@ in
     cp --no-preserve=mode ${./minecraft-datapacks}/*.zip community_server/datapacks/
   '';
 
+  # World backups every 4h into /var/lib/minecraft-backups, newest 3 kept.
+  # Same disk as the server: covers griefing/corruption, not disk failure.
+  # Restore: stop the server, replace community_server/ with an extracted archive, start.
+  systemd.services.minecraft-backup = let
+    mc = config.services.minecraft-server;
+  in {
+    description = "Back up the minecraft world";
+    path = [ pkgs.mcrcon pkgs.gnutar pkgs.zstd ];
+    serviceConfig = {
+      Type = "oneshot";
+      User = "minecraft";
+      StateDirectory = "minecraft-backups";
+      StateDirectoryMode = "0700";
+    };
+    script = ''
+      rcon() { mcrcon -H 127.0.0.1 -P ${toString mc.serverProperties."rcon.port"} -p '${mc.serverProperties."rcon.password"}' "$@"; }
+      # flush chunks to disk and hold off saving so the copy is consistent
+      rcon save-off "save-all flush"
+      trap 'rcon save-on' EXIT
+      tar -C ${mc.dataDir} --zstd -cf "$STATE_DIRECTORY/${mc.serverProperties.level-name}-$(date +%Y%m%d-%H%M).tar.zst" ${mc.serverProperties.level-name}
+      ls -1t "$STATE_DIRECTORY"/*.tar.zst | tail -n +4 | xargs -r rm --
+    '';
+  };
+  systemd.timers.minecraft-backup = {
+    wantedBy = [ "timers.target" ];
+    timerConfig = {
+      OnCalendar = "0/4:00";
+      Persistent = true;
+    };
+  };
+
   services.obsidian-autocommit = {
     enable = true;
     user = username;
@@ -207,16 +238,23 @@ in
       minecraft-server = {
         enable = true;
         eula = true;
-        openFirewall = true;
+        # off: it would also open the rcon port; game port 25566 is in networking.firewall
+        openFirewall = false;
         declarative = true;
         # keep in sync with Vanilla Tweaks datapack versions in ./minecraft-datapacks
         package = pkgs.minecraftServers.vanilla-26-3;
+        whitelist = {
+          Cookapphys = "3138c723-4c0a-4de8-9e39-096c93198e01";
+          Cheese0448 = "b7230bd7-fbc0-41a8-8b91-bbb02d11c14b";
+          o00gareth00o = "91b3c74e-46d7-457a-b0c4-7843413ee08e";
+        };
         serverProperties = {
           enable-rcon = true;
           "rcon.password" = "fart";
           "rcon.port" = 25576;
           server-port = 25566;
-          white-list = false;
+          white-list = true;
+          enforce-whitelist = true;
           motd = "Not Artistic SMP";
           level-name = "community_server";
           level-seed = "dan_is_a_nerd";
