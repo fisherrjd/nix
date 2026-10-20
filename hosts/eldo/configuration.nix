@@ -184,6 +184,8 @@ in
     opsDeployer = lib.mkIf opsDeployerTokenExists {
       enable = true;
       tokenFile = config.age.secrets.ops-deployer-token.path;
+      # every namespace ops main renders into (osrs-ge: the ge-* services)
+      namespaces = [ "default" "osrs-ge" ];
     };
   };
 
