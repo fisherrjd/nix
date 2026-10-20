@@ -26,6 +26,11 @@
       url = "github:fisherrjd/wisp";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    # oh-my-pi coding agent; provides the `omp` binary
+    oh-my-pi = {
+      url = "github:can1357/oh-my-pi";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     # Software factory. Local checkout for now; switch to
     # git+ssh://git@github.com/fisherrjd/factory once it is pushed.
     factory = {

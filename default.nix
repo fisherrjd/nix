@@ -12,6 +12,7 @@ import nixpkgs {
     # revision. The docs used to be a hand-written copy under packages/wisp-docs here, and it
     # drifted until it described a wisp with no workspaces, no hosts and no close-out.
     (_: _: { inherit (flake.inputs.wisp.packages.${system}) wisp wisp-docs; })
+    (_: _: { inherit (flake.inputs.oh-my-pi.packages.${system}) omp; })
     (_: prev: { inherit (prev.jacobi) llama-cpp-latest codex-latest hermes-agent sglang-omni pog; })
   ] ++ (import ./overlays.nix) ++ overlays;
   config = {

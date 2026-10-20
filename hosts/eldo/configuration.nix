@@ -2,6 +2,8 @@
 let
   factoryKeyFile = ../../secrets/factory-github-app-key.age;
   factoryKeyExists = builtins.pathExists factoryKeyFile;
+  opsDeployerTokenFile = ../../secrets/ops-deployer-token.age;
+  opsDeployerTokenExists = builtins.pathExists opsDeployerTokenFile;
   hostname = "eldo";
   username = "jade";
   ts_ip = "100.66.184.28";
@@ -34,6 +36,13 @@ in
       factory-github-app-key = {
         file = factoryKeyFile;
         owner = "factory-runner";
+        mode = "0400";
+      };
+    } // lib.optionalAttrs opsDeployerTokenExists {
+      # fine-grained PAT, fisherrjd/ops only, Administration RW; read by the runner's root ExecStartPre
+      ops-deployer-token = {
+        file = opsDeployerTokenFile;
+        owner = "root";
         mode = "0400";
       };
     } // {
@@ -171,6 +180,11 @@ in
       if factoryKeyExists then config.age.secrets.factory-github-app-key.path else null;
     # run previews at <run-id>.preview.jade.rip (router on the tailnet, port 3075)
     previews.enable = true;
+    # M5: apply fisherrjd/ops main to the cluster from a gated self-hosted runner
+    opsDeployer = lib.mkIf opsDeployerTokenExists {
+      enable = true;
+      tokenFile = config.age.secrets.ops-deployer-token.path;
+    };
   };
 
   services =

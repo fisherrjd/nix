@@ -73,6 +73,7 @@ in
         nixpkgs-fmt
         nixpkgs-review
         prettier
+        omp
         openssh
         p7zip
         patch

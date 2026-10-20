@@ -13,4 +13,5 @@ in
   "grafana-secret-key.age".publicKeys = default;
   "orc-api-token.age".publicKeys = default;
   "factory-github-app-key.age".publicKeys = default;
+  "ops-deployer-token.age".publicKeys = default;
 }
