@@ -31,12 +31,6 @@
       url = "github:can1357/oh-my-pi";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    # Software factory. Local checkout for now; switch to
-    # git+ssh://git@github.com/fisherrjd/factory once it is pushed.
-    factory = {
-      url = "git+file:///home/jade/github/projects/factory";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     vscode-server = {
       url = "github:msteen/nixos-vscode-server";
       inputs.nixpkgs.follows = "nixpkgs";

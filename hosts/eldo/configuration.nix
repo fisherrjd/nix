@@ -8,6 +8,19 @@ let
   username = "jade";
   ts_ip = "100.66.184.28";
   common = import ../common.nix { inherit flake machine-name pkgs username; };
+  # Software factory is a private repo, so it is fetched here instead of being a flake input:
+  # only evaluating eldo fetches it (over ssh, as whoever runs the build), never `nix flake update`.
+  # Bump: set rev to the new fisherrjd/factory main commit.
+  factorySrc = builtins.fetchGit {
+    url = "ssh://git@github.com/fisherrjd/factory.git";
+    ref = "main";
+    rev = "6141df71ac4f2729e811b575e9a5b0753d672913";
+  };
+  # factory's flake outputs, built against this repo's nixpkgs
+  factory = (import "${factorySrc}/flake.nix").outputs {
+    self = factory;
+    inherit (flake.inputs) nixpkgs;
+  };
 in
 {
   imports =
@@ -17,7 +30,7 @@ in
       ./hardware-configuration.nix
       ../../modules/obsidian-autocommit.nix
       ../../modules/monitoring.nix
-      flake.inputs.factory.nixosModules.default
+      factory.nixosModules.default
       { inherit (common) services; }
     ];
   # Bootloader.

@@ -89,26 +89,6 @@
         "type": "github"
       }
     },
-    "factory": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1792587220,
-        "narHash": "sha256-jSjWO58Yp2eOXLjoxKC3g0sxyegH7mjdWVdsUs+TgNY=",
-        "ref": "refs/heads/main",
-        "rev": "6141df71ac4f2729e811b575e9a5b0753d672913",
-        "revCount": 86,
-        "type": "git",
-        "url": "file:///home/jade/github/projects/factory"
-      },
-      "original": {
-        "type": "git",
-        "url": "file:///home/jade/github/projects/factory"
-      }
-    },
     "flake-compat": {
       "flake": false,
       "locked": {
@@ -1081,7 +1061,6 @@
     "root": {
       "inputs": {
         "agenix": "agenix",
-        "factory": "factory",
         "home-manager": "home-manager",
         "jacobi": "jacobi",
         "nix-darwin": "nix-darwin_2",
