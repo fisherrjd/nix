@@ -42,7 +42,7 @@ jobs:
         id: factory-token
         uses: actions/create-github-app-token@v3.2.0
         with:
-          app-id: ${{ secrets.CI_APP_ID }}
+          client-id: ${{ vars.CI_APP_CLIENT_ID }}
           private-key: ${{ secrets.CI_APP_PRIVATE_KEY }}
           repositories: factory
           permission-contents: read
