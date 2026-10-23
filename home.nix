@@ -24,12 +24,6 @@ in
   _module.args = {
     inherit flake;
     inherit machine-name username home-manager;
-    # forward the overlaid `hax` helpers to sub-modules; home-manager's own
-    # pkgs doesn't carry the overlay, so `pkgs.hax` is unavailable there.
-    inherit (pkgs) hax;
-    # home.nix's `pkgs` is the overlaid set (hax, hms, jacobi pkgs, ...);
-    # forward it for modules that install those overlay-only packages.
-    opkgs = pkgs;
   };
 
   programs = {

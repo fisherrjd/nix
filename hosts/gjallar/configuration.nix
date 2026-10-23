@@ -8,7 +8,6 @@ let
 in
 {
   imports = [
-    "${common.home-manager}/nix-darwin"
     ../../modules/buzz-selfhost.nix
   ];
 

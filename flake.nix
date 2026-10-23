@@ -52,6 +52,8 @@
       forAllSystems = lib.genAttrs lib.systems.flakeExposed;
       packages = forAllSystems
         (system: import ./. { flake = self; inherit system; });
+      # home-manager reuses the system's overlaid pkgs instead of evaluating a plain nixpkgs of its own
+      hmGlobalPkgs = { home-manager.useGlobalPkgs = true; };
     in
     {
       inherit packages;
@@ -64,6 +66,8 @@
           specialArgs = { flake = self; machine-name = name; };
           modules = [
             self.inputs.agenix.nixosModules.default
+            self.inputs.home-manager.nixosModules.default
+            hmGlobalPkgs
             ./hosts/${name}/configuration.nix
           ];
         });
@@ -73,6 +77,8 @@
           pkgs = self.packages.aarch64-darwin;
           specialArgs = { flake = self; machine-name = name; };
           modules = [
+            self.inputs.home-manager.darwinModules.default
+            hmGlobalPkgs
             ./hosts/common_darwin.nix
             "${self.inputs.jacobi}/hosts/modules/darwin/llama-server.nix"
             ./modules/darwin/splash.nix
