@@ -30,8 +30,8 @@ in
     isNormalUser = true;
     description = "jade";
     extraGroups = [ "networkmanager" "wheel" "docker" ];
-    # KeyList for access this is stored in /hosts/common.nix under pubkeys
-    openssh.authorizedKeys.keys = common.pubkeys.all;
+    # who can log in: hosts/constants.nix `logins`
+    openssh.authorizedKeys.keys = common.logins.neverland;
   };
 
   services = {

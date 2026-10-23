@@ -40,7 +40,7 @@ in
   users.users.jadfis = {
     name = username;
     home = "/Users/${username}";
-    openssh.authorizedKeys.keys = common.pubkeys.all;
+    openssh.authorizedKeys.keys = common.logins.gjallar;
   };
   system = {
     # nix-darwin's uninstaller evaluates a separate default config with docs

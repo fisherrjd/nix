@@ -49,7 +49,7 @@ in
     isNormalUser = true;
     description = "Jade Fisher";
     extraGroups = [ "networkmanager" "wheel" ];
-    openssh.authorizedKeys.keys = common.pubkeys.all;
+    openssh.authorizedKeys.keys = common.logins.bifrost;
   };
 
   security.sudo.wheelNeedsPassword = false;

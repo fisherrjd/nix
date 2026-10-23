@@ -91,7 +91,7 @@ in
     isNormalUser = true;
     description = "Jade Fisher";
     extraGroups = [ "networkmanager" "wheel" ];
-    openssh.authorizedKeys.keys = common.pubkeys.all;
+    openssh.authorizedKeys.keys = common.logins.eldo;
   };
   programs.nix-ld.enable = true;
   environment.systemPackages = with pkgs; [

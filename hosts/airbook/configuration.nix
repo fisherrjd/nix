@@ -26,7 +26,7 @@ in
     name = username;
     home = "/Users/${username}";
     shell = pkgs.bashInteractive;
-    openssh.authorizedKeys.keys = common.pubkeys.all;
+    openssh.authorizedKeys.keys = common.logins.airbook;
   };
   system.primaryUser = mkDefault username;
 

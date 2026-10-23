@@ -38,8 +38,16 @@ let
       gjallar
     ];
 
-    # every machine trusts every other machine, so hosts just use `all`
+    # only the do-builder image still trusts every key; hosts use `logins` below
     all = jade ++ work;
+  };
+  # who can ssh into each machine, named by the machine the key lives on
+  logins = with pubkeys; {
+    eldo = [ atlantis airbook ];
+    bifrost = [ atlantis eldo airbook ];
+    gjallar = [ atlantis ];
+    airbook = [ ];
+    neverland = [ ];
   };
   # ssh host keys (/etc/ssh/ssh_host_ed25519_key.pub); agenix decrypts with these at boot
   hostkeys = {
@@ -48,5 +56,5 @@ let
   };
 in
 {
-  inherit pubkeys machines hostkeys;
+  inherit pubkeys machines hostkeys logins;
 }
