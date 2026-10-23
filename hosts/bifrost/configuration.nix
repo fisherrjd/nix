@@ -21,7 +21,8 @@ in
   inherit (common) nix;
 
   age = {
-    identityPaths = [ "/home/jade/.ssh/id_ed25519" ];
+    # host key first; jade's key stays as a fallback until every secret is rekeyed to the host key
+    identityPaths = [ "/etc/ssh/ssh_host_ed25519_key" "/home/jade/.ssh/id_ed25519" ];
     secrets = {
       caddy = {
         file = ../../secrets/caddy.age;

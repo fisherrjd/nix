@@ -41,7 +41,12 @@ let
     # every machine trusts every other machine, so hosts just use `all`
     all = jade ++ work;
   };
+  # ssh host keys (/etc/ssh/ssh_host_ed25519_key.pub); agenix decrypts with these at boot
+  hostkeys = {
+    eldo = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAII9Jfl1EHVKlIv1q34kcbt4EZiVr1CF92YgB3Ta2e3zm root@eldo";
+    bifrost = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIM3jXIEY4FJ8om7qhoP97K47f/pp9DBEnJOT/bvDdpDI root@bifrost";
+  };
 in
 {
-  inherit pubkeys machines;
+  inherit pubkeys machines hostkeys;
 }
