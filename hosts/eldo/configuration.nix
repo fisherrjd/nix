@@ -45,13 +45,14 @@ in
   };
   age = {
     identityPaths = [ "/home/jade/.ssh/id_ed25519" ];
-    secrets = lib.optionalAttrs factoryKeyExists {
-      factory-github-app-key = {
-        file = factoryKeyFile;
-        owner = "factory-runner";
-        mode = "0400";
-      };
-    } // lib.optionalAttrs opsDeployerTokenExists {
+    secrets = lib.optionalAttrs factoryKeyExists
+      {
+        factory-github-app-key = {
+          file = factoryKeyFile;
+          owner = "factory-runner";
+          mode = "0400";
+        };
+      } // lib.optionalAttrs opsDeployerTokenExists {
       # fine-grained PAT, fisherrjd/ops only, Administration RW; read by the runner's root ExecStartPre
       ops-deployer-token = {
         file = opsDeployerTokenFile;
@@ -130,80 +131,84 @@ in
   home-manager.users.jade = common.jade;
 
   inherit (common) nix;
-  systemd.targets = {
-    sleep.enable = false;
-    suspend.enable = false;
-    hibernate.enable = false;
-    hybrid-sleep.enable = false;
-  };
-
-  # Vanilla Tweaks datapacks (MC 26.3), synced into the world on every start.
-  # Replaces all zips in datapacks/, so anything dropped in by hand gets removed.
-  systemd.services.minecraft-server.preStart = ''
-    mkdir -p community_server/datapacks
-    rm -f community_server/datapacks/*.zip
-    # store files are read-only; the world upgrader needs write access to everything
-    cp --no-preserve=mode ${./minecraft-datapacks}/*.zip community_server/datapacks/
-  '';
-
-  # World backups every 4h into /var/lib/minecraft-backups, newest 3 kept.
-  # Same disk as the server: covers griefing/corruption, not disk failure.
-  # Restore: stop the server, replace community_server/ with an extracted archive, start.
-  systemd.services.minecraft-backup = let
-    mc = config.services.minecraft-server;
-  in {
-    description = "Back up the minecraft world";
-    path = [ pkgs.mcrcon pkgs.gnutar pkgs.zstd ];
-    serviceConfig = {
-      Type = "oneshot";
-      User = "minecraft";
-      StateDirectory = "minecraft-backups";
-      StateDirectoryMode = "0700";
+  systemd = {
+    targets = {
+      sleep.enable = false;
+      suspend.enable = false;
+      hibernate.enable = false;
+      hybrid-sleep.enable = false;
     };
-    script = ''
-      rcon() { mcrcon -H 127.0.0.1 -P ${toString mc.serverProperties."rcon.port"} -p '${mc.serverProperties."rcon.password"}' "$@"; }
-      # flush chunks to disk and hold off saving so the copy is consistent
-      rcon save-off "save-all flush"
-      trap 'rcon save-on' EXIT
-      tar -C ${mc.dataDir} --zstd -cf "$STATE_DIRECTORY/${mc.serverProperties.level-name}-$(date +%Y%m%d-%H%M).tar.zst" ${mc.serverProperties.level-name}
-      ls -1t "$STATE_DIRECTORY"/*.tar.zst | tail -n +4 | xargs -r rm --
+
+    # Vanilla Tweaks datapacks (MC 26.3), synced into the world on every start.
+    # Replaces all zips in datapacks/, so anything dropped in by hand gets removed.
+    services.minecraft-server.preStart = ''
+      mkdir -p community_server/datapacks
+      rm -f community_server/datapacks/*.zip
+      # store files are read-only; the world upgrader needs write access to everything
+      cp --no-preserve=mode ${./minecraft-datapacks}/*.zip community_server/datapacks/
     '';
-  };
-  systemd.timers.minecraft-backup = {
-    wantedBy = [ "timers.target" ];
-    timerConfig = {
-      OnCalendar = "0/4:00";
-      Persistent = true;
-    };
-  };
 
-  services.obsidian-autocommit = {
-    enable = true;
-    user = username;
-    repoPath = "/home/${username}/syncthing/obsidian";
-    gitName = hostname;
-  };
-
-  # Software factory: sandbox, runner and web app (github.com/fisherrjd/factory)
-  services.factory = {
-    enable = true;
-    claudePackage = pkgs.claude-code-latest;
-    githubAppId = "5358946"; # GitHub App "fisherrjd-factory" (not a secret)
-    githubAppKeyFile =
-      if factoryKeyExists then config.age.secrets.factory-github-app-key.path else null;
-    # run previews at <run-id>.preview.jade.rip (router on the tailnet, port 3075)
-    previews.enable = true;
-    # M5: apply fisherrjd/ops main to the cluster from a gated self-hosted runner
-    opsDeployer = lib.mkIf opsDeployerTokenExists {
-      enable = true;
-      tokenFile = config.age.secrets.ops-deployer-token.path;
-      # every namespace ops main renders into (osrs-ge: the ge-* services)
-      namespaces = [ "default" "osrs-ge" ];
+    # World backups every 4h into /var/lib/minecraft-backups, newest 3 kept.
+    # Same disk as the server: covers griefing/corruption, not disk failure.
+    # Restore: stop the server, replace community_server/ with an extracted archive, start.
+    services.minecraft-backup =
+      let
+        mc = config.services.minecraft-server;
+      in
+      {
+        description = "Back up the minecraft world";
+        path = [ pkgs.mcrcon pkgs.gnutar pkgs.zstd ];
+        serviceConfig = {
+          Type = "oneshot";
+          User = "minecraft";
+          StateDirectory = "minecraft-backups";
+          StateDirectoryMode = "0700";
+        };
+        script = ''
+          rcon() { mcrcon -H 127.0.0.1 -P ${toString mc.serverProperties."rcon.port"} -p '${mc.serverProperties."rcon.password"}' "$@"; }
+          # flush chunks to disk and hold off saving so the copy is consistent
+          rcon save-off "save-all flush"
+          trap 'rcon save-on' EXIT
+          tar -C ${mc.dataDir} --zstd -cf "$STATE_DIRECTORY/${mc.serverProperties.level-name}-$(date +%Y%m%d-%H%M).tar.zst" ${mc.serverProperties.level-name}
+          ls -1t "$STATE_DIRECTORY"/*.tar.zst | tail -n +4 | xargs -r rm --
+        '';
+      };
+    timers.minecraft-backup = {
+      wantedBy = [ "timers.target" ];
+      timerConfig = {
+        OnCalendar = "0/4:00";
+        Persistent = true;
+      };
     };
   };
 
   services =
     {
+      obsidian-autocommit = {
+        enable = true;
+        user = username;
+        repoPath = "/home/${username}/syncthing/obsidian";
+        gitName = hostname;
+      };
+
+      # Software factory: sandbox, runner and web app (github.com/fisherrjd/factory)
+      factory = {
+        enable = true;
+        claudePackage = pkgs.claude-code-latest;
+        githubAppId = "5358946"; # GitHub App "fisherrjd-factory" (not a secret)
+        githubAppKeyFile =
+          if factoryKeyExists then config.age.secrets.factory-github-app-key.path else null;
+        # run previews at <run-id>.preview.jade.rip (router on the tailnet, port 3075)
+        previews.enable = true;
+        # M5: apply fisherrjd/ops main to the cluster from a gated self-hosted runner
+        opsDeployer = lib.mkIf opsDeployerTokenExists {
+          enable = true;
+          tokenFile = config.age.secrets.ops-deployer-token.path;
+          # every namespace ops main renders into (osrs-ge: the ge-* services)
+          namespaces = [ "default" "osrs-ge" ];
+        };
+      };
+
       monitoring = {
         enable = true;
         secretKeyFile = config.age.secrets.grafana-secret-key.path;

@@ -136,39 +136,41 @@ in
           posix ${lib.escapeShellArg dir}/s3
       '';
 
-      buzz-relay = lib.recursiveUpdate (mkAgent "relay" ''
-        . ${ensureSecrets}
-        export PGPASSWORD="$PG_PASSWORD"
-        pgargs="-h 127.0.0.1 -p ${toString cfg.postgresPort} -U buzz"
-        until ${pg}/bin/pg_isready $pgargs -d postgres -q; do sleep 1; done
-        ${pg}/bin/psql $pgargs -d postgres -tAc "select 1 from pg_database where datname='buzz'" | grep -q 1 \
-          || ${pg}/bin/createdb $pgargs buzz
-        until REDISCLI_AUTH="$REDIS_PASSWORD" ${pkgs.redis}/bin/redis-cli -p ${toString cfg.redisPort} ping >/dev/null 2>&1; do sleep 1; done
-        until ${pkgs.curl}/bin/curl -s -o /dev/null http://127.0.0.1:${toString cfg.s3Port}/; do sleep 1; done
+      buzz-relay = lib.recursiveUpdate
+        (mkAgent "relay" ''
+          . ${ensureSecrets}
+          export PGPASSWORD="$PG_PASSWORD"
+          pgargs="-h 127.0.0.1 -p ${toString cfg.postgresPort} -U buzz"
+          until ${pg}/bin/pg_isready $pgargs -d postgres -q; do sleep 1; done
+          ${pg}/bin/psql $pgargs -d postgres -tAc "select 1 from pg_database where datname='buzz'" | grep -q 1 \
+            || ${pg}/bin/createdb $pgargs buzz
+          until REDISCLI_AUTH="$REDIS_PASSWORD" ${pkgs.redis}/bin/redis-cli -p ${toString cfg.redisPort} ping >/dev/null 2>&1; do sleep 1; done
+          until ${pkgs.curl}/bin/curl -s -o /dev/null http://127.0.0.1:${toString cfg.s3Port}/; do sleep 1; done
 
-        export DATABASE_URL="postgres://buzz:$PG_PASSWORD@127.0.0.1:${toString cfg.postgresPort}/buzz"
-        export REDIS_URL="redis://:$REDIS_PASSWORD@127.0.0.1:${toString cfg.redisPort}"
-        export BUZZ_S3_SECRET_KEY="$S3_SECRET"
-        unset PG_PASSWORD PGPASSWORD REDIS_PASSWORD S3_SECRET
-        exec ${lib.getExe cfg.package}
-      '') {
-        path = [ pkgs.coreutils pkgs.gnugrep pkgs.git ];
-        environment = {
-          RELAY_URL = cfg.publicUrl;
-          BUZZ_BIND_ADDR = "127.0.0.1:${toString cfg.relayPort}";
-          BUZZ_HEALTH_PORT = toString cfg.healthPort;
-          BUZZ_METRICS_PORT = toString cfg.metricsPort;
-          BUZZ_AUTO_MIGRATE = "true";
-          BUZZ_MEDIA_BASE_URL = "${builtins.replaceStrings [ "wss://" "ws://" ] [ "https://" "http://" ] cfg.publicUrl}/media";
-          BUZZ_S3_ENDPOINT = "http://127.0.0.1:${toString cfg.s3Port}";
-          BUZZ_S3_ACCESS_KEY = "buzz";
-          BUZZ_S3_BUCKET = "buzz-media";
-          BUZZ_S3_REGION = "us-east-1";
-          BUZZ_S3_ADDRESSING_STYLE = "path";
-          BUZZ_GIT_REPO_PATH = "${dir}/git";
-          RUST_LOG = "buzz_relay=info";
+          export DATABASE_URL="postgres://buzz:$PG_PASSWORD@127.0.0.1:${toString cfg.postgresPort}/buzz"
+          export REDIS_URL="redis://:$REDIS_PASSWORD@127.0.0.1:${toString cfg.redisPort}"
+          export BUZZ_S3_SECRET_KEY="$S3_SECRET"
+          unset PG_PASSWORD PGPASSWORD REDIS_PASSWORD S3_SECRET
+          exec ${lib.getExe cfg.package}
+        '')
+        {
+          path = [ pkgs.coreutils pkgs.gnugrep pkgs.git ];
+          environment = {
+            RELAY_URL = cfg.publicUrl;
+            BUZZ_BIND_ADDR = "127.0.0.1:${toString cfg.relayPort}";
+            BUZZ_HEALTH_PORT = toString cfg.healthPort;
+            BUZZ_METRICS_PORT = toString cfg.metricsPort;
+            BUZZ_AUTO_MIGRATE = "true";
+            BUZZ_MEDIA_BASE_URL = "${builtins.replaceStrings [ "wss://" "ws://" ] [ "https://" "http://" ] cfg.publicUrl}/media";
+            BUZZ_S3_ENDPOINT = "http://127.0.0.1:${toString cfg.s3Port}";
+            BUZZ_S3_ACCESS_KEY = "buzz";
+            BUZZ_S3_BUCKET = "buzz-media";
+            BUZZ_S3_REGION = "us-east-1";
+            BUZZ_S3_ADDRESSING_STYLE = "path";
+            BUZZ_GIT_REPO_PATH = "${dir}/git";
+            RUST_LOG = "buzz_relay=info";
+          };
         };
-      };
     };
   };
 }

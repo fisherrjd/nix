@@ -116,7 +116,7 @@ in
         inherit (config.users.groups."${cfg.user}") gid;
         createHome = false;
         description = "splash service user";
-        home = cfg.home;
+        inherit (cfg) home;
         shell = "/bin/bash";
         uid = lib.mkDefault 801;
       };
