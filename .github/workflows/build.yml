@@ -36,6 +36,20 @@ jobs:
         with:
           name: fisherrjd
           authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
+      # eldo fetches the private fisherrjd/factory repo over ssh (builtins.fetchGit); a read-only
+      # fisherrjd-nix-ci app token lets git fetch it over https instead
+      - if: matrix.attrs.config_name == 'eldo'
+        id: factory-token
+        uses: actions/create-github-app-token@v3.2.0
+        with:
+          app-id: ${{ secrets.CI_APP_ID }}
+          private-key: ${{ secrets.CI_APP_PRIVATE_KEY }}
+          repositories: factory
+          permission-contents: read
+      - if: matrix.attrs.config_name == 'eldo'
+        env:
+          TOKEN: ${{ steps.factory-token.outputs.token }}
+        run: git config --global url."https://x-access-token:${TOKEN}@github.com/".insteadOf ssh://git@github.com/
       # g7c goes on the command line: `cachix use` writes `substituters =` to the user nix.conf,
       # which replaces any extra-substituters set earlier in /etc/nix/nix.conf
       - run: >-

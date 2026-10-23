@@ -13,8 +13,6 @@ jobs:
           - claude-code-latest
     runs-on: ubuntu-24.04
     timeout-minutes: 30
-    env:
-      GITHUB_TOKEN: ${{ secrets.NIX_TOKEN }}
     steps:
       - uses: actions/checkout@v7.0.1
         with:
@@ -25,6 +23,14 @@ jobs:
             extra-substituters = https://cache.g7c.us
             extra-trusted-public-keys = cache.g7c.us:dSWpE2B5zK/Fahd7npIQWM4izRnVL+a4LiCAnrjdoFY=
       - run: nix run .#${{ matrix.attr }}.updateScript -- --repo "$GITHUB_WORKSPACE"
+      # fisherrjd-nix-ci app token: unlike GITHUB_TOKEN, PRs it opens still trigger the build workflow
+      - uses: actions/create-github-app-token@v3.2.0
+        id: app
+        with:
+          app-id: ${{ secrets.CI_APP_ID }}
+          private-key: ${{ secrets.CI_APP_PRIVATE_KEY }}
+          permission-contents: write
+          permission-pull-requests: write
       - uses: peter-evans/create-pull-request@v8.1.0
         id: pr
         with:
@@ -33,6 +39,8 @@ jobs:
           title: automatic update (${{ matrix.attr }})
           commit-message: automatic update (${{ matrix.attr }})
           branch: automatic-update-${{ matrix.attr }}
-          token: ${{ secrets.NIX_TOKEN }}
+          token: ${{ steps.app.outputs.token }}
       - if: ${{ steps.pr.outputs.pull-request-number }}
         run: gh pr merge --auto --squash ${{ steps.pr.outputs.pull-request-url }}
+        env:
+          GH_TOKEN: ${{ steps.app.outputs.token }}
