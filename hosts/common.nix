@@ -25,7 +25,7 @@ let
 in
 {
   inherit (constants) pubkeys logins;
-  inherit home-manager jade nix-darwin pkgs;
+  inherit jade nix-darwin pkgs;
 
   nix = {
     extraOptions = ''

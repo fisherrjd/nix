@@ -6,7 +6,6 @@ let
 in
 {
   imports = [
-    "${common.home-manager}/nixos"
     flake.inputs.nixos-wsl.nixosModules.wsl
   ];
 

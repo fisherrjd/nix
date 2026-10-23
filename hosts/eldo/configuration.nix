@@ -22,7 +22,6 @@ in
   imports =
     [
       # Include the results of the hardware scan.
-      "${common.home-manager}/nixos"
       ./hardware-configuration.nix
       ../../modules/obsidian-autocommit.nix
       ../../modules/monitoring.nix

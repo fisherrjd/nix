@@ -1,9 +1,9 @@
 # Core home-manager identity and base settings. Owns the canonical
 # `home.sessionVariables`; other modules read individual values via
 # `config.home.sessionVariables.<NAME>` rather than redefining them.
-{ pkgs, hax, username, home-manager, ... }:
+{ pkgs, username, home-manager, ... }:
 let
-  inherit (hax) isLinux;
+  inherit (pkgs.hax) isLinux;
 
   homeDirectory =
     if isLinux then

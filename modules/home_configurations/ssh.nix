@@ -1,6 +1,6 @@
-{ hax, machine-name, ... }:
+{ pkgs, machine-name, ... }:
 let
-  inherit (hax) isDarwin optionalString;
+  inherit (pkgs.hax) isDarwin optionalString;
   isWork = machine-name == "gjallar";
 
   # macOS needs xauth pointed at the XQuartz location for X11 forwarding.
@@ -50,6 +50,6 @@ in
 
   home.file.ssh_config_github = {
     target = ".ssh/config.d/github";
-    text = hax.ssh.github;
+    text = pkgs.hax.ssh.github;
   };
 }

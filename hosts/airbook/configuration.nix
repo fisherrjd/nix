@@ -7,10 +7,6 @@ let
   configPath = "/Users/${username}/cfg/hosts/${hostname}/configuration.nix";
 in
 {
-  imports = [
-    "${common.home-manager}/nix-darwin"
-  ];
-
   home-manager.users.jade = common.jade;
 
   documentation.enable = false;

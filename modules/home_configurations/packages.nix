@@ -1,16 +1,12 @@
-# Uses `opkgs` (home.nix's overlaid pkgs) rather than the module's plain
-# `pkgs`, because several entries below (hms, hermes-agent,
-# colmena_pog_scripts, ...) are provided by overlays not present on
-# home-manager's default pkgs.
-{ opkgs, flake, machine-name, ... }:
+{ pkgs, flake, machine-name, ... }:
 let
-  inherit (opkgs.hax) isLinux;
+  inherit (pkgs.hax) isLinux;
   isWork = machine-name == "gjallar";
   isAirbook = machine-name == "airbook";
-  jacobi = flake.inputs.jacobi.legacyPackages.${opkgs.stdenv.hostPlatform.system};
+  jacobi = flake.inputs.jacobi.legacyPackages.${pkgs.stdenv.hostPlatform.system};
 in
 {
-  home.packages = with opkgs;
+  home.packages = with pkgs;
     lib.flatten
       [
         (writeShellScriptBin "machine-name" ''
@@ -114,7 +110,7 @@ in
           ]
         )
         # Secrets
-        flake.inputs.agenix.packages.${opkgs.stdenv.hostPlatform.system}.default
+        flake.inputs.agenix.packages.${pkgs.stdenv.hostPlatform.system}.default
 
         (lib.optionals isWork [
           awscli2
