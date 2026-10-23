@@ -1,9 +1,5 @@
 { config, flake, pkgs, lib, machine-name, ... }:
 let
-  factoryKeyFile = ../../secrets/factory-github-app-key.age;
-  factoryKeyExists = builtins.pathExists factoryKeyFile;
-  opsDeployerTokenFile = ../../secrets/ops-deployer-token.age;
-  opsDeployerTokenExists = builtins.pathExists opsDeployerTokenFile;
   hostname = "eldo";
   username = "jade";
   ts_ip = "100.66.184.28";
@@ -45,49 +41,30 @@ in
   };
   age = {
     identityPaths = [ "/home/jade/.ssh/id_ed25519" ];
-    secrets = lib.optionalAttrs factoryKeyExists
-      {
-        factory-github-app-key = {
-          file = factoryKeyFile;
-          owner = "factory-runner";
-          mode = "0400";
-        };
-      } // lib.optionalAttrs opsDeployerTokenExists {
+    secrets = {
+      factory-github-app-key = {
+        file = ../../secrets/factory-github-app-key.age;
+        owner = "factory-runner";
+        mode = "0400";
+      };
       # fine-grained PAT, fisherrjd/ops only, Administration RW; read by the runner's root ExecStartPre
       ops-deployer-token = {
-        file = opsDeployerTokenFile;
+        file = ../../secrets/ops-deployer-token.age;
         owner = "root";
         mode = "0400";
       };
-    } // {
+      # litellm + openwebui: env files read by podman as root
       litellm = {
         file = ../../secrets/litellm.age;
-        mode = "644";
+        mode = "0400";
       };
       openwebui = {
         file = ../../secrets/openwebui.age;
-        mode = "644";
-      };
-      github-runner-token = {
-        file = ../../secrets/github-runner-token.age;
-        mode = "644";
-      };
-      github-runner-token-nix = {
-        file = ../../secrets/github-runner-token-nix.age;
-        mode = "644";
-      };
-      ntfy = {
-        file = ../../secrets/ntfy.age;
-        mode = "644";
+        mode = "0400";
       };
       grafana-secret-key = {
         file = ../../secrets/grafana-secret-key.age;
         owner = "grafana";
-        mode = "400";
-      };
-      orc-api-token = {
-        file = ../../secrets/orc-api-token.age;
-        owner = "jade";
         mode = "400";
       };
     };
@@ -196,12 +173,11 @@ in
         enable = true;
         claudePackage = pkgs.claude-code-latest;
         githubAppId = "5358946"; # GitHub App "fisherrjd-factory" (not a secret)
-        githubAppKeyFile =
-          if factoryKeyExists then config.age.secrets.factory-github-app-key.path else null;
+        githubAppKeyFile = config.age.secrets.factory-github-app-key.path;
         # run previews at <run-id>.preview.jade.rip (router on the tailnet, port 3075)
         previews.enable = true;
         # M5: apply fisherrjd/ops main to the cluster from a gated self-hosted runner
-        opsDeployer = lib.mkIf opsDeployerTokenExists {
+        opsDeployer = {
           enable = true;
           tokenFile = config.age.secrets.ops-deployer-token.path;
           # every namespace ops main renders into (osrs-ge: the ge-* services)
@@ -220,7 +196,6 @@ in
           base-url = "https://ntfy.jade.rip";
           upstream-base-url = "https://ntfy.sh";
           listen-http = "0.0.0.0:8081";
-          environmentFiles = [ config.age.secrets.litellm.path ];
           web-push-file = "/var/lib/ntfy-sh/webpush.db";
           web-push-email-address = "fisherrjd@gmail.com";
         };

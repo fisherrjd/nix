@@ -7,11 +7,7 @@ in
   "litellm.age".publicKeys = default;
   "openwebui.age".publicKeys = default;
   "caddy.age".publicKeys = default ++ [ pubkeys.bifrost ];
-  "github-runner-token.age".publicKeys = default;
-  "github-runner-token-nix.age".publicKeys = default;
-  "ntfy.age".publicKeys = default;
   "grafana-secret-key.age".publicKeys = default;
-  "orc-api-token.age".publicKeys = default;
   "factory-github-app-key.age".publicKeys = default;
   "ops-deployer-token.age".publicKeys = default;
 }
