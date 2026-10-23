@@ -40,8 +40,8 @@ in
     };
   };
   age = {
-    # host key first; jade's key stays as a fallback until every secret is rekeyed to the host key
-    identityPaths = [ "/etc/ssh/ssh_host_ed25519_key" "/home/jade/.ssh/id_ed25519" ];
+    # decrypt with the ssh host key; jade's key is only for editing (agenix -e)
+    identityPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
     secrets = {
       factory-github-app-key = {
         file = ../../secrets/factory-github-app-key.age;
