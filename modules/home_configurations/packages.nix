@@ -1,5 +1,5 @@
 # Uses `opkgs` (home.nix's overlaid pkgs) rather than the module's plain
-# `pkgs`, because several entries below (hms, hermes-agent,
+# `pkgs`, because several entries below (hms,
 # colmena_pog_scripts, ...) are provided by overlays not present on
 # home-manager's default pkgs.
 { opkgs, flake, machine-name, ... }:
@@ -28,6 +28,7 @@ in
         codex-acp
         claude-code-latest
         claude-agent-acp
+        jacobi.kimi-code
         curl
         diffutils
         doggo
@@ -49,7 +50,6 @@ in
         gron
         gum # learn about this
         gzip
-        hermes-agent
         hms
         htmlq
         jq

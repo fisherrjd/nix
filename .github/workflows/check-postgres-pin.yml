@@ -10,7 +10,6 @@ name: check postgres timescaledb pin
 # e.g. someone bumps the nixpkgs-postgresql rev). The rolling `nixpkgs` input
 # moving away from 2.27.2 is EXPECTED and benign (eldo uses the pin, not
 # rolling), so that is reported as a non-blocking warning.
-# See .hermes/plans/2026-07-05-fix-ge-data-timescaledb-mismatch.md Phase 2.
 on: {pull_request, workflow_dispatch}
 jobs:
   check-postgres-pin:

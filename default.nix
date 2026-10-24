@@ -13,7 +13,7 @@ import nixpkgs {
     # drifted until it described a wisp with no workspaces, no hosts and no close-out.
     (_: _: { inherit (flake.inputs.wisp.packages.${system}) wisp wisp-docs; })
     (_: _: { inherit (flake.inputs.oh-my-pi.packages.${system}) omp; })
-    (_: prev: { inherit (prev.jacobi) llama-cpp-latest codex-latest hermes-agent sglang-omni pog; })
+    (_: prev: { inherit (prev.jacobi) llama-cpp-latest codex-latest sglang-omni pog; })
   ] ++ (import ./overlays.nix) ++ overlays;
   config = {
     allowUnfree = true;
