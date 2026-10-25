@@ -49,18 +49,18 @@
       inherit (self.inputs.nixpkgs) lib;
       # single source of truth for host names; hms.nix builds `hmx.<host>` from the same list
       inherit (import ./hosts/constants.nix) machines;
-      forAllSystems = lib.genAttrs lib.systems.flakeExposed;
-      packages = forAllSystems
+      forAllSystems = lib.genAttrs [ "x86_64-linux" "aarch64-darwin" ];
+      legacyPackages = forAllSystems
         (system: import ./. { flake = self; inherit system; });
     in
     {
-      inherit packages;
+      inherit legacyPackages;
       inherit (self.inputs) jacobi agenix;
       pins = self.inputs;
 
       nixosConfigurations = lib.genAttrs machines.nixos (name:
         lib.nixosSystem {
-          pkgs = self.packages.x86_64-linux;
+          pkgs = self.legacyPackages.x86_64-linux;
           specialArgs = { flake = self; machine-name = name; };
           modules = [
             self.inputs.agenix.nixosModules.default
@@ -70,7 +70,7 @@
 
       darwinConfigurations = lib.genAttrs machines.darwin (name:
         self.inputs.nix-darwin.lib.darwinSystem {
-          pkgs = self.packages.aarch64-darwin;
+          pkgs = self.legacyPackages.aarch64-darwin;
           specialArgs = { flake = self; machine-name = name; };
           modules = [
             ./hosts/common_darwin.nix

@@ -2,10 +2,11 @@
 
 Uncommitted on purpose. These come from the 2026-10-22 review. Delete each item once it's done.
 
-**Review session: next up is item 3 of 12.**
+**Review session: next up is item 3 of 11.**
 - 1: deferred.
 - 2: done in PR #528 (branch `hm-use-global-pkgs`), waiting on your review and builds.
-- 3–12: not discussed yet.
+- 6: done.
+- 3–5 and 7–12: not discussed yet.
 
 Order = suggested work order. Each item names the Nix concept it teaches.
 
@@ -84,17 +85,6 @@ Fix: `github:nix-community/home-manager`, `github:nix-darwin/nix-darwin`, `githu
 Re-locking after a url change bumps those inputs, so do it as part of a normal update.
 
 Concept: indirect vs direct flake refs; the flake registry. ~10 min plus an update build.
-
-### 6. `packages` holds the whole nixpkgs set
-
-The flake schema expects `packages.<system>` to contain only derivations. A full package set belongs in
-`legacyPackages` (jacobi does this, see the comment in `modules/home_configurations/cobi.nix`). `forAllSystems` also
-spans all ~10 `flakeExposed` systems, and you use 2.
-
-Fix: rename to `legacyPackages` and limit systems to `[ "x86_64-linux" "aarch64-darwin" ]`. `.#hmx.eldo` and
-`.#claude-code-latest.updateScript` still resolve. Update the `self.packages.*` references in flake.nix.
-
-Concept: the flake output schema; why `nix flake show` / `check` choke on the current layout. ~15 min.
 
 ### 7. Stray top-level outputs
 

@@ -3,7 +3,7 @@ let
 in
 {
   meta = {
-    nixpkgs = flake.packages.x86_64-linux;
+    nixpkgs = flake.legacyPackages.x86_64-linux;
     specialArgs = {
       inherit flake;
       machine-name = "bifrost";
