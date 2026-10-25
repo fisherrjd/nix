@@ -3,7 +3,7 @@ final: prev:
   with prev;
   with lib;
   lib // rec {
-    inherit (stdenv) isLinux isDarwin isAarch64;
+    inherit (stdenv.hostPlatform) isLinux isDarwin isAarch64;
     isM1 = isDarwin && isAarch64;
     attrIf = check: name: if check then name else null;
     words = splitString " ";

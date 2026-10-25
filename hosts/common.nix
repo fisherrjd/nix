@@ -40,13 +40,13 @@ in
     gc = {
       automatic = true;
       options = "--delete-older-than 30d";
-    } // (if pkgs.stdenv.isDarwin
+    } // (if pkgs.stdenv.hostPlatform.isDarwin
     then { interval = { Weekday = 0; Hour = 3; Minute = 0; }; }
     else { dates = "Sun *-*-* 03:00:00"; });
 
     optimise = {
       automatic = true;
-    } // (if pkgs.stdenv.isDarwin
+    } // (if pkgs.stdenv.hostPlatform.isDarwin
     then { interval = { Weekday = 0; Hour = 4; Minute = 0; }; }
     else { dates = [ "Sun *-*-* 04:00:00" ]; });
   };

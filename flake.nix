@@ -31,10 +31,7 @@
       url = "github:can1357/oh-my-pi";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    vscode-server = {
-      url = "github:msteen/nixos-vscode-server";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    vscode-server.url = "github:msteen/nixos-vscode-server";
     agenix = {
       url = "github:ryantm/agenix";
       inputs.nixpkgs.follows = "nixpkgs";
