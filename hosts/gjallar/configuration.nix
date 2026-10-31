@@ -66,8 +66,9 @@ in
     # Splash: Qwen3.8 with DFlash2 speculative decoding on Metal, loopback only.
     # Models download on first start into /private/var/lib/splash; logs in its log/.
     # Saluki ships only an F16 vision projector, which Splash rejects: text only.
+    # Disabled 2026-10-14: crash-looped under KeepAlive, re-downloading ~17 MB per restart.
     splash.servers.saluki = {
-      enable = true;
+      enable = false;
       model = "ConwayResearch/Underdog-Saluki-27B-1.0:IQ2-mix";
       port = 8000;
       extraFlags = [ "--language-only" "--idle-release" "off" ];

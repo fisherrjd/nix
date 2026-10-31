@@ -5,7 +5,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sinch-cli";
-  version = "0.8.0";
+  version = "0.8.1";
 
   # @sinch/cli on npm is only a Node launcher shim; the actual bun-compiled
   # executable ships in the per-platform package, so fetch that directly.
@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
   #   curl -s https://registry.npmjs.org/@sinch%2fcli-darwin-arm64 | jq -r '.versions["<version>"].dist.integrity'
   src = fetchurl {
     url = "https://registry.npmjs.org/@sinch/cli-darwin-arm64/-/cli-darwin-arm64-${finalAttrs.version}.tgz";
-    hash = "sha512-9wnfAH/bha4b2lpNtVYI6aJFbgP3t3BM7l6r+FkRQTJxGIdd66ifVKvRLAKA08CiYiu4NZYa/8j3s0cT771cnw==";
+    hash = "sha512-4XfhD2eXRLmsiqH2z1I1auE9GPSmle5S3DOd2XPf7ijlbpzhOm+mcxYvfz0xVYItdDGqmClQHc3K6bf5v7ddug==";
   };
 
   dontBuild = true;
