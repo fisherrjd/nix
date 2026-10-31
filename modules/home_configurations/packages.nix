@@ -50,6 +50,7 @@ in
         gron
         gum # learn about this
         gzip
+        hermes-agent
         hms
         htmlq
         jq
