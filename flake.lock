@@ -508,11 +508,11 @@
         "vscode-server": "vscode-server"
       },
       "locked": {
-        "lastModified": 1793370938,
-        "narHash": "sha256-SUcA/9d/6YYTruNdy3IR223vjqUZiVJExrSuiwh91+M=",
+        "lastModified": 1793492243,
+        "narHash": "sha256-4/yI/eOB3SgllYKpj8oT+4PSQbFM7LUa0l1O7Cvxmhc=",
         "owner": "jpetrucciani",
         "repo": "nix",
-        "rev": "ba721a96f1f0a71602b7be8c34b5dff99b0425ca",
+        "rev": "50d82edcb763bab2f56c25a70996f0ab565cbcf6",
         "type": "github"
       },
       "original": {
@@ -958,11 +958,11 @@
         "rust-overlay": "rust-overlay"
       },
       "locked": {
-        "lastModified": 1793407160,
-        "narHash": "sha256-TXdO6ZTCQbyCODS334oGJHjOTxmdyFYl4Ov4X4IUH/4=",
+        "lastModified": 1793490507,
+        "narHash": "sha256-n9+wSL+JwJ48fJHFwvfBVbkm9mK/jxmETK1/f1AaRGQ=",
         "owner": "can1357",
         "repo": "oh-my-pi",
-        "rev": "c29f7c56f5530d805bb2887ade964aa55970d8e1",
+        "rev": "1c291b87e4b889398cc4b8e4ccdfa650b56a0486",
         "type": "github"
       },
       "original": {
@@ -1172,11 +1172,11 @@
         "nixpkgs": "nixpkgs_11"
       },
       "locked": {
-        "lastModified": 1787170016,
-        "narHash": "sha256-m/hBe+7Tz6hQlhlzQpLqpVCkT2wirvWQt/fTHqGIYEY=",
+        "lastModified": 1793470780,
+        "narHash": "sha256-l+7bUheuSo8jlrftJe4nQGw4uvm/4/IZYQK0UC4zPRU=",
         "owner": "fisherrjd",
         "repo": "skribbl",
-        "rev": "184c467278fdb9dcbb3b8d1d1f53306ff1f644f5",
+        "rev": "23601a3224301d96cdfd9642c6775b743c40fb01",
         "type": "github"
       },
       "original": {
