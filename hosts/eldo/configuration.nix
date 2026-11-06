@@ -10,7 +10,7 @@ let
   factorySrc = builtins.fetchGit {
     url = "ssh://git@github.com/fisherrjd/factory.git";
     ref = "main";
-    rev = "0b936d8894ebbc757febb9a9b64c60e6dcffec1c";
+    rev = "4e0bebff9e3c2d57b34046d3dfd545164f8738c6";
   };
   # factory's flake outputs, built against this repo's nixpkgs
   factory = (import "${factorySrc}/flake.nix").outputs {
