@@ -431,11 +431,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1793757180,
-        "narHash": "sha256-gyV7AtCwLnOImcrfSETP4J3Ie96bz19DY47B7m7Y3HM=",
+        "lastModified": 1793979366,
+        "narHash": "sha256-7OoWDsYO9teiPxl0QdlS5lYE20Pue8/5mpscSL32FUA=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "b787c48e2ec57a9d098f5c2721882a3bc1e16f97",
+        "rev": "2c0c1f01521469cf0271180c453c79782d53c2f6",
         "type": "github"
       },
       "original": {
@@ -508,11 +508,11 @@
         "vscode-server": "vscode-server"
       },
       "locked": {
-        "lastModified": 1793836615,
-        "narHash": "sha256-M4wW3uaCI7kGVLNmJrEMBKp5bTWvSymJGNWz3fnBPZw=",
+        "lastModified": 1793975353,
+        "narHash": "sha256-+2iGm3iRh1f6+sJF6BKofhySwBFB4vyeVmLvbDjrzfk=",
         "owner": "jpetrucciani",
         "repo": "nix",
-        "rev": "99ed5eb0a58e77fc499f747bc7ac26bc90c459ae",
+        "rev": "c10b3c6b0883441231d1bcd243ecd35a80d963f8",
         "type": "github"
       },
       "original": {
@@ -796,11 +796,11 @@
     },
     "nixpkgs_10": {
       "locked": {
-        "lastModified": 1793726008,
-        "narHash": "sha256-iNjybNORi/2+shilhMlkNr01UHWKOHRGzQyIyvobs9o=",
-        "rev": "1d060086d60cb76a40cf37109f979d88a5bd6396",
+        "lastModified": 1793876309,
+        "narHash": "sha256-Q62pssAT9r01POiSyXW0IPXBWhntiKqMhzlsp3bsl5I=",
+        "rev": "f9a75f41be3a74eab55d3a7679d34ad6cc0da977",
         "type": "tarball",
-        "url": "https://releases.nixos.org/nixos/unstable/nixos-26.11pre1107793.1d060086d60c/nixexprs.tar.zst"
+        "url": "https://releases.nixos.org/nixos/unstable/nixos-26.11pre1108983.f9a75f41be3a/nixexprs.tar.zst"
       },
       "original": {
         "id": "nixpkgs",
@@ -958,11 +958,11 @@
         "rust-overlay": "rust-overlay"
       },
       "locked": {
-        "lastModified": 1793965190,
-        "narHash": "sha256-ukVzc0rI6YCCzA8V4znlvJ/KEa0nT2jYmz6ZSm1jICE=",
+        "lastModified": 1794018449,
+        "narHash": "sha256-NFdNJjTSmK8hk7Z355SSQISXKMHSq0ToLlKhSKCoPec=",
         "owner": "can1357",
         "repo": "oh-my-pi",
-        "rev": "684eb58c54d6927d6844800c98eb43176e61009a",
+        "rev": "f2b795ba747b23d42052184d822b41e3d01357cc",
         "type": "github"
       },
       "original": {
