@@ -24,7 +24,7 @@ jobs:
             extra-trusted-public-keys = cache.g7c.us:dSWpE2B5zK/Fahd7npIQWM4izRnVL+a4LiCAnrjdoFY=
       - run: nix run .#${{ matrix.attr }}.updateScript -- --repo "$GITHUB_WORKSPACE"
       # fisherrjd-nix-ci app token: unlike GITHUB_TOKEN, PRs it opens still trigger the build workflow
-      - uses: actions/create-github-app-token@v3.2.0
+      - uses: actions/create-github-app-token@v3.3.0
         id: app
         with:
           client-id: ${{ vars.CI_APP_CLIENT_ID }}
