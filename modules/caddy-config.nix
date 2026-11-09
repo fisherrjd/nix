@@ -82,8 +82,8 @@ let
     "ge.jade.rip" = proxy "eldo:30420";
     "7out.jade.rip" = proxy "eldo:30711";
     "news.jade.rip" = proxy "eldo:3060";
+    "chores.jade.rip" = proxy "eldo:3030";
 
-    "chores.jade.rip" = private "eldo:3030";
     "grafana.jade.rip" = private "eldo:3000";
     "factory.jade.rip" = privateApp "eldo:3070";
     # factory previews: <run-id>.preview.jade.rip → the factory's preview router.
