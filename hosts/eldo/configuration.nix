@@ -329,43 +329,8 @@ in
     dockerCompat = true; # provide docker → podman symlink
   };
 
-  virtualisation.oci-containers = {
-    # backend = "docker";
-    backend = "podman";
-    containers = {
-      litellm = {
-        image = "ghcr.io/berriai/litellm:main-v1.74.3-stable";
-        volumes = [ "lite-llm:/app" ];
-        environmentFiles = [ config.age.secrets.litellm.path ];
-        extraOptions = [
-          "--network=host"
-        ];
-      };
-      openwebui = {
-        image = "ghcr.io/open-webui/open-webui:v0.6.16";
-        volumes = [ "open-webui:/app/backend/data" ];
-        environmentFiles = [ config.age.secrets.openwebui.path ];
-        environment = {
-          PORT = "3001";
-        };
-        extraOptions = [
-          "--network=host"
-        ];
-      };
-      n8n = {
-        image = "docker.n8n.io/n8nio/n8n:1.105.3";
-        volumes = [ "n8n_data:/home/node/.n8n" ];
-        ports = [ "5678:5678" ];
-        environment = {
-          GENERIC_TIMEZONE = "America/Denver";
-          N8N_EDITOR_BASE_URL = "https://n8n.jade.rip";
-          N8N_TEMPLATES_ENABLED = "true";
-          N8N_HIRING_BANNER_ENABLED = "false";
-          N8N_WEBHOOK_URL = "https://n8n.jade.rip";
-          N8N_HOST = "n8n.jade.rip";
-        };
-      };
-
-    };
-  };
+  # litellm, openwebui and n8n (podman oci-containers) were removed 2026-11-10:
+  # unused, and podman's layer storage was damaged. Their data stays in the
+  # podman volumes lite-llm, open-webui and n8n_data; revert this commit to
+  # bring them back.
 }
