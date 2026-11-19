@@ -508,11 +508,11 @@
         "vscode-server": "vscode-server"
       },
       "locked": {
-        "lastModified": 1794960772,
-        "narHash": "sha256-8ZJHWbsZ5V50sEuAIbOtNRypux6ZCXoR5GS7S+ktN4M=",
+        "lastModified": 1795037036,
+        "narHash": "sha256-faFPIwwtJke2Re7zJ/fhSU1eop9FwJdDxZHdMPot6qo=",
         "owner": "jpetrucciani",
         "repo": "nix",
-        "rev": "b64d26f0b3820f5d9ed37bf2ba9ef9a0e0531ac3",
+        "rev": "a3ff3508ba8306ac7e07421681db8ab349c6af29",
         "type": "github"
       },
       "original": {
@@ -958,11 +958,11 @@
         "rust-overlay": "rust-overlay"
       },
       "locked": {
-        "lastModified": 1795002320,
-        "narHash": "sha256-0X7Otqn9J80fsSKPdUYtJ+H/S02ZysxST73fexZEa1A=",
+        "lastModified": 1795090111,
+        "narHash": "sha256-XcB5Fe7THjTqyebsYptv3S3Ji1qXT8aHg53FmSdQTl4=",
         "owner": "can1357",
         "repo": "oh-my-pi",
-        "rev": "792c2986d5f12fe1235e3cce37bb59713cd07b72",
+        "rev": "d4ebe4d0425519411a78055c4ba6e0e8d20a3ca6",
         "type": "github"
       },
       "original": {
