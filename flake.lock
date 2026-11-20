@@ -508,11 +508,11 @@
         "vscode-server": "vscode-server"
       },
       "locked": {
-        "lastModified": 1795037036,
-        "narHash": "sha256-faFPIwwtJke2Re7zJ/fhSU1eop9FwJdDxZHdMPot6qo=",
+        "lastModified": 1795133629,
+        "narHash": "sha256-Xv/8ZJWgnmAghcpHOPxBADSxBfcZ3bDWH9LJGUoHU+w=",
         "owner": "jpetrucciani",
         "repo": "nix",
-        "rev": "a3ff3508ba8306ac7e07421681db8ab349c6af29",
+        "rev": "3c3d2464067e385ba277b028c0803a0dd2684bba",
         "type": "github"
       },
       "original": {
@@ -796,11 +796,11 @@
     },
     "nixpkgs_10": {
       "locked": {
-        "lastModified": 1794890597,
-        "narHash": "sha256-vJoAj1xon3Mhfc8FZ5uBrPyZee9Eqa05gG/taXv6iZ8=",
-        "rev": "04906337b6d53e8bb0eaf0470ae9f070a4d4eb55",
+        "lastModified": 1795085501,
+        "narHash": "sha256-kqy60mdSH4GQAv3kzSeefteaiCv9arf3P+auosZrpo0=",
+        "rev": "0bb8272318b4ca41bf0edc6224df3e3e3046b70d",
         "type": "tarball",
-        "url": "https://releases.nixos.org/nixos/unstable/nixos-26.11pre1122823.04906337b6d5/nixexprs.tar.zst"
+        "url": "https://releases.nixos.org/nixos/unstable/nixos-26.11pre1124497.0bb8272318b4/nixexprs.tar.zst"
       },
       "original": {
         "id": "nixpkgs",
@@ -958,11 +958,11 @@
         "rust-overlay": "rust-overlay"
       },
       "locked": {
-        "lastModified": 1795090111,
-        "narHash": "sha256-XcB5Fe7THjTqyebsYptv3S3Ji1qXT8aHg53FmSdQTl4=",
+        "lastModified": 1795170430,
+        "narHash": "sha256-XDovDyrQ9OwIQGJJmLhhF8UeWs95KhuG7NpuaM+RsQs=",
         "owner": "can1357",
         "repo": "oh-my-pi",
-        "rev": "d4ebe4d0425519411a78055c4ba6e0e8d20a3ca6",
+        "rev": "21d93e49fbe3d3bd81e9245ddbf085271a53bf4d",
         "type": "github"
       },
       "original": {
