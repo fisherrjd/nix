@@ -40,7 +40,7 @@ jobs:
       # fisherrjd-nix-ci app token lets git fetch it over https instead
       - if: matrix.attrs.config_name == 'eldo'
         id: factory-token
-        uses: actions/create-github-app-token@v3.2.0
+        uses: actions/create-github-app-token@v3.3.0
         with:
           client-id: ${{ vars.CI_APP_CLIENT_ID }}
           private-key: ${{ secrets.CI_APP_PRIVATE_KEY }}
