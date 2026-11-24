@@ -83,6 +83,8 @@ let
     "7out.jade.rip" = proxy "eldo:30711";
     "news.jade.rip" = proxy "eldo:3060";
     "chores.jade.rip" = proxy "eldo:3030";
+    "workout.jade.rip" = proxy "eldo:3041";
+    "recipes.jade.rip" = proxy "eldo:3051";
 
     "grafana.jade.rip" = private "eldo:3000";
     "factory.jade.rip" = privateApp "eldo:3070";
