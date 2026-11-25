@@ -19,13 +19,9 @@ in
     enable = true;
     defaultUser = "jade";
     startMenuLaunchers = true;
+    useWindowsDriver = true;
     wslConf.automount.root = "/mnt";
-    # Enable native Docker support
-    # docker-native.enable = true;
-    # Enable integration with Docker Desktop (needs to be installed)
-    # docker-desktop.enable = true;
   };
-
   users.users.jade = {
     isNormalUser = true;
     description = "jade";
@@ -42,6 +38,29 @@ in
     enable = true;
   };
 
+<<<<<<< HEAD
+=======
+  systemd.tmpfiles.rules = [
+    "d /var/lib/sglang-omni 0755 jade users -"
+  ];
+
+  # systemd.services.sglang-omni = {
+  #   description = "sglang-omni TTS server (voice cloning)";
+  #   after = [ "network.target" ];
+  #   wantedBy = [ "multi-user.target" ];
+  #   environment = {
+  #     HF_HOME = "/var/lib/sglang-omni";
+  #     LD_LIBRARY_PATH = "/usr/lib/wsl/lib:/run/opengl-driver/lib";
+  #   };
+  #   serviceConfig = {
+  #     ExecStart = "${sglang}/bin/sgl-omni serve --model-path Qwen/Qwen3-TTS-12Hz-1.7B-Base --port 8000 --mem-fraction-static 0.7 --config /var/lib/sglang-omni/configs/qwen3_tts_1_7b.yaml --isolate-stage vocoder";
+  #     Restart = "on-failure";
+  #     User = "jade";
+  #     WorkingDirectory = "/var/lib/sglang-omni";
+  #   };
+  # };
+
+>>>>>>> e2e9f6c (cleanup)
   hardware = {
     graphics = {
       enable = true;
@@ -58,6 +77,7 @@ in
   inherit (common) nix;
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   programs.command-not-found.enable = false;
+  programs.nix-ld.enable = true;
 
   system.stateVersion = "22.05";
 }
